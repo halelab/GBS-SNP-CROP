@@ -11,6 +11,7 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 
 ### Pipeline workflow
 * **Stage 1. Process the raw GBS data**
+
 *Step 1: Parse the raw reads*
 
 *Step 2: Trim based on quality* 
