@@ -1,4 +1,4 @@
-#### GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP)
+# GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP)
 
 This is the official development repository for GBS-SNP-CROP
 
@@ -40,3 +40,18 @@ Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery
 * [Java 7 or higher][4]
 * [Trimmomatic][5] (Bolger et al., 2014)
 * [PEAR][6] (Zhang et al., 2014)
+* [Usearch][7] (Edgar, 2010)
+* [BWA aligner][8] (Li & Durbin, 2009)
+* [SAMTools][9](Li et al., 2009)
+
+[1]:http://www.halelab.org
+[2]:http://www.halelab.org
+[3]:
+[4]:https://www.java.com/en/
+[5]:http://www.usadellab.org/cms/?page=trimmomatic
+[6]:http://sco.h-its.org/exelixis/web/software/pear/
+[7]: http://www.drive5.com/usearch/
+[8]:http://bio-bwa.sourceforge.net
+[9]:http://samtools.sourceforge.net
+
+
