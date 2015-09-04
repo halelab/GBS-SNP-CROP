@@ -45,7 +45,7 @@ Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery
 
 [1]:http://www.halelab.org
 [2]:http://www.halelab.org
-[3]:
+[3]:https://github.com/halelab/GBS-SNP-CROP/tree/master/GBS-SNP-CROP-scripts
 [4]:https://www.java.com/en/
 [5]:http://www.usadellab.org/cms/?page=trimmomatic
 [6]:http://sco.h-its.org/exelixis/web/software/pear/
