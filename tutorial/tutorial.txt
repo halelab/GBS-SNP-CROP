@@ -1,0 +1,36 @@
+##############################################################
+#
+# GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) 
+#			
+#			step-by-step
+#
+##############################################################
+
+# Authors: Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
+# University of New Hampshire, College of Life Science and Agriculture, Department of Biological Sciences, Durham, NH, USA.
+
+
+Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl –b barcodesID.txt –fq L001 –s 1 –e 2 –enz1 TGCA –enz2 CGG 
+
+Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl –fq L001 –t 10 –l 30 –sl 4:30 –tr 30 –m 32
+
+Step 3: Demultiplex (GBS-SNP-CROP-3.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl –b barcodesID.txt –fqN  L001_PE_R1parsed.fastq –r R1
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl –b barcodesID.txt –fqN  L001_PE_R2parsed.fastq –r R2
+
+Step 4: Cluster reads and assemble the Mock Reference (GBS-SNP-CROP-4.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl –b barcodeID.txt –rl 150 –pl 32 –p 0.01 –id 0.93 –t 10 –MR MockRefName
+
+Step 5: Align with BWA-mem and process with SAMTools (GBS-SNP-CROP-5.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl –b barcodeID.txt –ref MockRefName.MockRef_Genome.fasta –samf 2 –samF 2308 –t 10 
+
+Step 6: Parse mpileup output and produce the SNP discovery master matrix (GBS-SNP-CROP-6.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-6.pl –b barcodeID.txt –out SNPs_master_matrix.txt
+
+Step 7: Filter SNPs and call genotypes (GBS-SNP-CROP-7.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-7.pl –in SNPs_master_matrix.txt –out SNPs_genotyping_matrix.txt –mnHoDepth 7 –mnHeDepth 2 –mnAlleleProp 0.1 –call 0.25 –mnAvgDepth 4 –mxAvgDepth 200  
+
+Downstream Tool (GBS-SNP-CROP-8.pl)
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-8.pl –in SNPs_genotyping_matrix.txt –b barcodeID.txt –formats R,Tassel,Plink 
