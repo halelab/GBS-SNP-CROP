@@ -41,7 +41,7 @@ Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery
 * [PEAR][6] (Zhang et al., 2014)
 * [Usearch][7] (Edgar, 2010)
 * [BWA aligner][8] (Li & Durbin, 2009)
-* [SAMTools][9](Li et al., 2009)
+* [SAMTools][9] (Li et al., 2009)
 
 [1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-User-Manual-v1.0.pdf
 [2]:http://www.halelab.org
