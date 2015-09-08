@@ -36,12 +36,12 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. DOI XX.
 
 ### Requirements
-* [Java 7 or higher][4]
-* [Trimmomatic][5] (Bolger et al., 2014)
-* [PEAR][6] (Zhang et al., 2014)
-* [Usearch][7] (Edgar, 2010)
-* [BWA aligner][8] (Li & Durbin, 2009)
-* [SAMTools][9](Li et al., 2009)
+* [Java 7 or higher][4] - We used Java 8
+* [Trimmomatic][5] (Bolger et al., 2014) - We used v.0.33
+* [PEAR][6] (Zhang et al., 2014) - We used v.0.96
+* [Usearch][7] (Edgar, 2010) - We used v.8.0.1623
+* [BWA aligner][8] (Li & Durbin, 2009) - We used v.0.7.12
+* [SAMTools][9] (Li et al., 2009) - We used v.1.2
 
 [1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-User-Manual-v1.0.pdf
 [2]:http://www.halelab.org
