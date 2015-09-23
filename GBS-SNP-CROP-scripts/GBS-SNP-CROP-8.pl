@@ -9,16 +9,17 @@ use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>
+my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file> -out <output file label>
 -formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format should be created>.\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
-my ($SNPmatrix,$barcodesID_file,$tools);
+my ($SNPmatrix,$output,$barcodesID_file,$tools);
 
 GetOptions(
 'in=s' => \$SNPmatrix,    	# file
+'out=s' => \$output		# string
 'b=s' => \$barcodesID_file,     # file
-'formats=s' => \$tools,	# file
+'formats=s' => \$tools,		# file
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
 
 #####################
