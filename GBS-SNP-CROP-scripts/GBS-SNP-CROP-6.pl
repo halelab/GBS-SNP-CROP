@@ -212,10 +212,10 @@ main();
 
 system ( "mv *.count.txt ./mpileup" );
 system ( "mv *.mpileup ./mpileup" );
+system ( "mv SNPsVerticalRef.txt ./mpileup" );
+system ( "mv CountFileList.txt ./mpileup" );
 system ( "rm *.ref.txt" );
 system ( "rm *.countF.txt" );
-system ( "rm SNPsVerticalRef.txt " );
-system ( "rm CountFileList.txt " );
 
 print "The SNP master matrix was successfully created.\nPlease, proceed with SNP filtering and genotyping step 7.\n";
 
