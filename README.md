@@ -43,7 +43,7 @@ Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery
 * [BWA aligner][8] (Li & Durbin, 2009) - We used v.0.7.12
 * [SAMTools][9] (Li et al., 2009) - We used v.1.2
 
-[1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-User-Manual-v1.0.pdf
+[1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-UserManual_v1.0.pdf
 [2]:http://www.halelab.org
 [3]:https://github.com/halelab/GBS-SNP-CROP/tree/master/GBS-SNP-CROP-scripts
 [4]:https://www.java.com/en/
