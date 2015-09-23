@@ -246,14 +246,6 @@ while (<SNP>)
 
 close DEST;
 
-sub main {
-   	my $dir = "SNPsCalled"; 
-   	unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
-}
-main();
-
-system ( "mv *.txt ./SNPsCalled" );
-
 print "Your $output genotyping matrix was successfully created. Please, see 'SNPsCalled' directory.\n\n";
 
 print "GBS-SNP-CROP called $lc SNPs in your population using the follow parameters:\n
