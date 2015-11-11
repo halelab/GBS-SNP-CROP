@@ -24,6 +24,11 @@ GetOptions(
 'enz2=s' => \$enzyme2,        # string
 ) or die "$Usage\n$Manual\n";
 
+my $RC_enz1 = reverse $enzyme1;
+$RC_enz1 =~ tr/acgtACGT/tgcaTGCA/;
+my $RC_enz2 = reverse $enzyme2;
+$RC_enz2 =~ tr/acgtACGT/tgcaTGCA/;
+
 sub main {
    	my $dir1 = "summaries"; 
    	my $dir2 = "distribs"; 
@@ -217,11 +222,14 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 		if ( $R1reads[$k][0] eq "" ) {
 			next;
 		} else {
-			if ( $R1reads[$k][1] =~ /^(\w+)$enzyme2[AN][GN][AN][TN][CN][GN][GN][AN][AN]\w+$/ ) {
+			my $R1seq = $R1reads[$k][1];
+			if ( $R1seq =~ /^(\w+)$RC_enz2[AN][GN][AN][TN][CN][GN][GN][AN][AN]\w+$/ ) {
 				my $R1_read = $1;
-				my $R1_read_length = length ( $R1_read );
+				my $R1_read_length = length ( $R1_read );				
+				$R1reads[$k][1] = $R1_read;
+				$R1reads[$k][2] = substr ( $R1reads[$k][2], 0, $R1_read_length );
 			} else {
-			next;
+				next;
 			}
 		}
 	}
@@ -233,7 +241,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			next;
 		} else {
 			my $R2seq = $R1reads[$k][3];
-			if ( $R2seq =~ /^(\w+)$enzyme1(\w{5,10})[AN][GN][AN][TN]/ ) {
+			if ( $R2seq =~ /^(\w+)$RC_enz1(\w{5,10})[AN][GN][AN][TN]/ ) {
 				my $R2_read = $1;
 				my $inline_index = scalar reverse $2;
 				$inline_index =~ tr/actgACTG/tgacTGAC/;
