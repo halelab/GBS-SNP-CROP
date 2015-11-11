@@ -9,26 +9,26 @@ use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file> -out <output file label>
+my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>
 -formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format should be created>.\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
 my ($SNPmatrix,$output,$barcodesID_file,$tools);
 
 GetOptions(
-'in=s' => \$SNPmatrix,    	# file
-'out=s' => \$output		# string
+'in=s' => \$SNPmatrix,    		# file
+'out=s' => \$output,			# file
 'b=s' => \$barcodesID_file,     # file
-'formats=s' => \$tools,		# file
+'formats=s' => \$tools,			# file
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
 
 #####################
 # Defining outputs
 #####################
 
-my $R_out = join (".","GBS-SNP-CROP","R_in","txt");
-my $Tassel_out = join (".","GBS-SNP-CROP","Tassel_in","hmp","txt");
-my $Plink_out = join (".","GBS-SNP-CROP","PLINK_in","tped");
+my $R_out = join (".","$output","R_in","txt");
+my $Tassel_out = join (".","$output","Tassel_in","hmp","txt");
+my $Plink_out = join (".","$output","PLINK_in","tped");
 
 #############################
 # Creating R input file
@@ -45,15 +45,15 @@ if ($tools =~ "R" or $tools =~ "r"){
 		chomp @snp;
 
 		my $col = join ("\t",$snp[0],$snp[1]);
-		my $primary = $snp[4];
-		my $secondary = $snp[5];
+		my $primary = $snp[5];
+		my $secondary = $snp[6];
 
 		my @out = ();
 		push @out, "$col";
 	
 		my $length = scalar(@snp) - 1;
 	
-		for ( my $i=10; $i<=$length; $i++ ) {
+		for ( my $i=11; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -64,6 +64,9 @@ if ($tools =~ "R" or $tools =~ "r"){
 				push @out, "0";
 				next;
 			} elsif ($geno2 eq join("/",$primary,$secondary)) {
+				push @out, "0.5";
+				next;
+			} elsif ($geno2 eq join("/",$secondary,$primary)) {
 				push @out, "0.5";
 				next;
 			} elsif ($geno2 eq join("/",$secondary,$secondary)) {
@@ -87,6 +90,7 @@ if ($tools =~ "R" or $tools =~ "r"){
 
 #######################################
 # Creating Tassel HapMap input file
+#		  work only for SNPs
 #######################################
 if ($tools =~ "T" or $tools =~ "t"){
 	
@@ -110,15 +114,19 @@ if ($tools =~ "T" or $tools =~ "t"){
 	while(<IN>) {
 		my @snp = split "\t", $_;
 		chomp @snp;
+		
+		if ($snp[2] eq "Indel") {
+			next;
+		}
 	
 		my $col1 = join ("_",$snp[0],$snp[1]);
-		my $alleles = join ("/",$snp[4],$snp[5]);
+		my $alleles = join ("/",$snp[5],$snp[6]);
 
 		my @out;
 	
 		my $length = scalar(@snp) - 1;
 	
-		for ( my $i=10; $i<=$length; $i++ ) {
+		for ( my $i=11; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -160,7 +168,8 @@ if ($tools =~ "T" or $tools =~ "t"){
 				next;
 			}
 		}				
-		my $line = "$col1\t$alleles\t$snp[0]\t$snp[1]\t+\tNA\tGBS-SNP-CROP\tGBS\tRefName\tCustom\tQC+\t@out";
+		my $line = join ("\t","$col1","$alleles","$snp[0]","$snp[1]","+","NA","GBS-SNP-CROP",
+						"GBS","RefName","Custom","QC+","@out");
 		push @output,"$line\n";
 
 	}
@@ -173,9 +182,10 @@ if ($tools =~ "T" or $tools =~ "t"){
 	} else {
 }
 
-#######################################
-# Creating Tassel HapMap input file
-#######################################
+################################
+# Creating PLINK input file 
+#	work only for SNPs
+#################################
 if ($tools =~ "P" or $tools =~ "p"){
 
 	print "\nConverting the SNP genotyping matrix into an input file compatible with PLINK software...";
@@ -186,6 +196,11 @@ if ($tools =~ "P" or $tools =~ "p"){
 	while (<IN>) {
 		chomp;
 		my @input = split ("\t", $_);
+		
+		if ($input[2] eq "Indel") {
+			next;
+		}
+		
 		my $header = $input[0];
 		my $position = $input[1];
 		my $snp_identifier = join ("_",$header,$position);
