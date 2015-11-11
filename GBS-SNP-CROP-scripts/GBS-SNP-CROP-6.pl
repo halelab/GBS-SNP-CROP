@@ -8,7 +8,7 @@ use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-6.pl -b <barcodesID file> -out <output SNP master matrix file>\n";
+my $Usage = "Usage: perl GBS-SNP-CROP-6.pl -b <barcodesID file> -out <output variant master matrix file>\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
 my ($barcodesID_file,$output_file);
@@ -46,57 +46,79 @@ foreach my $file (@files) {
 	while (<PILEUP>){
 		my @input1 = split("\t", $_);
 		my $ref = $input1[2];
-		my $algn = $input1[4];
+		my $algn = uc $input1[4];
+		$algn =~ s/\,/\./g;
+		$algn =~ s/\^.\././g;
 	
-		my @bases = split(//, $algn);
-		s/\./$ref/g for @bases;
-		s/\,/$ref/g for @bases;
-			
-		my $aCount=0; my $ACount=0;
-		my $gCount=0; my $GCount=0;
-		my $cCount=0; my $CCount=0;
-		my $tCount=0; my $TCount=0;
-
-        my $x;
-        for($x=0;$x<scalar(@bases);$x++) {
-			if ($bases[$x] =~ /A/){
-                   $ACount++;
-			}
-        	if ($bases[$x] =~ /a/){
-                   $aCount++;
-            }
-            if ($bases[$x] =~ /C/){
-                   $CCount++;
-            }
-            if ($bases[$x] =~ /c/){
-                   $cCount++;
-            }
-            if ($bases[$x] =~ /G/){
-                    $GCount++;
-            }
-            if ($bases[$x] =~ /g/){
-                    $gCount++;
-            }
-            if ($bases[$x] =~ /T/){
-                    $TCount++;
-            }
-            if ($bases[$x] =~ /t/){
-                    $tCount++;
-            }
-        }
-        my $A = $ACount + $aCount;
-        my $C = $CCount + $cCount;
-        my $G = $GCount + $gCount;
-        my $T = $TCount + $tCount;
-        	          
-		print OUT1 join ("\t", $input1[0], $input1[1], $input1[2]),"\t", join(",","$A", "$C", "$G", "$T"),"\n";
-		
+	### Capturing Indels and put it out from mpileup string
+		my @positions;
+		my @sizes;
+		my @Indels;
+		while ( $algn =~ /\.{1}[\+|-]{1}(\d+)/g  ) { 
+			push @positions, pos($algn);
+			push @sizes, $1;
 		}
+
+		my $indices = scalar @positions - 1;
+
+		for (my $k = $indices; $k >= 0; $k--) {
+			my $indel = substr ( $algn, $positions[$k] - length($sizes[$k]) - 1, 1 + length($sizes[$k]) + $sizes[$k]);
+			push @Indels, $indel;
+			my $start = substr ( $algn, 0, $positions[$k] - length($sizes[$k]) - 2 );
+			my $end = substr ( $algn, $positions[$k] + $sizes[$k] );
+			$algn = join ("", "$start", "$end" );
+		}
+
+		# Count Indels frequency and store a hash with Indel type and count	
+		my %Indel_cnt;
+		$Indel_cnt{$_}++ foreach @Indels;
+		
+		my @IndelType = sort {$Indel_cnt{$b} <=> $Indel_cnt{$a}} keys %Indel_cnt;
+		my @IndelCount = @Indel_cnt{@IndelType};
+	
+		### Work on a nucleotides specific string
+		$algn =~ s/\$//g;   
+		$algn =~ s/\*//g;
+		$algn =~ s/\./$ref/g;
+		
+		my @bases = split(//, $algn);
+		@bases = grep /\S/, @bases; # remove empty elements from array
+		
+		my $A=0;	my $C=0; 
+		my $G=0;	my $T=0; 
+		
+        	for(my $x=0; $x<scalar(@bases);$x++) {
+			if ($bases[$x] =~ /A/){
+                   	$A++;
+			}
+            		if ($bases[$x] =~ /C/){
+                	 $C++;
+            		}
+            		if ($bases[$x] =~ /G/){
+                	    $G++;
+            		}
+            		if ($bases[$x] =~ /T/){
+                	    $T++;
+        		}
+        	}
+		if (scalar @IndelCount == 0) { 	
+			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","_","_","_","_"),"\n";
+			next;
+		} elsif (scalar @IndelCount == 1) {
+			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","_","_"),"\n";
+			next;
+		} elsif (scalar @IndelCount > 1) {
+			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","$IndelCount[1]","$IndelType[1]"),"\n";
+			next;
+		} else {
+		next;
+		}
+	}
 	
 	close PILEUP;
 	close OUT1;
 	
-	print "Filtering polymorphic SNPs from $count_out file...\n";
+	print "Filtering polymorphic sites from $count_out file...\n";
 	
 	my $countF_out = join (".", "$file","countF","txt");
 	my $ref_file = join (".", "$file","ref","txt");
@@ -112,8 +134,8 @@ foreach my $file (@files) {
         my $ref = $input2[2];
         my @geno = split(",", $input2[3]);
 	    
-	    if ($ref eq "A" and $geno[0] == 0 and ($geno[1]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
-	    	$ref eq "A" and $geno[0] != 0 and ($geno[1]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
+	if ($ref eq "A" and $geno[0] == 0 and ($geno[1]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
+		$ref eq "A" and $geno[0] != 0 and ($geno[1]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
      		$ref eq "A" and $geno[0] != 0 and ($geno[1]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
 	        $ref eq "C" and $geno[1] == 0 and ($geno[0]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
     		$ref eq "C" and $geno[1] != 0 and ($geno[0]!= 0 or $geno[2] != 0 or $geno[3] != 0) or
@@ -126,13 +148,13 @@ foreach my $file (@files) {
     		print OUT2 "@output\n";
     		print REF join ("\t", $input2[0], $input2[1], $input2[2]),"\n";
     		}
-		}
-		print "DONE.\n";
-		close COUNT;
-		close OUT2;
+	}
+	print "DONE.\n";
+	close COUNT;
+	close OUT2;
 }
 
-print "\nCreating a polymorphic SNP list...\n";
+print "\nCreating a polymorphic variant list...\n";
 
 system ( "cat *.ref.txt | uniq > SNPsVerticalRef.txt" );
 
@@ -141,11 +163,10 @@ system ( "ls *.count.txt > CountFileList.txt" );
 
 print "DONE.\n";
 
-print "\nCreating a SNP master matrix...\n";
+print "\nCreating a variant depth count master matrix...\n";
 
 my $posFile = "SNPsVerticalRef.txt";
 my $countList = "CountFileList.txt";
-#my $outFile = "SNPsDiscovered_Master_Matrix.txt";
 
 open (POS, "$posFile") || die "cant load file $!";
 open (LIST, "$countList") || die "cant load file $!";
@@ -167,8 +188,7 @@ while (<POS>){
 }
 close POS;
 
-while ( my $fileName = <LIST> )
-{
+while ( my $fileName = <LIST> ) {
 	chomp $fileName;
 	open (GENO_BASE_COUNT_FILE, "$fileName") or die "can't load file $!";
 
@@ -186,7 +206,7 @@ while ( my $fileName = <LIST> )
 		if ( $genoHash{$chr_pos_ref} ) {
 			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "$genoHash{$chr_pos_ref}");
 		} else {
-			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "_,_,_,_,_,_");
+			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "_,_,_,_,_,_,_,_");
 		}
 	}
 
@@ -217,7 +237,7 @@ system ( "mv CountFileList.txt ./mpileup" );
 system ( "rm *.ref.txt" );
 system ( "rm *.countF.txt" );
 
-print "The SNP master matrix was successfully created.\nPlease, proceed with SNP filtering and genotyping step 7.\n";
+print "The variant count master matrix was successfully created.\nPlease, proceed with filtering and genotyping call on step 7.\n";
 
 print "\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for
 SNP discovery and plant germplasm characterization using variable length, paired-end
