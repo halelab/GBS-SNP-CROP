@@ -232,7 +232,7 @@ main();
 
 system ( "mv *.count.txt ./mpileup" );
 system ( "mv *.mpileup ./mpileup" );
-system ( "mv SNPsVerticalRef.txt ./mpileup" );
+system ( "mv VariantVerticalRef.txt ./mpileup" );
 system ( "mv CountFileList.txt ./mpileup" );
 system ( "rm *.ref.txt" );
 system ( "rm *.countF.txt" );
