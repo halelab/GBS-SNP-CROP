@@ -18,7 +18,7 @@ my ($SNPmatrix,$output,$barcodesID_file,$tools);
 GetOptions(
 'in=s' => \$SNPmatrix,    		# file
 'out=s' => \$output,			# file
-'b=s' => \$barcodesID_file,     # file
+'b=s' => \$barcodesID_file		# file
 'formats=s' => \$tools,			# file
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
 
@@ -208,7 +208,7 @@ if ($tools =~ "P" or $tools =~ "p"){
 		$header =~ s/chr//;
 		my $Tpedfile = join("\t",$header,$snp_identifier,"0",$position);
 	
-		my @geno = splice @input, 10; 
+		my @geno = splice @input, 11; 
 		foreach (@geno) {
 			my @geno1 = split /\|/, $_;
 			s/-/0 0/ for @geno1;
