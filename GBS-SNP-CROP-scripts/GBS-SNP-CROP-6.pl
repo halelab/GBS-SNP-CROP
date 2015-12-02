@@ -69,12 +69,12 @@ foreach my $file (@files) {
 			$algn = join ("", "$start", "$end" );
 		}
 
-		# Count Indels frequency and store a hash with Indel type and count	
-		my %Indel_cnt;
-		$Indel_cnt{$_}++ foreach @Indels;
+		### Count Indels frequency and store a hash with Indel type and count	
+		# my %Indel_cnt;
+		# $Indel_cnt{$_}++ foreach @Indels;
 		
-		my @IndelType = sort {$Indel_cnt{$b} <=> $Indel_cnt{$a}} keys %Indel_cnt;
-		my @IndelCount = @Indel_cnt{@IndelType};
+		# my @IndelType = sort {$Indel_cnt{$b} <=> $Indel_cnt{$a}} keys %Indel_cnt;
+		# my @IndelCount = @Indel_cnt{@IndelType};
 	
 		### Work on a nucleotides specific string
 		$algn =~ s/\$//g;   
@@ -101,18 +101,24 @@ foreach my $file (@files) {
                 	    $T++;
         		}
         	}
-		if (scalar @IndelCount == 0) { 	
-			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","_","_","_","_"),"\n";
-			next;
-		} elsif (scalar @IndelCount == 1) {
-			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","_","_"),"\n";
-			next;
-		} elsif (scalar @IndelCount > 1) {
-			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","$IndelCount[1]","$IndelType[1]"),"\n";
-			next;
-		} else {
-		next;
-		}
+        	
+        	### Call only SNPs
+        	print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T"),"\n";
+        	
+        	
+        	### Call SNPs and Indels. Needs improvements ...
+#		if (scalar @IndelCount == 0) { 	
+#			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","_","_","_","_"),"\n";
+#			next;
+#		} elsif (scalar @IndelCount == 1) {
+#			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","_","_"),"\n";
+#			next;
+#		} elsif (scalar @IndelCount > 1) {
+#			print OUT1 join ("\t",$input1[0],$input1[1],$input1[2]),"\t",join(",","$A","$C","$G","$T","$IndelCount[0]","$IndelType[0]","$IndelCount[1]","$IndelType[1]"),"\n";
+#			next;
+#		} else {
+#			next;
+#		}
 	}
 	
 	close PILEUP;
@@ -156,7 +162,7 @@ foreach my $file (@files) {
 
 print "\nCreating a polymorphic variant list...\n";
 
-system ( "cat *.ref.txt | uniq > SNPsVerticalRef.txt" );
+system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
 
 # Creating a count file list
 system ( "ls *.count.txt > CountFileList.txt" );
@@ -165,7 +171,7 @@ print "DONE.\n";
 
 print "\nCreating a variant depth count master matrix...\n";
 
-my $posFile = "SNPsVerticalRef.txt";
+my $posFile = "VerticalRefPos.txt";
 my $countList = "CountFileList.txt";
 
 open (POS, "$posFile") || die "cant load file $!";
@@ -232,7 +238,7 @@ main();
 
 system ( "mv *.count.txt ./mpileup" );
 system ( "mv *.mpileup ./mpileup" );
-system ( "mv VariantVerticalRef.txt ./mpileup" );
+system ( "mv VerticalRefPos.txt ./mpileup" );
 system ( "mv CountFileList.txt ./mpileup" );
 system ( "rm *.ref.txt" );
 system ( "rm *.countF.txt" );
