@@ -9,7 +9,7 @@ use warnings;
 use Getopt::Long qw(GetOptions);
 use List::Util qw(sum);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-7.pl -in <input file> -out <output file> -mnHoDepth 
+my $Usage = "Usage: perl GBS-SNP-CROP-7.pl -in <count matrix> -out <genotyping matrix> -mnHoDepth 
 <minimum depth value required for homozygotes call> -mnHeDepth <minimum depth value required for heterozygotes call>
 -mnAlleleProp <minimum treshold of less frequent to more frequent allele> -call <SNP call rate across the population threshold value>
 -mnAvgDepth <minimum acceptable of SNP average depth> -mxAvgDepth <maximum acceptable of SNP average depth>\n";
@@ -83,35 +83,35 @@ while (<VAR>) {
 				$Var_cnt{'T'} = $Var_cnt{'T'} + 1;
 			}
 		}
-		if ( $genotype[4] ne "_" ) {
-			if ( exists $Var_depth{$genotype[5]} ) {
-				$Var_depth{$genotype[5]} = $Var_depth{$genotype[5]} + $genotype[4];
-			} else {
-				$Var_depth{$genotype[5]} = $genotype[4];
-			}
-			if ( $genotype[4] > 0 ) {
-				if ( exists $Var_cnt{$genotype[5]} ) {
-					$Var_cnt{$genotype[5]} = $Var_cnt{$genotype[5]} + 1;
-				} else {
-					$Var_cnt{$genotype[5]} = 1;
-				}
-			}
-		}
-						
-		if ( $genotype[6] ne "_" ) {
-			if ( exists $Var_depth{$genotype[7]} ) {
-				$Var_depth{$genotype[7]} = $Var_depth{$genotype[7]} + $genotype[6];
-			} else {
-				$Var_depth{$genotype[7]} = $genotype[6];
-			}
-			if ( $genotype[6] > 0 ) {
-				if ( exists $Var_cnt{$genotype[7]} ) {
-					$Var_cnt{$genotype[7]} = $Var_cnt{$genotype[7]} + 1;
-				} else {
-					$Var_cnt{$genotype[7]} = 1;
-				}
-			}
-		}
+#		if ( $genotype[4] ne "_" ) {
+#			if ( exists $Var_depth{$genotype[5]} ) {
+#				$Var_depth{$genotype[5]} = $Var_depth{$genotype[5]} + $genotype[4];
+#			} else {
+#				$Var_depth{$genotype[5]} = $genotype[4];
+#			}
+#			if ( $genotype[4] > 0 ) {
+#				if ( exists $Var_cnt{$genotype[5]} ) {
+#					$Var_cnt{$genotype[5]} = $Var_cnt{$genotype[5]} + 1;
+#				} else {
+#					$Var_cnt{$genotype[5]} = 1;
+#				}
+#			}
+#		}
+#						
+#		if ( $genotype[6] ne "_" ) {
+#			if ( exists $Var_depth{$genotype[7]} ) {
+#				$Var_depth{$genotype[7]} = $Var_depth{$genotype[7]} + $genotype[6];
+#			} else {
+#				$Var_depth{$genotype[7]} = $genotype[6];
+#			}
+#			if ( $genotype[6] > 0 ) {
+#				if ( exists $Var_cnt{$genotype[7]} ) {
+#					$Var_cnt{$genotype[7]} = $Var_cnt{$genotype[7]} + 1;
+#				} else {
+#					$Var_cnt{$genotype[7]} = 1;
+#				}
+#			}
+#		}
 	}
 	
 	# Estimating the total population depth and skip NA lines	
@@ -189,12 +189,12 @@ while (<VAR>) {
 		if ( $genotype[3] ne "_" ) {
 			$geno_hash{'T'} = $genotype[3];
 		}
-		if ( $genotype[4] ne "_" ) {
-			$geno_hash{$genotype[5]} = $genotype[4];
-		} 
-		if ( $genotype[6] ne "_" ) {
-			$geno_hash{$genotype[7]} = $genotype[6];
-		} 
+#		if ( $genotype[4] ne "_" ) {
+#			$geno_hash{$genotype[5]} = $genotype[4];
+#		} 
+#		if ( $genotype[6] ne "_" ) {
+#			$geno_hash{$genotype[7]} = $genotype[6];
+#		} 
 		
 		# Estimating the genotype specific primary and secondary alleles 
 		my $primary_count = $geno_hash{$pop_one_var};
@@ -308,9 +308,9 @@ while (<VAR>) {
 
 close DEST;
 
-print "Your $output genotyping matrix was successfully created. \n\n";
+print "Your $output genotyping SNP matrix was successfully created. \n\n";
 
-print "GBS-SNP-CROP called $lc Variants in your population using the follow parameters:\n
+print "GBS-SNP-CROP called $lc SNPs in your population using the follow parameters:\n
 Minimum read depth required to call homozygotes alleles: $minHomoDepth
 Minimum read depth required to call heterozygotes alleles: $minHeteroDepth
 Minimum proportion of less frequent to more frequent alleles: $AlleleFreqProp
