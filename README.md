@@ -35,22 +35,26 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 ### Citing GBS-SNP-CROP
 Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. DOI XX.
 
+### GBS-SNP-CROP discussion forum
+Please, acess [pipeline Google group][4]
+
 ### Requirements
-* [Java 7 or higher][4] - We used Java 8
-* [Trimmomatic][5] (Bolger et al., 2014) - We used v.0.33
-* [PEAR][6] (Zhang et al., 2014) - We used v.0.96
-* [Usearch][7] (Edgar, 2010) - We used v.8.0.1623
-* [BWA aligner][8] (Li & Durbin, 2009) - We used v.0.7.12
-* [SAMTools][9] (Li et al., 2009) - We used v.1.2
+* [Java 7 or higher][5] - We used Java 8
+* [Trimmomatic][6] (Bolger et al., 2014) - We used v.0.33
+* [PEAR][7] (Zhang et al., 2014) - We used v.0.96
+* [Usearch][8] (Edgar, 2010) - We used v.8.0.1623
+* [BWA aligner][9] (Li & Durbin, 2009) - We used v.0.7.12
+* [SAMTools][10] (Li et al., 2009) - We used v.1.2
 
 [1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-UserManual_v1.0.pdf
 [2]:http://www.halelab.org
 [3]:https://github.com/halelab/GBS-SNP-CROP/tree/master/GBS-SNP-CROP-scripts
-[4]:https://www.java.com/en/
-[5]:http://www.usadellab.org/cms/?page=trimmomatic
-[6]:http://sco.h-its.org/exelixis/web/software/pear/
-[7]: http://www.drive5.com/usearch/
-[8]:http://bio-bwa.sourceforge.net
-[9]:http://samtools.sourceforge.net
+[4]:https://groups.google.com/forum/#!forum/gbs-snp-crop
+[5]:https://www.java.com/en/
+[6]:http://www.usadellab.org/cms/?page=trimmomatic
+[7]:http://sco.h-its.org/exelixis/web/software/pear/
+[8]: http://www.drive5.com/usearch/
+[9]:http://bio-bwa.sourceforge.net
+[10]:http://samtools.sourceforge.net
 
 
