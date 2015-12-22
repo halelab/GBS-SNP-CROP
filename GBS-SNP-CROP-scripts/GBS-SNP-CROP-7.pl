@@ -9,53 +9,54 @@ use warnings;
 use Getopt::Long qw(GetOptions);
 use List::Util qw(sum);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-7.pl -in <count matrix> -out <genotyping matrix> -mnHoDepth 
-<minimum depth value required for homozygotes call> -mnHeDepth <minimum depth value required for heterozygotes call>
--mnAlleleProp <minimum treshold of less frequent to more frequent allele> -call <SNP call rate across the population threshold value>
--mnAvgDepth <minimum acceptable of SNP average depth> -mxAvgDepth <maximum acceptable of SNP average depth>\n";
+my $Usage = "Usage: perl GBS-SNP-CROP-7.pl -in <master matrix filename> -out <genotyping matrix filename> -mnHoDepth0 <minimum depth required for calling a homozygote when the alternative allele depth = 0>\n"
+."-mnHoDepth1 <minimum depth required for calling a homozygote when the alternative allele depth = 1> -mnHetDepth <minimum depth required for each allele when calling a heterozygote>\n"
+."-altStrength <Across the population for a given putative bi-allelic SNP, this alternate allele strength parameter is the minimum proportion of non-primary allele reads that are the secondary allele (numeric)>\n" 
+."-mnAlleleRatio <minimum requierd ratio of less frequent to more frequent allele depht to more frequent allele depth> -mnCall <minimum acceptable proportion of genotyped individuals to retain a SNP>\n"
+."-mnAvgDepth <minimum average depth of an acceptable SNP> -mxAvgDepth <maximum average depth of an acceptable SNP>\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
-my ($SummaryFile,$output,$minHomoDepth,$minHeteroDepth,$AlleleFreqProp,$CallRate,$minAvgDepth,$maxAvgDepth);
+my ($SummaryFile,$output,$minHomoDepth,$minHomoDepthOneAlt,$minHeteroDepth,$AltAlleleStrength,$AlleleFreqProp,$CallRate,$minAvgDepth,$maxAvgDepth);
 
 GetOptions(
-'in=s' => \$SummaryFile,    			# file
-'out=s' => \$output,				# file
-'mnHoDepth=s' => \$minHomoDepth, 		# numeric
-'mnHeDepth=s' => \$minHeteroDepth,	 	# numeric
-'mnAlleleProp=s' => \$AlleleFreqProp,  		# numeric
-'call=s' => \$CallRate,				# numeric
-'mnAvgDepth=s' => \$minAvgDepth, 		# numeric
-'mxAvgDepth=s' => \$maxAvgDepth, 		# numeric
+'in=s' => \$SummaryFile,                   # file
+'out=s' => \$output,                       # file
+'mnHoDepth0=s' => \$minHomoDepth,          # numeric
+'mnHoDepth1=s' => \$minHomoDepthOneAlt,    # numeric
+'mnHetDepth=s' => \$minHeteroDepth,        # numeric
+'altStrength=s' => \$AltAlleleStrength,    # numeric
+'mnAlleleRatio=s' => \$AlleleFreqProp,     # numeric
+'mncall=s' => \$CallRate,                    # numeric
+'mnAvgDepth' => \$minAvgDepth,             # numeric
+'mxAvgDepth=s' => \$maxAvgDepth,           # numeric
 ) or die "$Usage\n$Manual\n";
 
-print "\nGBS-SNP-CROP is filtering variants and calling genotypes for your population...\n";
+print "\n#######################\n# GBS-SNP-CROP, Step 7\n#######################\n";
+print "\nGBS-SNP-CROP is filtering SNPs and calling genotypes for your population...\n";
 
-
-open (VAR, "$SummaryFile") || die "cant load file";
-open (DEST, ">$output") || die "cant load file";
+open my $VAR, "<", "$SummaryFile" or die "Can't load file $SummaryFile";
+open my $DEST, ">", "$output" or die "Can't initialized $output output file";
 
 my $lc = 0;
 
-while (<VAR>) {
+while (<$VAR>) {
 	chomp;
 	my @input = split("\t", $_);
 	my $header = $input[0];
 	my $position = $input[1];
 	my $ref = $input[2];
-	
-# Parse mpileup count summary file in two hashes
+
 	my %Var_depth = ( 'A' => 0,
-			  'C' => 0,
-			  'G' => 0,
-			  'T' => 0 );
-	
+					'C' => 0,
+					'G' => 0,
+					'T' => 0 );
+
 	my %Var_cnt = ( 'A' => 0,
-			'C' => 0,
-			'G' => 0,
-			'T' => 0 );
+					 'C' => 0,
+					 'G' => 0,
+					 'T' => 0 );
 
 	for ( my $x=3; $x < scalar(@input); $x++ ){
-	
 		my $geno=$input[$x];
 		my @genotype = split(",", $geno);
 		
@@ -83,69 +84,39 @@ while (<VAR>) {
 				$Var_cnt{'T'} = $Var_cnt{'T'} + 1;
 			}
 		}
-#		if ( $genotype[4] ne "_" ) {
-#			if ( exists $Var_depth{$genotype[5]} ) {
-#				$Var_depth{$genotype[5]} = $Var_depth{$genotype[5]} + $genotype[4];
-#			} else {
-#				$Var_depth{$genotype[5]} = $genotype[4];
-#			}
-#			if ( $genotype[4] > 0 ) {
-#				if ( exists $Var_cnt{$genotype[5]} ) {
-#					$Var_cnt{$genotype[5]} = $Var_cnt{$genotype[5]} + 1;
-#				} else {
-#					$Var_cnt{$genotype[5]} = 1;
-#				}
-#			}
-#		}
-#						
-#		if ( $genotype[6] ne "_" ) {
-#			if ( exists $Var_depth{$genotype[7]} ) {
-#				$Var_depth{$genotype[7]} = $Var_depth{$genotype[7]} + $genotype[6];
-#			} else {
-#				$Var_depth{$genotype[7]} = $genotype[6];
-#			}
-#			if ( $genotype[6] > 0 ) {
-#				if ( exists $Var_cnt{$genotype[7]} ) {
-#					$Var_cnt{$genotype[7]} = $Var_cnt{$genotype[7]} + 1;
-#				} else {
-#					$Var_cnt{$genotype[7]} = 1;
-#				}
-#			}
-#		}
 	}
-	
-	# Estimating the total population depth and skip NA lines	
+
 	my $total;
 	while ( my ($key, $val) = each %Var_depth ) {
-    	$total += sum $val;
+		$total += sum $val;
 	}
 	if ( $total == 0) {
 		next;
 	}
-	
-	# Create the @rank array and sort Variant depth hash		
+
 	my @rank = ();
-	
+
 	foreach my $variant (sort { $Var_depth{$b} <=> $Var_depth{$a} } keys %Var_depth) {
-    	push @rank, $variant;
-    }
+		push @rank, $variant;
+	}
 
-	my $pop_one_var = $rank[0];				my $pop_two_var = $rank[1];
-	my $pop_one_count = $Var_depth{$pop_one_var};		my $pop_two_count = $Var_depth{$pop_two_var};
+	my $pop_one_var = $rank[0];
+	my $pop_two_var = $rank[1];
+	my $pop_one_count = $Var_depth{$pop_one_var};
+	my $pop_two_count = $Var_depth{$pop_two_var};
 
-	# Initial filters based on population allele frequency.  
-	# The secondary allele ratio, strength and representativeness are ask
+	# Initial filters based on population-level allele frequencies
 	my $alt_allele_ratio = ( $pop_two_count / ($pop_one_count + $pop_two_count) );
 	if ( $alt_allele_ratio < 0.05) {
 		next;
 	}
-
+	
 	if ( $pop_two_count == 0 ) {
 		next;
 	}
 	
 	my $alt_allele_strength = ( $pop_two_count / ($total - $pop_one_count) );
-	if ( $alt_allele_strength < 0.9 ) {
+	if ( $alt_allele_strength < $AltAlleleStrength ) {
 		next;
 	}
 	
@@ -157,26 +128,23 @@ while (<VAR>) {
 		next;
 	}
 	
-	# Define some variables to use after for loop (applying the genotyping criteria)	
+	# Secondary filters based on genotype-level allele frequencies
 	my $row = "";
 	my $homo_pri = 0;
 	my $hets = 0;
 	my $homo_alt = 0;
-	my $cumulative_depth = 0;	
+	my $cumulative_depth = 0;
 
-	# Initialize for loop across the entire population for count primary and secondary alleles for 
-	# each genotype separately. A genotype specific hash will be use to count primary and 
-	# secondary alleles. The genotyping criteria will be applied ... 
 	for ( my $x=3; $x < scalar(@input); $x++ ) {
 	
 		my $geno=$input[$x];
 		my @genotype = split(",",$geno);
-		
+	
 		my %geno_hash = ( 'A' => 0,
-				  'C' => 0,
-				  'G' => 0,
-				  'T' => 0 );
-				 		  
+							'C' => 0,
+							'G' => 0,
+							'T' => 0 );
+
 		if ( $genotype[0] ne "_" ) {
 			$geno_hash{'A'} = $genotype[0];
 		}
@@ -189,17 +157,10 @@ while (<VAR>) {
 		if ( $genotype[3] ne "_" ) {
 			$geno_hash{'T'} = $genotype[3];
 		}
-#		if ( $genotype[4] ne "_" ) {
-#			$geno_hash{$genotype[5]} = $genotype[4];
-#		} 
-#		if ( $genotype[6] ne "_" ) {
-#			$geno_hash{$genotype[7]} = $genotype[6];
-#		} 
-		
-		# Estimating the genotype specific primary and secondary alleles 
+
 		my $primary_count = $geno_hash{$pop_one_var};
 		my $alt_count = $geno_hash{$pop_two_var};
-		
+
 		if (!$primary_count) {
 			$primary_count = 0;
 		}
@@ -215,30 +176,30 @@ while (<VAR>) {
 
 		my $depth = 0;
 
-		# Genotyping criteria. Call Heterozygotes		   
+		# Calling heterozygotes
 		if ( ($primary_count > $alt_count) and ($primary_count < 20) and ($primary_count >= $minHeteroDepth && $alt_count >= $minHeteroDepth)) {
 			$hets++;
 			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
 			$depth = $primary_count + $alt_count;
-		} elsif ( ($primary_count > $alt_count) and $primary_count >= 20 && $alt_count >= ($AlleleFreqProp * $primary_count)) {
+		} elsif ( ($primary_count > $alt_count) and $primary_count >= 20 and $alt_count >= ($AlleleFreqProp * $primary_count)) {
 			$hets++;
-			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";						
+			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
 			$depth = $primary_count + $alt_count;
 		} elsif ( ($alt_count > $primary_count) and ($alt_count < 20) and ($alt_count >= $minHeteroDepth && $primary_count >= $minHeteroDepth)) {
 			$hets++;
 			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
 			$depth = $primary_count + $alt_count;
-		} elsif ( ($alt_count > $primary_count) and $alt_count >= 20 && $primary_count >= ($AlleleFreqProp * $alt_count)) {
+		} elsif ( ($alt_count > $primary_count) and $alt_count >= 20 and $primary_count >= ($AlleleFreqProp * $alt_count)) {
 			$hets++;
-			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";						
-			$depth = $primary_count + $alt_count;	
-		
-		# Genotyping criteria. Call Homozygotes        
-        	} elsif ( $primary_count >= $minHomoDepth && $alt_count == 0 ) {
+			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
+			$depth = $primary_count + $alt_count;
+
+		# Calling homozygotes
+		} elsif ( $primary_count >= $minHomoDepth && $alt_count == 0 ) {
 			$homo_pri++;
 			$row = "$row\t$pop_one_var/$pop_one_var|$primary_count/0";
 			$depth = $primary_count;
-		} elsif ( $primary_count >= 50 && $alt_count == 1 ) {
+		} elsif ( $primary_count >= $minHomoDepthOneAlt && $alt_count == 1 ) {
 			$homo_pri++;
 			$row = "$row\t$pop_one_var/$pop_one_var|$primary_count/1";
 			$depth = $primary_count;
@@ -246,80 +207,77 @@ while (<VAR>) {
 			$homo_alt++;
 			$row = "$row\t$pop_two_var/$pop_two_var|0/$alt_count";
 			$depth = $alt_count;
-	
-		# Genotyping criteria. Missing data
-    		} elsif ( $primary_count == $minHeteroDepth || $alt_count == $minHeteroDepth ) {
-        		$row = "$row\t-|$primary_count/$alt_count";  
+
+		# Declaring missing genotypes
+		} elsif ( $primary_count == $minHeteroDepth || $alt_count == $minHeteroDepth ) {
+			$row = "$row\t-|$primary_count/$alt_count";  
 		} elsif ( $primary_count == 0 && ($primary_count + $alt_count) < $minHomoDepth ) {
-        	 	$row = "$row\t-|$primary_count/$alt_count";        
-        	} elsif ( $alt_count == 0 && ($primary_count + $alt_count) < $minHomoDepth ) {
-            		$row = "$row\t-|$primary_count/$alt_count";
-			
+			$row = "$row\t-|$primary_count/$alt_count";        
+		} elsif ( $alt_count == 0 && ($primary_count + $alt_count) < $minHomoDepth ) {
+			$row = "$row\t-|$primary_count/$alt_count";
+
 		} else {
 			$row = "$row\t-|-";
 		}
-		
-		$cumulative_depth = $cumulative_depth + $depth;
+			$cumulative_depth = $cumulative_depth + $depth;
 	}
 
-	# Estimate some parameters like % of scored genotypes and applying some population level 
-	# filter like variant loci depth, genotyping call and control the sequencing error (loci 
-	# representation across the population)
+	# Calculating population-level genotype parameters for additional filtering
 	my $scored_genotypes = $homo_pri + $hets + $homo_alt;
 	my $percentage_scored_genotypes = ($scored_genotypes) / ((scalar(@input) - 3))*100;
-	
+
 	if ( $scored_genotypes == 0 ) {
 		next;
 	}
-		
+
 	my $avgDepth = $cumulative_depth / $scored_genotypes;
-			
+
 	# Depth filter
 	if( ($avgDepth < $minAvgDepth) or ($avgDepth > $maxAvgDepth) ) {
 		next;
-	}	
+	}
 	
-	# Control sequencing error - Representation
+	# Genotype representation filter
 	if ( (scalar(@input) - 3) > 20 and (($homo_pri + $hets) < 3 or ($homo_alt + $hets) < 3 ) ) {
 		next;
 	} elsif( (scalar(@input) - 3) < 20 and (($homo_pri + $hets) < 2 or ($homo_alt + $hets) < 2 ) ) {
 		next;
 	}
 
-	# Genotype call control
-	if($scored_genotypes <= $CallRate * (scalar @input - 3)){	
+	# Genotype proportion filter
+	if($scored_genotypes <= $CallRate * (scalar @input - 3)){
 		next;
 	}
 
-	# Create a new column about variant type.
-	# if some Indel pattern (+|-) appear on pop_one or pop_two base, this loci is an Indel call
-	my $VarType = "";
-	if ( $pop_one_var =~ /^(\+|-)/ or $pop_two_var =~ /^(\+|-)/ ) {
-		$VarType = "Indel";
-	} else {
-		$VarType = "SNP";
-	}
-	
-	$row = join ("\t","$header","$position","$VarType","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
-	print DEST "$row\n";
+	$row = join ("\t","$header","$position","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
+	print $DEST "$row\n";
 	$lc++;
-	
 }
 
-close DEST;
+close $DEST;
 
-print "Your $output genotyping SNP matrix was successfully created. \n\n";
+print "\nYour $output genotyping matrix was successfully created. \n";
 
-print "GBS-SNP-CROP called $lc SNPs in your population using the follow parameters:\n
-Minimum read depth required to call homozygotes alleles: $minHomoDepth
-Minimum read depth required to call heterozygotes alleles: $minHeteroDepth
-Minimum proportion of less frequent to more frequent alleles: $AlleleFreqProp
-Minimum threshold to call some variant rate across the population: $CallRate
-Minimum acceptable average read depth: $minAvgDepth
-Maximum acceptable average read depth: $maxAvgDepth\n";
+print "GBS-SNP-CROP called $lc SNPs in your population using the following parameters:\n"
+."Minimum read depth required to call homozygotes when the secondary allele depth = 0: $minHomoDepth\n"
+."Minimum read depth required to call homozygotes when the secondary allele depth = 1: $minHomoDepthOneAlt\n"
+."Minimum read depth for each allele equired to call heterozygotes: $minHeteroDepth\n"
+."Minimum proportion of non-primary allele reads that are the secondary allele: $AltAlleleStrength\n"
+."Minimum proportion of less frequent allele depth to more frequent allele depth: $AlleleFreqProp\n"
+."Minimum proportion of genotyped individuals to accept a SNP: $CallRate\n"
+."Minimum acceptable average read depth: $minAvgDepth\n"
+."Maximum acceptable average read depth: $maxAvgDepth\n";
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for
-SNP discovery and plant germplasm characterization using variable length, paired-end
-genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+sub main {
+	my $dir = "SNPsCalled"; 
+	unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
+}
+main();
+
+system ( "mv $SummaryFile $output ./SNPsCalled" );
+
+print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
 
 exit;
