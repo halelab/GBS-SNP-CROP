@@ -4,7 +4,7 @@
 ####################################################################
 
 # Authors: Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
-# University of New Hampshire, College of Life Science and Agriculture, Department of Biological Sciences, Durham, NH, USA.
+# Department of Biological Sciences, College of Life Science and Agriculture, University of New Hampshire, Durham, NH, USA.
 
 Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl –b barcodesID.txt –fq L001 –s 1 –e 2 –enz1 TGCA –enz2 CGG 
