@@ -1,26 +1,27 @@
 #!/usr/bin/perl
 
 ##########################################################################################
-# GBS-SNP-CROP-8.pl
-# For description, see Melo et al. (2015) DOI XXX
+# GBS-SNP-CROP, Step 8. For description, see Melo et al. (2015) DOI XXX
 ##########################################################################################
 
 use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>
--formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format should be created>.\n";
+my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>\n"
+."-formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format is desired>.\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
 my ($SNPmatrix,$output,$barcodesID_file,$tools);
 
 GetOptions(
-'in=s' => \$SNPmatrix,    		# file
-'out=s' => \$output,			# file
-'b=s' => \$barcodesID_file		# file
-'formats=s' => \$tools,			# file
+'in=s' => \$SNPmatrix,          # file
+'out=s' => \$output,            # file
+'b=s' => \$barcodesID_file,     # file
+'formats=s' => \$tools,         # file
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
+
+print "\n#######################\n# GBS-SNP-CROP, Step 8\n#######################\n";
 
 #####################
 # Defining outputs
@@ -37,23 +38,23 @@ if ($tools =~ "R" or $tools =~ "r"){
 
 	print "\nConverting the SNP genotyping matrix into an input file compatible with R software...";
 
-	open (IN, "$SNPmatrix") || die "cant load file";
-	open (OUT_R, ">$R_out") || die "cant load file";
+	open my $IN1, "<", "$SNPmatrix" or die "Can't load $SNPmatrix file";
+	open my $OUT_R, ">", "$R_out" or die "Can't initialize $R_out output file";
 	
-	while(<IN>) {
+	while(<$IN1>) {
 		my @snp = split "\t", $_;
 		chomp @snp;
 
 		my $col = join ("\t",$snp[0],$snp[1]);
-		my $primary = $snp[5];
-		my $secondary = $snp[6];
+		my $primary = $snp[4];
+		my $secondary = $snp[5];
 
 		my @out = ();
 		push @out, "$col";
 	
 		my $length = scalar(@snp) - 1;
 	
-		for ( my $i=11; $i<=$length; $i++ ) {
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -76,29 +77,28 @@ if ($tools =~ "R" or $tools =~ "r"){
 				push @out, "NA";
 				next;
 			}
-		}	
+		}
 		my $line = join "\t", @out;
-		print OUT_R "$line\n";
+		print $OUT_R "$line\n";
 	}
 
-	close IN;
-	close OUT_R;
+	close $IN1;
+	close $OUT_R;
 	print "DONE.\n";
 	
 	} else {
 }
 
-#######################################
+#####################################
 # Creating Tassel HapMap input file
-#		  work only for SNPs
-#######################################
+#####################################
 if ($tools =~ "T" or $tools =~ "t"){
-	
+
 	print "\nConverting the SNP genotyping matrix into an input file compatible with TASSEL GUI software...";
 
 	my @TaxaNames = ();
-	open BAR, "$barcodesID_file" or die "Can't find $barcodesID_file file\n";
-	while(<BAR>) {
+	open my $BAR, "<", "$barcodesID_file" or die "Can't find $barcodesID_file file\n";
+	while(<$BAR>) {
 		my $barcodesID = $_;
 		chomp $barcodesID;
 		my @barcode = split("\t", $barcodesID);
@@ -107,41 +107,37 @@ if ($tools =~ "T" or $tools =~ "t"){
 	s/_/./g for @TaxaNames;
 
 	my @output;
-	
-	open (IN, "$SNPmatrix") || die "cant load file";
-	open (OUT_T, ">$Tassel_out") || die "cant load file";
-	
-	while(<IN>) {
+
+	open my $IN2, "<", "$SNPmatrix" or die "Can't load $SNPmatrix file";
+	open my $OUT_T, ">", "$Tassel_out" or die "Can't initialize $Tassel_out output file";
+
+	while(<$IN2>) {
 		my @snp = split "\t", $_;
 		chomp @snp;
-		
-		if ($snp[2] eq "Indel") {
-			next;
-		}
-	
+
 		my $col1 = join ("_",$snp[0],$snp[1]);
-		my $alleles = join ("/",$snp[5],$snp[6]);
+		my $alleles = join ("/",$snp[4],$snp[5]);
 
 		my @out;
-	
+
 		my $length = scalar(@snp) - 1;
-	
-		for ( my $i=11; $i<=$length; $i++ ) {
+
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
 			if ($geno2 eq "-") {
 				push @out,"N";
-				next;			
+				next;
 			} elsif ($geno2 eq join("/","A","A")) {
 				push @out,"A";
-				next;	
+				next;
 			} elsif ($geno2 eq join("/","C","C")) {
 				push @out,"C";
 				next;
 			} elsif ($geno2 eq join("/","G","G")) {
 				push @out,"G";
-				next;	
+				next;
 			} elsif ($geno2 eq join("/","T","T")) {
 				push @out,"T";
 				next;
@@ -167,66 +163,60 @@ if ($tools =~ "T" or $tools =~ "t"){
 				push @out,"N";
 				next;
 			}
-		}				
-		my $line = join ("\t","$col1","$alleles","$snp[0]","$snp[1]","+","NA","GBS-SNP-CROP",
-						"GBS","RefName","Custom","QC+","@out");
+		}
+		my $line = join ("\t","$col1","$alleles","$snp[0]","$snp[1]","+","NA","GBS-SNP-CROP","GBS","RefName","Custom","QC+","@out");
 		push @output,"$line\n";
 
 	}
-	print OUT_T "#rs\talleles\tchrom\tpos\tstrand\tassembly\tcenter\tprotLSID\tassayLSID\tpanelLSID\tQCcode\t@TaxaNames\n@output";
+	print $OUT_T "#rs\talleles\tchrom\tpos\tstrand\tassembly\tcenter\tprotLSID\tassayLSID\tpanelLSID\tQCcode\t@TaxaNames\n@output";
 
-	close IN;
-	close OUT_T;
+	close $IN2;
+	close $OUT_T;
 	print "DONE.\n";
 	
 	} else {
 }
 
-################################
+############################
 # Creating PLINK input file 
-#	work only for SNPs
-#################################
+############################
 if ($tools =~ "P" or $tools =~ "p"){
 
 	print "\nConverting the SNP genotyping matrix into an input file compatible with PLINK software...";
-	
-	open (IN, "$SNPmatrix") || die "cant load file";
-	open (OUT_P, ">$Plink_out") || die "cant load file";
-	
-	while (<IN>) {
+
+	open my $IN3, "<", "$SNPmatrix" or die "Can't load $SNPmatrix file";
+	open my $OUT_P, ">", "$Plink_out" or die "Can't initialize $Plink_out output file";
+
+	while (<$IN3>) {
 		chomp;
 		my @input = split ("\t", $_);
-		
-		if ($input[2] eq "Indel") {
-			next;
-		}
-		
+
 		my $header = $input[0];
 		my $position = $input[1];
 		my $snp_identifier = join ("_",$header,$position);
 		$header =~ s/chr0//;
 		$header =~ s/chr//;
 		my $Tpedfile = join("\t",$header,$snp_identifier,"0",$position);
-	
-		my @geno = splice @input, 11; 
+
+		my @geno = splice @input, 10; 
 		foreach (@geno) {
 			my @geno1 = split /\|/, $_;
 			s/-/0 0/ for @geno1;
 			s/\// / for @geno1;	
 			$Tpedfile = join("\t",$Tpedfile,$geno1[0]);
 		}
-		print OUT_P "$Tpedfile\n";
+		print $OUT_P "$Tpedfile\n";
 	}
 
-	close IN;
-	close OUT_P;
+	close $IN3;
+	close $OUT_P;
 	print "DONE.\n";
-	
+
 	} else {
 }
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for
-SNP discovery and plant germplasm characterization using variable length, paired-end
-genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
 
 exit;
