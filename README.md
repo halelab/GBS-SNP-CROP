@@ -46,7 +46,7 @@ Please, acess the [pipeline Google group][4]
 * [BWA aligner][9] (Li & Durbin, 2009) - We used v.0.7.12
 * [SAMTools][10] (Li et al., 2009) - We used v.1.2
 
-[1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-UserManual.pdf
+[1]:https://github.com/halelab/GBS-SNP-CROP/blob/master/UserManual.pdf
 [2]:http://www.halelab.org
 [3]:https://github.com/halelab/GBS-SNP-CROP/tree/master/GBS-SNP-CROP-scripts
 [4]:https://groups.google.com/forum/#!forum/gbs-snp-crop
