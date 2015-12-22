@@ -1,16 +1,17 @@
 #!/usr/bin/perl
 
 ##########################################################################################
-# GBS-SNP-CROP, Step 1. For description, see Melo et al. (2015) DOI XXX
+# GBS-SNP-CROP, Step 1. For description, please see Melo et al. (2015) DOI XXX
 ##########################################################################################
 
 use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
+use IO::Zlib;
 
-my $Usage = "Usage: perl GBS-SNP-CROP-1.pl -b <barcode-ID file name> -fq <FASTQ file name seed> 
--s <start number of FASTQ file> -e <end number of FASTQ file> -enz1 <enzyme 1 restriction site residue sequence> 
--enz2 <enzime 2 restriction site residue sequence>.\n";
+my $Usage = "Usage: perl GBS-SNP-CROP-1.pl -b <barcode-ID file name> -fq <FASTQ file name seed>\n" 
+."-s <start number of FASTQ file> -e <end number of FASTQ file> -enz1 <enzyme 1 restriction site residue sequence>\n" 
+."-enz2 <enzyme 2 restriction site residue sequence>.\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
 my ($barcodesID_file,$fastq_seed,$fastq_start_num,$fastq_end_num,$enzyme1,$enzyme2);
@@ -23,6 +24,8 @@ GetOptions(
 'enz1=s' => \$enzyme1,        # string
 'enz2=s' => \$enzyme2,        # string
 ) or die "$Usage\n$Manual\n";
+
+print "\n#######################\n# GBS-SNP-CROP, Step 1\n#######################\n";
 
 my $RC_enz1 = reverse $enzyme1;
 $RC_enz1 =~ tr/acgtACGT/tgcaTGCA/;
@@ -64,16 +67,15 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 	die "Unable to identify input fastq.gz files.\n";
 	}
 
-	print "\n\nProcessing files $R1file and $R2file\n";
+	print "\nProcessing files $R1file and $R2file\n";
 	print "Loading data...";
 	
 	my @R1read;
 	my @R1reads;
 	
-	open IN, "gunzip -c $R1file |" or die "Can't open file: $!\n";
-	
+	open my $IN1, '-|', 'gzip', '-dc', $R1file or die "Can't open file $R1file: $!\n";
 	my $i = 1;
-	while(<IN>) {
+	while(<$IN1>) {
 		if ($i % 4 != 0) {
 			push @R1read, $_;
 			$i++;
@@ -85,14 +87,14 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			$i++;
 		}
 	}
-	
+	close $IN1;
+		
 	my @R2read;
 	my @R2reads;
 	
-	open IN, "gunzip -c $R2file |" or die "Can't open file: $!\n";
-	
+	open my $IN2, '-|', 'gzip', '-dc', $R2file or die "Can't open file $R2file: $!\n";
 	my $j = 1;
-	while(<IN>) {
+	while(<$IN2>) {
 		if ($j % 4 != 0) {
 			push @R2read, $_;
 			$j++;
@@ -104,7 +106,8 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			$j++;
 		}
 	}
-	
+	close $IN2;
+		
 	print "\nConsolidating R1 and R2 reads...";
 		
 	my $size = scalar @R1reads - 1;
@@ -133,26 +136,24 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 		
 	@R2reads = ();
 	
-	print "\nExtracting barcodes from R1 reads (exact matches and one mismatch)...";
+	print "\nExtracting barcodes from R1 reads (exact matches or one mismatch)...";
 		
 	my @barcodes = ();
 	my $barcode_string = "";
 	
-	open IN, "$barcodesID_file" or die "Can't find barcode_ID file\n";
-	
-	while(<IN>) {
-		my $barcodesID = $_;
-		chomp $barcodesID;
-		my @barcode = split("\t", $barcodesID);
+	open my $BAR, "<", "$barcodesID_file" or die "Can't find barcode_ID file\n";
+	while ( <$BAR> ) {
+		my $barcodeID = $BAR;
+		chomp $barcodeID;
+		my @barcode = split("\t", $barcodeID);
 		my $barcode_list = $barcode[0];
 		my $TaxaNames = $barcode[1];
-	
 		push @barcodes, $barcode_list;
 		$barcode_string = "$barcode_string $_";
-		}
-	
+	}
+	close $BAR;
 	chomp (@barcodes);
-	
+		
 	$barcode_string = "$barcode_string ";
 	$barcode_string =~ s/\n/ /g;
 	
@@ -192,7 +193,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			if ( $hd_status == 1 ) {
 				$R1reads[$k][0] = "$R1reads[$k][0]$barcode_match";
 				$R1reads[$k][5] = "$barcode_match";
-				next;		
+			    next;
 			} else {
 				$no_R1_barcode_tally++;
 				$R1reads[$k][0] = "";
@@ -216,7 +217,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 		}
 	}
 	
-	print "\nTrimming R1 reads based on presence of $enzyme2 site, barcodes and Illumina tag...";
+	print "\nTrimming R1 reads based on presence of $enzyme2 site, barcodes, and Illumina tag...";
 	
 	for (my $k = 0; $k <= $size; $k++) {
 		if ( $R1reads[$k][0] eq "" ) {
@@ -225,7 +226,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			my $R1seq = $R1reads[$k][1];
 			if ( $R1seq =~ /^(\w+)$RC_enz2[AN][GN][AN][TN][CN][GN][GN][AN][AN]\w+$/ ) {
 				my $R1_read = $1;
-				my $R1_read_length = length ( $R1_read );				
+				my $R1_read_length = length ( $R1_read );
 				$R1reads[$k][1] = $R1_read;
 				$R1reads[$k][2] = substr ( $R1reads[$k][2], 0, $R1_read_length );
 			} else {
@@ -234,7 +235,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 		}
 	}
 	
-	print "\nTrimming R2 reads based on presence of $enzyme1 site, barcodes and Illumina tag...";
+	print "\nTrimming R2 reads based on presence of $enzyme1 site, barcodes, and Illumina tag...";
 	
 	for (my $k = 0; $k <= $size; $k++) {
 		if ( $R1reads[$k][3] eq "" ) {
@@ -249,8 +250,8 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 				
 				if ( $index_hd <= 1 ) {
 					$R1reads[$k][3] = $R2_read;
-					my $read_length = length ($R1reads[$k][3]);
-					$R1reads[$k][4] = substr ( $R1reads[$k][4], 0, $read_length );
+					my $R2_read_length = length ($R1reads[$k][3]);
+					$R1reads[$k][4] = substr ( $R1reads[$k][4], 0, $R2_read_length );
 					next;
 				} else {
 					next;
@@ -298,19 +299,19 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 	
 	print "\nWriting results to output files...";
 	
-	my $R1singles_file = join ("_", "$fileseed", "R1singles.fastq");
-	my $R1out_file = join ("_", "$fileseed", "R1parsed.fastq");
-	my $R2out_file = join ("_", "$fileseed", "R2parsed.fastq");
-	my $summary_file = join ("_", "$fileseed", "summary");
-	my $read_dist_file = join ("_", "$fileseed", "dist");
+	my $R1singles_file = join (".","$fileseed","R1singles.fastq");
+	my $R1out_file = join (".","$fileseed","R1parsed.fastq");
+	my $R2out_file = join (".","$fileseed","R2parsed.fastq");
+	my $summary_file = join (".","$fileseed","summary");
+	my $read_dist_file = join (".","$fileseed","dist");
 	
 	my $R1_singleton_tally = 0;
 	my $usable_pairs_tally = 0;
-	
-	open R1_singles, ">", "./singles/$R1singles_file";
-	open R1_OUT, ">", "./parsed/$R1out_file";
-	open R2_OUT, ">", "./parsed/$R2out_file";
-	
+
+	open my $R1_singles, " | gzip > ./singles/$R1singles_file.gz" or die "Can't open $R1singles_file\n";
+	open my $R1_OUT, " | gzip > ./parsed/$R1out_file.gz" or die "Can't open $R1out_file\n";
+	open my $R2_OUT, " | gzip > ./parsed/$R2out_file.gz" or die "Can't open $R2out_file\n";
+
 	my %R1_singles_lengths;
 	my %R1_lengths;
 	my %R2_lengths;
@@ -321,118 +322,113 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 			next;
 		} elsif ( ( $R1reads[$k][1] ne "" ) && ( $R1reads[$k][3] eq "" ) ) {
 			$R1_singleton_tally++;
-			print R1_singles "$R1reads[$k][0]\n";
-			print R1_singles "$R1reads[$k][1]\n";
-			print R1_singles "+\n";
-			print R1_singles "$R1reads[$k][2]\n";
+			print $R1_singles "$R1reads[$k][0]\n";
+			print $R1_singles "$R1reads[$k][1]\n";
+			print $R1_singles "+\n";
+			print $R1_singles "$R1reads[$k][2]\n";
 			
 			my $R1_len = length ($R1reads[$k][1]);
 			if ( exists $R1_singles_lengths{$R1_len} ) {
 				$R1_singles_lengths{$R1_len}++;
 			} else {
 				$R1_singles_lengths{$R1_len} = 1;
-			}	
+			}
 			next;
 			
 		} else {
 			$usable_pairs_tally++;
-			print R1_OUT "$R1reads[$k][0]\n";
-			print R1_OUT "$R1reads[$k][1]\n";
-			print R1_OUT "+\n";
-			print R1_OUT "$R1reads[$k][2]\n";
+			print $R1_OUT "$R1reads[$k][0]\n";
+			print $R1_OUT "$R1reads[$k][1]\n";
+			print $R1_OUT "+\n";
+			print $R1_OUT "$R1reads[$k][2]\n";
 	
 			my $R1_len = length ($R1reads[$k][1]);
 			if ( exists $R1_lengths{$R1_len} ) {
 				$R1_lengths{$R1_len}++;
 			} else {
 				$R1_lengths{$R1_len} = 1;
-			}	
-	
+			}
+			
 			my $R2_header = $R1reads[$k][0];
 			$R2_header =~ s/ 1:/ 2:/;
-			print R2_OUT "$R2_header\n";
-			print R2_OUT "$R1reads[$k][3]\n";
-			print R2_OUT "+\n";
-			print R2_OUT "$R1reads[$k][4]\n";
+			print $R2_OUT "$R2_header\n";
+			print $R2_OUT "$R1reads[$k][3]\n";
+			print $R2_OUT "+\n";
+			print $R2_OUT "$R1reads[$k][4]\n";
 	
 			my $R2_len = length ($R1reads[$k][3]);
 			if ( exists $R2_lengths{$R2_len} ) {
 				$R2_lengths{$R2_len}++;
 			} else {
 				$R2_lengths{$R2_len} = 1;
-			}	
+			}
 	
 			my $diff = $R1_len - $R2_len;
 			if ( exists $R1R2_diff_lengths{$diff} ) {
 				$R1R2_diff_lengths{$diff}++;
 			} else {
 				$R1R2_diff_lengths{$diff} = 1;
-			}	
-	
+			}
 			next;
 		}
 	}
-	
-	close R1_singles;
-	close R1_OUT;
-	close R2_OUT;
-	
-	open summary_OUT, ">", "./summaries/$summary_file";
-	
-	print summary_OUT "SUMMARY:\n";
-	print summary_OUT "Total raw read pairs = $total_raw_reads\n";
-	print summary_OUT "R1 reads with no identifiable restriction site = $no_R1_RE_site_tally\n";
-	print summary_OUT "R1 reads with no identifiable barcode = $no_R1_barcode_tally\n";
-	print summary_OUT "Usable R1 singletons = $R1_singleton_tally\n\n";
+	close $R1_singles;
+	close $R1_OUT;
+	close $R2_OUT;
+
+	open my $summary_OUT, ">", "./summaries/$summary_file" or die "Can't open $summary_file\n";
+
+	print $summary_OUT "SUMMARY:\n";
+	print $summary_OUT "Total raw read pairs = $total_raw_reads\n";
+	print $summary_OUT "R1 reads with no identifiable restriction site = $no_R1_RE_site_tally\n";
+	print $summary_OUT "R1 reads with no identifiable barcode = $no_R1_barcode_tally\n";
+	print $summary_OUT "Usable R1 singletons = $R1_singleton_tally\n\n";
 	my $usable_pairs_percent = ($usable_pairs_tally / $total_raw_reads) * 100;
-	print summary_OUT "Percentage of usable paired reads = $usable_pairs_percent\n";
+	print $summary_OUT "Percentage of usable paired reads = $usable_pairs_percent\n";
 	my $R1_singleton_percent = ( $R1_singleton_tally / $total_raw_reads ) * 100;
-	print summary_OUT "Percentage of usable, unpaired R1 reads = $R1_singleton_percent\n";
+	print $summary_OUT "Percentage of usable, unpaired R1 reads = $R1_singleton_percent\n";
+	close $summary_OUT;
 	
-	close summary_OUT;
-	
-	open dist_OUT, ">", "./distribs/$read_dist_file";
-	
-	print dist_OUT "Distribution of pairable R1 read lengths:\n";
+	open my $dist_OUT, '>', "./distribs/$read_dist_file" or die "Can't open $read_dist_file\n";
+
+	print $dist_OUT "Distribution of pairable R1 read lengths:\n";
 	foreach my $key ( sort ( keys %R1_lengths ) ) {
-		print dist_OUT "R1", "\t", "$key", "\t", "$R1_lengths{$key}", "\n";
+		print $dist_OUT "R1", "\t", "$key", "\t", "$R1_lengths{$key}", "\n";
 	}
-	print dist_OUT "\n\n";
+	print $dist_OUT "\n\n";
 	
-	print dist_OUT "Distribution of pairable R2 read lengths:\n";
+	print $dist_OUT "Distribution of pairable R2 read lengths:\n";
 	foreach my $key ( sort ( keys %R2_lengths ) ) {
-		print dist_OUT "R2", "\t", "$key", "\t", "$R2_lengths{$key}", "\n";
+		print $dist_OUT "R2", "\t", "$key", "\t", "$R2_lengths{$key}", "\n";
 	}
-	print dist_OUT "\n\n";
+	print $dist_OUT "\n\n";
 	
-	print dist_OUT "Distribution of paired R1-R2 read length differences:\n";
+	print $dist_OUT "Distribution of paired R1-R2 read length differences:\n";
 	foreach my $key ( sort ( keys %R1R2_diff_lengths ) ) {
-		print dist_OUT "R1-R2", "\t", "$key", "\t", "$R1R2_diff_lengths{$key}", "\n";
+		print $dist_OUT "R1-R2", "\t", "$key", "\t", "$R1R2_diff_lengths{$key}", "\n";
 	}
-	print dist_OUT "\n\n";
+	print $dist_OUT "\n\n";
 	
-	print dist_OUT "Distribution of singleton R1 read lengths:\n";
+	print $dist_OUT "Distribution of singleton R1 read lengths:\n";
 	foreach my $key ( sort ( keys %R1_singles_lengths ) ) {
-		print dist_OUT "R1_singles", "\t", "$key", "\t", "$R1_singles_lengths{$key}", "\n";
+		print $dist_OUT "R1_singles", "\t", "$key", "\t", "$R1_singles_lengths{$key}", "\n";
 	}
-	print dist_OUT "\n\n";
+	print $dist_OUT "\n\n";
+	close $dist_OUT;
 	
-	close dist_OUT;
-	
-	
-#	print "DONE.\n\n";
 	print "\nData can be found in:\n$R1out_file\n$R2out_file\n$R1singles_file\n$read_dist_file\n$summary_file\n";
 
 }
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for
-SNP discovery and plant germplasm characterization using variable length, paired-end
-genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
 
-### SUB-ROUTINES
+### SUB-ROUTINES ###
 
-sub hd { 
-    length( $_[ 0 ] ) - ( ( $_[ 0 ] ^ $_[ 1 ] ) =~ tr[\0][\0] ) 
+sub hd {
+	my @var = $_;
+	return length( $_[ 0 ] ) - ( ( $_[ 0 ] ^ $_[ 1 ] ) =~ tr[\0][\0] );
 }
 
 exit;
