@@ -1,6 +1,6 @@
 ###################################################################
 # GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v1.0) 
-#	          	    	    step-by-step
+#	        step-by-step
 ####################################################################
 
 # Authors: Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
