@@ -256,7 +256,7 @@ while (<$VAR>) {
 
 close $DEST;
 
-print "\nYour $output genotyping matrix was successfully created. \n";
+print "\nYour $output genotyping matrix was successfully created into SNPsCalled directory. \n";
 
 print "GBS-SNP-CROP called $lc SNPs in your population using the following parameters:\n"
 ."Minimum read depth required to call homozygotes when the secondary allele depth = 0: $minHomoDepth\n"
