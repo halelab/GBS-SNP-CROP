@@ -7,23 +7,26 @@
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-3.pl -b <barcode-ID file name> -fqN <FASTQ file name> 
--r <the type of reads being demultiplexed, R1 or R2>\n";
+my $Usage = "Usage: perl GBS-SNP-CROP-3.pl -b <barcode-ID file name> -fq <FASTQ file name seed>\n";
 my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
 
 my ($barcodesID_file,$fastq_file,$read_pair);
 
 GetOptions(
 'b=s' => \$barcodesID_file,     # file
-'fqN=s' => \$fastq_file,     	# string
-'r=s' => \$read_pair, 		  	# string 
+'fq=s' => \$fastq_seed,         # string
 ) or die "$Usage\n$Manual\n";
+
+print "\n#######################\n# GBS-SNP-CROP, Step 3\n#######################\n";
+
+my $input1 = join ("","$fastq_seed","_PE_R1parsed",".fastq");
+print "\nCreating genotype-specific FASTQ files from $input1 file...\n";
 
 my %barcode_hash;
 	
-open IN, "$barcodesID_file" or die "Can't find barcode_ID file\n";
+open my $BAR, "<", "$barcodesID_file" or die "Can't find barcode_ID file\n";
 	
-while(<IN>) {
+while(<$BAR>) {
 	my $barcodesID = $_;
 	chomp $barcodesID;
 	my @barcode_ID = split("\t", $barcodesID);
@@ -34,52 +37,93 @@ while(<IN>) {
 		$barcode_hash{$barcode_ID[0]} = $barcode_ID[1];
 	}
 }
-	
-close IN;
+close $BAR;
 
 sub main {
 	my $dir = "demultiplexed";
-   	unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
+   	unless(-e $dir, or mkdir $dir) {die "Directory $dir does not exist and cannot be created.\n";}
  }
 main();
 
-open IN, "$fastq_file" or die "Can't open FASTQ file: $!\n";
+open my $IN1, "<", "$input1" or die "Can't open FASTQ file: $!\n";
 
 foreach my $key (keys %barcode_hash) {
-	my $filename = join(".", "$barcode_hash{$key}","$read_pair","fastq");
+	my $filename = join(".", "$barcode_hash{$key}","R1","fastq");
 	open $key, ">", "./demultiplexed/$filename";
 }
 
-my @read = ();
-my $i = 1;
-while(<IN>) {
-	if ($i % 4 != 0) {
-		push @read, $_;
-		$i++;
+my @read1 = ();
+my $i1 = 1;
+while(<$IN1>) {
+	if ($i1 % 4 != 0) {
+		push @read1, $_;
+		$i1++;
 	} else {
-		push @read, $_;
-		chomp (@read);
-		if ( $read[0] =~ /^(@.*:N:0:)(\w{0,10})$/ && $barcode_hash{$2} ) {
-			print $2 "$read[0]\n$read[1]\n$read[2]\n$read[3]\n";
-			@read = ();
-			$i++;
+		push @read1, $_;
+		chomp (@read1);
+		if ( $read1[0] =~ /^(@.*:N:0:)(\w{0,10})$/ && $barcode_hash{$2} ) {
+			print $2 "$read1[0]\n$read1[1]\n$read1[2]\n$read1[3]\n";
+			@read1 = ();
+			$i1++;
 			next;
 		} else {
-			@read = ();
-			$i++;
+			@read1 = ();
+			$i1++;
 			next;
 		}
 	}
 }
+close $IN1;
 
 foreach my $key (keys %barcode_hash) {
 	my $filename = join(".", "$barcode_hash{$key}", "fastq");
 	close $key;
 }
-print "\nGenotypes specific FASTQ files were successfully extracted from $fastq_file.\nPlease, see the 'demultiplexed' directory.\n";
+print "DONE!\n";
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for
-SNP discovery and plant germplasm characterization using variable length, paired-end
-genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+my $input2 = join ("","$fastq_seed","_PE_R2parsed",".fastq");
+print "\nCreating genotype-specific FASTQ files from $input2 file...\n";
+
+open my $IN2, "<", "$input2" or die "Can't open FASTQ file: $!\n";
+
+foreach my $key (keys %barcode_hash) {
+	my $filename = join(".", "$barcode_hash{$key}","R2","fastq");
+	open $key, ">", "./demultiplexed/$filename";
+}
+
+my @read2 = ();
+my $i2 = 1;
+while(<$IN2>) {
+	if ($i2 % 4 != 0) {
+		push @read2, $_;
+		$i2++;
+	} else {
+		push @read2, $_;
+		chomp (@read2);
+		if ( $read2[0] =~ /^(@.*:N:0:)(\w{0,10})$/ && $barcode_hash{$2} ) {
+			print $2 "$read2[0]\n$read2[1]\n$read2[2]\n$read2[3]\n";
+			@read2 = ();
+			$i2++;
+			next;
+		} else {
+			@read2 = ();
+			$i2++;
+			next;
+		}
+	}
+}
+close $IN2;
+
+foreach my $key (keys %barcode_hash) {
+	my $filename = join(".", "$barcode_hash{$key}", "fastq");
+	close $key;
+}
+print "DONE!\n";
+
+print "Please, see the 'demultiplexed' directory.\n";
+
+print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
 
 exit;
