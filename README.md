@@ -24,11 +24,11 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 
 * **Stage 3. Map the processed reads and generate standardized alignment files**
 
-*Step 5: Align with BWA-mem and process with SAMTools*
+*Step 5: Align with BWA-mem and process with SAMtools*
 
 *Step 6: Parse mpileup output and produce the SNP discovery master matrix*
 
-* **Stage 4. Calling SNPs and Genotypes**
+* **Stage 4. Call SNPs and Genotypes**
 
 *Step 7: Filter SNPs and call genotypes*
 
