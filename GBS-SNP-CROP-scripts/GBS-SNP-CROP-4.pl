@@ -92,10 +92,10 @@ foreach my $file (@MR_taxa_files) {
 	my $i = 1;
 	while(<$IN1>) {
 		if ($i % 4 != 0) {
-			push @R1read, $IN1;
+			push @R1read, $_;
 			$i++;
 		} else {
-			push @R1read, $IN1;
+			push @R1read, $_;
 			chomp (@R1read);
 			push @R1reads, [ @R1read ];
 			@R1read = ();
@@ -112,10 +112,10 @@ foreach my $file (@MR_taxa_files) {
 	my $j = 1;
 	while(<$IN2>) {
 		if ($j % 4 != 0) {
-			push @R2read, $IN2;
+			push @R2read, $_;
 			$j++;
 		} else {
-			push @R2read, $IN2;
+			push @R2read, $_;
 			chomp (@R2read);
 			push @R2reads, [ @R2read ];
 			@R2read = ();
