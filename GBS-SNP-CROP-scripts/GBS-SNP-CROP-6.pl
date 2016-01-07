@@ -189,7 +189,7 @@ while ( my $fileName = <$LIST> )
 		if ( $genoHash{$chr_pos_ref} ) {
 			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "$genoHash{$chr_pos_ref}");
 		} else {
-			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "_,_,_,_,_,_,_,_");
+			$posHash{$chr_pos_ref} = join ("\t", "$posHash{$chr_pos_ref}", "_,_,_,_,");
 		}
 	}
 
