@@ -27,7 +27,7 @@ GetOptions(
 'altStrength=s' => \$AltAlleleStrength,    # numeric
 'mnAlleleRatio=s' => \$AlleleFreqProp,     # numeric
 'mncall=s' => \$CallRate,                    # numeric
-'mnAvgDepth' => \$minAvgDepth,             # numeric
+'mnAvgDepth=s' => \$minAvgDepth,             # numeric
 'mxAvgDepth=s' => \$maxAvgDepth,           # numeric
 ) or die "$Usage\n$Manual\n";
 
