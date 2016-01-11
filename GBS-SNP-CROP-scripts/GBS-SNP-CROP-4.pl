@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-##########################################################################################
-# GBS-SNP-CROP, Step 4. For description, please see Melo et al. (2015) DOI XXX
-##########################################################################################
+##########################################################################################################################
+# GBS-SNP-CROP, Step 4. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+##########################################################################################################################
 
 ##########################################################################################
 # Requirement 1: PEAR bioinformatics tool (Zhang et al., 2014)
@@ -16,7 +16,7 @@ use Getopt::Long qw(GetOptions);
 my $Usage = "Usage: perl GBS-SNP-CROP-4.pl -b <barcode-ID file> -rl <Raw GBS read lengths> -pl <minimum length required after merging to retain read>\n"
 ."-p <p-value for PEAR (Zhang et al., 2014)> -id <nucleotide identity value required for USEARCH (Edgar, 2010) read clustering>\n"
 ." -t <number of threads dedicated to USEARCH clustering> -MR <Mock reference name>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($barcodesID_file,$raw_seq_length,$pear_length,$pvalue,$id,$threads,$MockRefName);
 
@@ -325,7 +325,7 @@ print "\nCongratulations! Your '$MockRefName' Mock Reference genome was assemble
 
 print "We recommend the using '$MR_Genome' as a reference genome for mapping your parsed, high quality paired-end reads.";
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
 ."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
 
