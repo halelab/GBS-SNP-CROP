@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-##########################################################################################
-# GBS-SNP-CROP, Step 5. For description, please see Melo et al. (2015) DOI XXX
-##########################################################################################
+##########################################################################################################################
+# GBS-SNP-CROP, Step 5. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+##########################################################################################################################
 
 ##########################################################################################
 # Requirement 1: BWA aligner (Li & Durbin, 2009)
@@ -15,7 +15,7 @@ use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-5.pl -b <barcode-ID file name>  -ref <reference FASTA file> -Q <Phred score> -q <mapping quality score>\n"
 ." -f <SAMTools -f flag> -F <SAMTools _F flag> -t <threads> -Opt <any additional desired SAMTools options>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($barcodesID_file,$Reference,$phred_Q,$map_q,$f,$F,$threads,$sam_add);
 
@@ -134,7 +134,7 @@ main();
 system ( "mv *bam* ./alignments" );
 system ( "rm *.sam" );
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
 ."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
 
