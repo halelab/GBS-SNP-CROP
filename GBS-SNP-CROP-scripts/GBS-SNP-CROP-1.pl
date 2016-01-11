@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-##########################################################################################
-# GBS-SNP-CROP, Step 1. For description, please see Melo et al. (2015) DOI XXX
-##########################################################################################
+##########################################################################################################################
+# GBS-SNP-CROP, Step 1. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+##########################################################################################################################
 
 use strict;
 use warnings;
@@ -12,7 +12,7 @@ use IO::Zlib;
 my $Usage = "Usage: perl GBS-SNP-CROP-1.pl -b <barcode-ID file name> -fq <FASTQ file name seed>\n" 
 ."-s <start number of FASTQ file> -e <end number of FASTQ file> -enz1 <enzyme 1 restriction site residue sequence>\n" 
 ."-enz2 <enzyme 2 restriction site residue sequence>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($barcodesID_file,$fastq_seed,$fastq_start_num,$fastq_end_num,$enzyme1,$enzyme2);
 
@@ -420,7 +420,7 @@ for ( my $file_index = $fastq_start_num; $file_index <= $fastq_end_num; $file_in
 
 }
 
-print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
+print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
 ."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
 
