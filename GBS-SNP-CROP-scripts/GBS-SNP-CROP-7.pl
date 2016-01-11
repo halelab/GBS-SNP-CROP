@@ -14,7 +14,7 @@ my $Usage = "Usage: perl GBS-SNP-CROP-7.pl -in <master matrix filename> -out <ge
 ."-altStrength <Across the population for a given putative bi-allelic SNP, this alternate allele strength parameter is the minimum proportion of non-primary allele reads that are the secondary allele (numeric)>\n" 
 ."-mnAlleleRatio <minimum requierd ratio of less frequent to more frequent allele depht to more frequent allele depth> -mnCall <minimum acceptable proportion of genotyped individuals to retain a SNP>\n"
 ."-mnAvgDepth <minimum average depth of an acceptable SNP> -mxAvgDepth <maximum average depth of an acceptable SNP>\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($SummaryFile,$output,$minHomoDepth,$minHomoDepthOneAlt,$minHeteroDepth,$AltAlleleStrength,$AlleleFreqProp,$CallRate,$minAvgDepth,$maxAvgDepth);
 
