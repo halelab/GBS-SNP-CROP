@@ -279,7 +279,7 @@ if (scalar (@MR_taxa_files) > 1) {
 			if ($seq =~ "N") { 
 				next;
 			} else {
-				print $OUT1 "$name\n$seq\n";
+				print $OUT1 ">$name\n$seq\n";
 				print $OUT2 "$seq";
 			}
 		}
