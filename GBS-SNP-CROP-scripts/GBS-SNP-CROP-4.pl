@@ -16,7 +16,7 @@ use Getopt::Long qw(GetOptions);
 my $Usage = "Usage: perl GBS-SNP-CROP-4.pl -b <barcode-ID file> -rl <Raw GBS read lengths> -pl <minimum length required after merging to retain read>\n"
 ."-p <p-value for PEAR (Zhang et al., 2014)> -id <nucleotide identity value required for USEARCH (Edgar, 2010) read clustering>\n"
 ." -t <number of threads dedicated to USEARCH clustering> -MR <Mock reference name>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
+my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($barcodesID_file,$raw_seq_length,$pear_length,$pvalue,$id,$threads,$MockRefName);
 
