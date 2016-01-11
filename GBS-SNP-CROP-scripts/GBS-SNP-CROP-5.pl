@@ -15,7 +15,7 @@ use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-5.pl -b <barcode-ID file name>  -ref <reference FASTA file> -Q <Phred score> -q <mapping quality score>\n"
 ." -f <SAMTools -f flag> -F <SAMTools _F flag> -t <threads> -Opt <any additional desired SAMTools options>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
+my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n";
 
 my ($barcodesID_file,$Reference,$phred_Q,$map_q,$f,$F,$threads,$sam_add);
 
