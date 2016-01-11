@@ -10,7 +10,7 @@ use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>\n"
 ."-formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format is desired>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($SNPmatrix,$output,$barcodesID_file,$tools);
 
