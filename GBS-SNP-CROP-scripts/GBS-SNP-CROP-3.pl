@@ -8,7 +8,7 @@ use warnings;
 use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-3.pl -b <barcode-ID file name> -fq <FASTQ file name seed>\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
 
 my ($barcodesID_file,$fastq_file,$read_pair);
 
@@ -124,6 +124,6 @@ print "Please, see the 'demultiplexed' directory.\n";
 
 print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
-."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
 
 exit;
