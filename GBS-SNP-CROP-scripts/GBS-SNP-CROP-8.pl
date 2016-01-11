@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-##########################################################################################
-# GBS-SNP-CROP, Step 8. For description, see Melo et al. (2015) DOI XXX
-##########################################################################################
+##################################################################################################################
+# GBS-SNP-CROP, Step 8. For description, see Melo et al. (2015) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+##################################################################################################################
 
 use strict;
 use warnings;
@@ -10,7 +10,7 @@ use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>\n"
 ."-formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format is desired>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI XXX\n"; 
+my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2015) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y\n"; 
 
 my ($SNPmatrix,$output,$barcodesID_file,$tools);
 
@@ -217,6 +217,6 @@ if ($tools =~ "P" or $tools =~ "p"){
 
 print "\n\nPlease cite: Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
-."genotyping-by-sequencing data. BMC Bioinformatics. DOI XXX.\n\n";
+."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
 
 exit;
