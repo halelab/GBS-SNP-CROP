@@ -15,7 +15,7 @@ use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-2.pl -fq <FASTQ file name seed> -t <number of threads> -ph <Phred quality score: 33 or 64>\n" 
 ."-l <Trimmomatic LEADING value> -sl <Trimmomatic SLIDINGWINDOW value> -tr <Trimmomatic TRAILING value> -m <Trimmomatic MINLEN value>.\n";
-my $Manual = "Please see Additional File 2 (User Manual) from Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
+my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($fastq_seed,$threads,$phred,$leading,$sliding,$trailing,$minlen);
 
