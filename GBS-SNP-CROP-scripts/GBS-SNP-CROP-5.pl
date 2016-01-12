@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 ##########################################################################################################################
-# GBS-SNP-CROP, Step 5. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+# GBS-SNP-CROP, Step 5. For description, please see Melo et al. (2016) BMC Bioinformatics 17:29 DOI 10.1186/s12859-016-0879-y.
 ##########################################################################################################################
 
 ##########################################################################################
@@ -136,6 +136,6 @@ system ( "rm *.sam" );
 
 print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
-."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
+."genotyping-by-sequencing data. BMC Bioinformatics 17:29 DOI 10.1186/s12859-016-0879-y.\n\n";
 
 exit;
