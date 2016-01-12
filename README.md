@@ -33,7 +33,7 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 *Step 7: Filter SNPs and call genotypes*
 
 ### Citing GBS-SNP-CROP
-Melo et al. (2015) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.
+Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. 17:29. DOI 10.1186/s12859-016-0879-y.
 
 ### GBS-SNP-CROP discussion forum
 Please, acess the [pipeline Google group][4]
