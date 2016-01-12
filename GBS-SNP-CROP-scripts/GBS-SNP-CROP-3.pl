@@ -1,14 +1,14 @@
 #!/usr/bin/perl
 
 ###########################################################################################################################
-# GBS-SNP-CROP, Step 3. For description, please see Melo et al. (2016) BMC Bioinformatics 17:29 DOI 10.1186/s12859-016-0879-y.
+# GBS-SNP-CROP, Step 3. For description, please see Melo et al. (2016) BMC Bioinformatics. 17:29. DOI 10.1186/s12859-016-0879-y.
 ###########################################################################################################################
 
 use warnings;
 use Getopt::Long qw(GetOptions);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-3.pl -b <barcode-ID file name> -fq <FASTQ file name seed>\n";
-my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics 17:29 DOI 10.1186/s12859-016-0879-y.\n"; 
+my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. 17:29. DOI 10.1186/s12859-016-0879-y.\n"; 
 
 my ($barcodesID_file,$fastq_file,$read_pair);
 
@@ -124,6 +124,6 @@ print "Please, see the 'demultiplexed' directory.\n";
 
 print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
-."genotyping-by-sequencing data. BMC Bioinformatics 17:29 DOI 10.1186/s12859-016-0879-y.\n\n";
+."genotyping-by-sequencing data. BMC Bioinformatics. 17:29. DOI 10.1186/s12859-016-0879-y.\n\n";
 
 exit;
