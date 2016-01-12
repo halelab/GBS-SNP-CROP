@@ -224,13 +224,13 @@ while (<$VAR>) {
 
 	# Calculating population-level genotype parameters for additional filtering
 	my $scored_genotypes = $homo_pri + $hets + $homo_alt;
-	my $percentage_scored_genotypes = ($scored_genotypes) / ((scalar(@input) - 3))*100;
+	my $percentage_scored_genotypes = sprintf("%.2f",($scored_genotypes) / ((scalar(@input) - 3))*100);
 
 	if ( $scored_genotypes == 0 ) {
 		next;
 	}
 
-	my $avgDepth = $cumulative_depth / $scored_genotypes;
+	my $avgDepth = sprintf("%.2f", ($cumulative_depth / $scored_genotypes));
 
 	# Depth filter
 	if( ($avgDepth < $minAvgDepth) or ($avgDepth > $maxAvgDepth) ) {
