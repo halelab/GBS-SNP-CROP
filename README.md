@@ -2,7 +2,7 @@
 
 This is the official development repository for GBS-SNP-CROP
 
-The original manuscript could be downloaded from [BMC Bioinformatic page][1].
+The original manuscript could be found on [BMC Bioinformatic page][1].
 
 Please, see [GBS-SNP-CROP User manual][2].
 
