@@ -47,11 +47,11 @@ Please, acess the [pipeline Google group][5]
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
-* [Trimmomatic][7] (Bolger et al., 2014) - We used v.0.33
-* [PEAR][8] (Zhang et al., 2014) - We used v.0.96
-* [Usearch][9] (Edgar, 2010) - We used v.8.0.1623
-* [BWA aligner][10] (Li & Durbin, 2009) - We used v.0.7.12
-* [SAMTools][11] (Li et al., 2009) - We used v.1.2
+* [Trimmomatic][7] v.0.33 (Bolger et al., 2014)
+* [PEAR][8] v.0.96 (Zhang et al., 2014)
+* [Usearch][9] v.8.0.1623 (Edgar, 2010)
+* [BWA aligner][10] v.0.7.12 (Li & Durbin, 2009)
+* [SAMTools][11] v.1.2 (Li et al., 2009)
 
 [1]:https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0879-y
 [2]:https://github.com/halelab/GBS-SNP-CROP/blob/master/GBS-SNP-CROP-UserManual.pdf
