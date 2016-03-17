@@ -261,6 +261,7 @@ if (scalar (@MR_taxa_files) > 1) {
 	system ( "usearch -cluster_fast $out5C -id $id -threads $threads -consout $out5D" );
 	
 	print "All sub-steps for clustering population-level centroids were completed!\n";
+	system ("rm *.consensus.fasta");
 
 ##########################################################################################
 # 6. Delete N-containing centroids and create the Mock Reference
@@ -319,7 +320,7 @@ sub main {
 main();
 
 system ( "mv *.AssembledStitched.fastq ./fastqForRef" );
-system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta *.reclusters.fasta *.consensus.fasta *.assembled.fastq *.stitched.fastq" );
+system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta *.reclusters.fasta *.assembled.fastq *.stitched.fastq" );
 
 print "\nCongratulations! Your '$MockRefName' Mock Reference genome was assembled using the following genotypes:\n@MR_taxa_files\n";
 
