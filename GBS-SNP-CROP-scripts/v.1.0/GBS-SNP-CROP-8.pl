@@ -8,7 +8,7 @@ use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 
-my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -b <barcodesID file>\n"
+my $Usage = "Usage: perl GBS-SNP-CROP-8.pl -in <input file: SNP genotyping matrix> -out <output file name> -b <barcodesID file>\n"
 ."-formats <The name(s) of the software packages (R, Tassel, Plink) for which an input-compatible file format is desired>.\n";
 my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics 17:29. DOI 10.1186/s12859-016-0879-y.\n"; 
 
