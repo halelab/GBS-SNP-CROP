@@ -452,7 +452,7 @@ if ($dataType eq "PE") {
 }
 
 print "\nCongratulations! Your '$MockRefName' Mock Reference genome was assembled using the following genotypes:\n@MR_taxa_files\n";
-print "We recommend the using '$MR_Genome' as a reference genome for mapping your parsed, high quality paired-end reads.";
+print "We recommend the using '$MR_Genome' as a reference genome for mapping your parsed, high quality reads.";
 print "\n\nPlease cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
 ."genotyping-by-sequencing data. BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n\n";
