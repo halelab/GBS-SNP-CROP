@@ -43,7 +43,7 @@ This updated version of GBS-SNP-CROP (v1.1) expands the functionality of the ori
 Melo et al. GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. 2016. 17:29. DOI 10.1186/s12859-016-0879-y.
 
 ### GBS-SNP-CROP discussion forum
-Please access the [pipeline Google group][5]
+Please access the [Google group][5]
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
