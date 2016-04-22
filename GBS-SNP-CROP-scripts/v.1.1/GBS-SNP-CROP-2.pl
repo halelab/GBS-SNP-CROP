@@ -40,12 +40,12 @@ if ($dataType eq "PE") {
 	print "Trimming Paired-End reads...\n";
 
 	print "\nConcatenating library $fastq_seed R1 reads...";
-	my $outR1 = join ("","$fastq_seed","_R1parsed",".fastq",".gz");
+	my $outR1 = join ("","$fastq_seed","_R1parsed",".merged",".fastq",".gz");
 	system ( "cat $fastq_seed*R1parsed.fastq.gz > $outR1" );
 	print "DONE.";
 
 	print "\nConcatenating library $fastq_seed R2 reads...";
-	my $outR2 = join ("","$fastq_seed","_R2parsed",".fastq",".gz");
+	my $outR2 = join ("","$fastq_seed","_R2parsed",".merged",".fastq",".gz");
 	system ( "cat $fastq_seed*R2parsed.fastq.gz > $outR2" );
 	print "DONE.";
 
@@ -68,7 +68,7 @@ if ($dataType eq "PE") {
 	print "Trimming Single-End reads...\n";
 
 	print "\nConcatenating library $fastq_seed reads...";
-	my $outR1 = join ("","$fastq_seed","_R1parsed",".fastq",".gz");
+	my $outR1 = join ("","$fastq_seed","_R1parsed",".merged",".fastq",".gz");
 	system ( "cat $fastq_seed*R1parsed.fastq.gz > $outR1" );
 	print "DONE.";
 
