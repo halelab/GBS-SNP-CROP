@@ -32,12 +32,12 @@ GetOptions(
 print "\n#################################\n# GBS-SNP-CROP, Step 2, v.1.0\n#################################\n";
 
 print "\nConcatenating library $fastq_seed R1 reads...";
-my $outR1 = join ("","$fastq_seed","_R1parsed",".fastq",".gz");
+my $outR1 = join ("","$fastq_seed","_R1parsed",".merged",".fastq",".gz");
 system ( "cat $fastq_seed*R1parsed.fastq.gz > $outR1" );
 print "DONE.";
 
 print "\nConcatenating library $fastq_seed R2 reads...";
-my $outR2 = join ("","$fastq_seed","_R2parsed",".fastq",".gz");
+my $outR2 = join ("","$fastq_seed","_R2parsed",".merged",".fastq",".gz");
 system ( "cat $fastq_seed*R2parsed.fastq.gz > $outR2" );
 print "DONE.";
 
