@@ -4,16 +4,15 @@ Authors: Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
 Department of Biological Sciences, College of Life Science and Agriculture, University of New Hampshire, Durham, NH, USA.
 
 ## Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
-
 ```bash
-## Parsing paired-end (PE) reads:
+# Parsing paired-end (PE) reads:
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d PE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG 
 # Parsing single-end (SE) reads:
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG 
 ```
 
 ## Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
-```basg
+```bash
 # Trimming paired-end (PE) reads:
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d PE -fq L001 -t 10 -ph 33 -l 30 -sl 4:30 -tr 30 -m 32
 # Trimming single-end (SE) reads:
