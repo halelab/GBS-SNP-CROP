@@ -3,7 +3,7 @@
 Authors: Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
 Department of Biological Sciences, College of Life Science and Agriculture, University of New Hampshire, Durham, NH, USA.
 
-# Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
+## Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
 
 ```bash
 # Parsing paired-end (PE) reads:
