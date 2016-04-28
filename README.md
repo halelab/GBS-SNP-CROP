@@ -19,10 +19,8 @@ This updated version of GBS-SNP-CROP (v1.1) expands the functionality of the ori
 ### Pipeline workflow
 * **Stage 1. Process the raw GBS data**
 
-*Step 1: Parse the raw reads*
-
-*Step 2: Trim based on quality* 
-
+*Step 1: Parse the raw reads*  
+*Step 2: Trim based on quality*   
 *Step 3: Demultiplex*
 
 * **Stage 2. Build the Mock Reference** 
