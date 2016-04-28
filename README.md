@@ -29,8 +29,7 @@ This updated version of GBS-SNP-CROP (v1.1) expands the functionality of the ori
 
 * **Stage 3. Map the processed reads and generate standardized alignment files**
 
-*Step 5: Align with BWA-mem and process with SAMtools*
-
+*Step 5: Align with BWA-mem and process with SAMtools*  
 *Step 6: Parse mpileup output and produce the SNP discovery master matrix*
 
 * **Stage 4. Call SNPs and Genotypes**
