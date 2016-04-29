@@ -4,7 +4,7 @@ This is the official development repository for GBS-SNP-CROP
 
 The original manuscript can be found at [BMC Bioinformatic page][1].
 
-Please, see [GBS-SNP-CROP User manual][2].
+Please, see [GBS-SNP-CROP User manual][12].
 
 See also our [Lab page][3].
 
@@ -61,5 +61,5 @@ Please access the [Google group][5]
 [9]: http://www.drive5.com/usearch/
 [10]:http://bio-bwa.sourceforge.net
 [11]:http://samtools.sourceforge.net
-
+[12]:https://github.com/halelab/GBS-SNP-CROP/issues/3
 
