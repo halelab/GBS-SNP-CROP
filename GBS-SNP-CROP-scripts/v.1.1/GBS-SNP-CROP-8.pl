@@ -29,7 +29,7 @@ print "\n#################################\n# GBS-SNP-CROP, Step 8, v.1.1\n#####
 
 my $R_out = join (".","$output","R_in","txt");
 my $Tassel_out = join (".","$output","Tassel_in","hmp","txt");
-my $Plink_out = join (".","$output","PLINK_in","tped");
+my $Plink_out = join (".","$output","Plink_in","tped");
 
 #############################
 # Creating R input file
