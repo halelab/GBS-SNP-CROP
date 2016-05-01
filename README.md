@@ -32,7 +32,7 @@ This updated version of GBS-SNP-CROP (v1.1) expands the functionality of the ori
 For more details, please see the [GBS-SNP-CROP User Manual][2].
 
 ### Discussion Forum
-Follow this link to access the [GBS-SNP-CROP Google Group][5]
+Follow this link to access the [GBS-SNP-CROP Google Group][5].
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
