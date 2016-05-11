@@ -28,7 +28,7 @@ This updated version of GBS-SNP-CROP (v.2.0) features the following improvements
 * SNP depth is now more rigorously based on the number of independently sequenced GBS fragments rather than on the number of reads.  For example, an overlapping R1 and R2 read pair from the same GBS fragment increases the depth tally by 1 (i.e. one GBS fragment) rather than 2 (i.e. 1 R1 read + 1 R2 read).  This improvement only affects PE analysis.  
 * Monomorphic sites are identified and filtered more efficiently, and users are now presented a progress bar to let them know the status of this relatively time-intensive mpileup parsing step.  
 
-*GBS-SNP-CROP-9.pl - **New Script** (Downstream Tools):*    
+*GBS-SNP-CROP-9.pl - New Script (Downstream Tools):*    
 * To better support user decision-making in applying subsequent filters based on the distributions of SNPs within centroids/clusters, this new script was developed that extracts and presents the following information for each identified SNP:
 (a) the ID of the centroid/cluster containing the SNP; 
 (b) the start position (coordinate) of the cluster within the mock reference;
