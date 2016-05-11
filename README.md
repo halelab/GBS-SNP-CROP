@@ -6,7 +6,7 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 ### Updates
 **Version 1.1**
 
-This updated version of GBS-SNP-CROP (v1.1) expands the functionality of the original pipeline by accommodating either Paired-End (PE) or Single-End (SE) GBS reads. To access this functionality, a new "data-type" flag (-d) was added so that users can specify their data type ("PE" or "SE") for Steps 1-5. Please refer to the [User Manual][2] for more details.
+This updated version of GBS-SNP-CROP (v.1.1) expands the functionality of the original pipeline by accommodating either Paired-End (PE) or Single-End (SE) GBS reads. To access this functionality, a new "data-type" flag (-d) was added so that users can specify their data type ("PE" or "SE") for Steps 1-5. Please refer to the [User Manual][2] for more details.
 
 **Version 2.0**
 
