@@ -20,6 +20,11 @@ GetOptions(
 
 print "\n#################################\n# GBS-SNP-CROP, Step 3, v.2.0\n#################################\n";
 
+sub main {
+	my $dir = "demultiplexed";
+	unless(-e $dir, or mkdir $dir) {die "Directory $dir does not exist and cannot be created.\n";}
+}
+main();
 ##################################
 # Demultiplexing Paired-End data 
 ##################################
@@ -45,12 +50,6 @@ if ($dataType eq "PE") {
 		}
 	}
 	close $BAR;
-
-	sub main {
-		my $dir = "demultiplexed";
-		unless(-e $dir, or mkdir $dir) {die "Directory $dir does not exist and cannot be created.\n";}
-	}
-	main();
 
 	open my $IN1, "<", "$input1" or die "Can't open FASTQ file: $!\n";
 
@@ -152,12 +151,6 @@ if ($dataType eq "PE") {
 		}
 	}
 	close $BAR;
-
-	sub main {
-		my $dir = "demultiplexed";
-		unless(-e $dir, or mkdir $dir) {die "Directory $dir does not exist and cannot be created.\n";}
-	}
-	main();
 
 	open my $IN1, "<", "$input1" or die "Can't open FASTQ file: $!\n";
 
