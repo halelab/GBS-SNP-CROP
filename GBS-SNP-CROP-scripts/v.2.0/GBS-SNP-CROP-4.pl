@@ -35,9 +35,6 @@ GetOptions(
 print "\n#################################\n# GBS-SNP-CROP, Step 4, v.2.0\n#################################\n";
 
 my @MR_taxa_files = ();
-my $script_output = "Pear.log";
-
-open my $code_OUT, ">", "$script_output" or die "Can't open $script_output\n";
 
 open my $BAR, "<", "$barcodesID_file" or die "Can't find barcode_ID file\n";
 while ( <$BAR> ) {
@@ -55,6 +52,12 @@ while ( <$BAR> ) {
 close $BAR;
 chomp (@MR_taxa_files);
 
+sub main {
+		my $dir = "fastaForRef"; 
+		unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
+	}
+	main();
+
 my $MR_Cluster = " ";
 my $MR_Genome = " ";
 
@@ -64,12 +67,6 @@ my $MR_Genome = " ";
 
 if ($dataType eq "PE") {
 	print "Parsing Paired-End reads...\n\n";
-	
-	sub main {
-		my $dir = "fastaForRef"; 
-		unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
-	}
-	main();
 	
 	my $script_output = "Pear.log";
 	open my $code_OUT, ">", "$script_output" or die "Can't open $script_output\n";
@@ -627,6 +624,7 @@ if ($dataType eq "PE") {
 		}
 	}
 	close $IN4;
+	system ( "mv *.R1.fasta ./fastaForRef" );
 	system ( "rm *.R1.sub.fasta *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $UsearchOUT" );
 }
 
