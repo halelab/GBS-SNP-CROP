@@ -574,7 +574,7 @@ if ($dataType eq "PE") {
 		system ( "usearch -cluster_fast $out5C -id $id -threads $threads -consout $UsearchOUT" );
 
 		print "All sub-steps for clustering population-level centroids were completed!\n";
-		unlink $UsearchIN;
+		system ("rm *.R1.sub.fasta UsearchIN.fasta" );
 	}
 
 # 4. Building the mock reference, identifying poly-A coordinates for masking, and deleting all N-containing centroids
@@ -625,7 +625,7 @@ if ($dataType eq "PE") {
 	}
 	close $IN4;
 	system ( "mv *.R1.fasta ./fastaForRef" );
-	system ( "rm *.R1.sub.fasta *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $UsearchOUT" );
+	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $UsearchOUT" );
 }
 
 print "\nCongratulations! Your '$MockRefName' Mock Reference genome was assembled using the following genotypes:\n@MR_taxa_files\n";
