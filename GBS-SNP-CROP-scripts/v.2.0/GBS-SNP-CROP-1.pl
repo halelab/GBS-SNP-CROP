@@ -149,7 +149,7 @@ if ($dataType eq "PE") {
 				$i++;
 
 				# Consolidating R1 and R2 reads
-				if ( $R1read[0] =~ /^(@.*:N:0:)\w{0,10}$/ ) {
+				if ( $R1read[0] =~ /^(@.*:N:0:)\w{0,50}$/ ) {
 					$R1read[0] = $1;
 				} else {
 					$R1read[0] = $R1read[0];
