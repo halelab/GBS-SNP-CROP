@@ -120,7 +120,7 @@ if ($dataType eq "PE") {
 		my $size = scalar @R1reads - 1;
 		for (my $k = 0; $k <= $size; $k++) {
 
-			if ( $R1reads[$k][0] =~ /^(@.*:N:0:)\w{0,10}$/ ) {
+			if ( $R1reads[$k][0] =~ /^(@.*:N:0:)\w{0,50}$/ ) {
 				$R1reads[$k][0] = $1;
 			} else {
 				$R1reads[$k][0] = $R1reads[$k][0];
