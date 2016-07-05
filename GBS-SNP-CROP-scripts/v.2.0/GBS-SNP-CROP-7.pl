@@ -193,6 +193,14 @@ while (<$VAR>) {
 			$hets++;
 			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
 			$depth = $primary_count + $alt_count;
+		} elsif ( ($primary_count == $alt_count) and ($primary_count < 20) and ($primary_count >= $minHeteroDepth && $alt_count >= $minHeteroDepth)) {
+			$hets++;
+			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
+			$depth = $primary_count + $alt_count;
+		} elsif ( ($primary_count == $alt_count) and $primary_count >= 20 and $alt_count >= ($AlleleFreqProp * $primary_count)) {
+			$hets++;
+			$row = "$row\t$pop_one_var/$pop_two_var|$primary_count/$alt_count";
+			$depth = $primary_count + $alt_count;
 
 		# Calling homozygotes
 		} elsif ( $primary_count >= $minHomoDepth && $alt_count == 0 ) {
