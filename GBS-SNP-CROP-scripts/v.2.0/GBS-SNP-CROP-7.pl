@@ -257,14 +257,6 @@ while (<$VAR>) {
 		next;
 	}
 
-	# Categorizing variant type (SNP or indel)
-	my $VarType = "";
-	if ( $pop_one_var =~ /^(\+|-)/ or $pop_two_var =~ /^(\+|-)/ ) {
-		$VarType = "Indel";
-	} else {
-		$VarType = "SNP";
-	}
-
 	$row = join ("\t","$header","$position","$VarType","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
 	print $DEST "$row\n";
 	$lc++;
