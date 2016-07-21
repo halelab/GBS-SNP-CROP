@@ -51,7 +51,7 @@ if ($tools =~ "R" or $tools =~ "r"){
 	
 		my $length = scalar(@snp) - 1;
 	
-		for ( my $i=11; $i<=$length; $i++ ) {
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -119,7 +119,7 @@ if ($tools =~ "T" or $tools =~ "t"){
 
 		my $length = scalar(@snp) - 1;
 
-		for ( my $i=11; $i<=$length; $i++ ) {
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
