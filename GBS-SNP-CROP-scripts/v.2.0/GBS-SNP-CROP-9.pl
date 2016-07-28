@@ -93,7 +93,7 @@ while (<$D1>) {
 
 	} else {
 		my $genome_coord = $position_list[$i];
-		my $snp_pos_cluster = ( $genome_coord - $start );
+		my $snp_pos_cluster = ( ($genome_coord - $start) + 1 );
 		if ($snp_pos_cluster == 0) {
 			$snp_pos_cluster = 1
 		}
@@ -108,7 +108,7 @@ while (<$D1>) {
 		if ( $position_list[$i] <= $end ) {
 			while ( $position_list[$i] <= $end ) {
 				my $next_genome_coord = $position_list[$i];
-				my $next_snp_pos_in_cluster = ( $next_genome_coord - $start );
+				my $next_snp_pos_in_cluster = ( ($next_genome_coord - $start) + 1 );
 				if ($next_snp_pos_in_cluster == 0) {
 					$next_snp_pos_in_cluster = 1
 				}
