@@ -1,4 +1,4 @@
-## GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v1.1) Tutorial
+## GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v2.0) Tutorial
 
 Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
 
@@ -15,9 +15,9 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s
 ## Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
 ```bash
 # Trimming paired-end (PE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d PE -fq L001 -t 10 -ph 33 -l 30 -sl 4:30 -tr 30 -m 32
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d PE -fq L001 -t 10 -ph 33 -ad TruSeq3-PE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
 # Trimming single-end (SE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d SE -fq L001 -t 10 -ph 33 -l 30 -sl 4:30 -tr 30 -m 32
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d SE -fq L001 -t 10 -ph 33 -ad TruSeq3-SE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
 ```
 
 ## Step 3: Demultiplex (GBS-SNP-CROP-3.pl)
@@ -54,7 +54,12 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out SNPs_master_m
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in SNPs_master_matrix.txt -out SNPs_genotyping_matrix.txt -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 4 -mxAvgDepth 200  
 ```
 
-## Downstream Tool (GBS-SNP-CROP-8.pl)
+## Downstream Tool 1: Creating input files to software packages R, TASSEL GUI and/or PLINK (GBS-SNP-CROP-8.pl)
 ```bash
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in SNPs_genotyping_matrix.txt -b barcodeID.txt -formats R,Tassel,Plink 
+```
+
+## Downstream Tool 2: Provide the cluster/centroid ID and other descriptors for all called SNPs (GBS-SNP-CROP-9.pl)
+```bash
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in SNPs_genotyping_matrix.txt -out outputName -ref MockRefName.MockRef_Cluster.fasta 
 ```
