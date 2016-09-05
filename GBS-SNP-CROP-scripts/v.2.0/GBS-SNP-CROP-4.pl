@@ -14,7 +14,7 @@ use warnings;
 use Getopt::Long qw(GetOptions);
 use List::Util qw/shuffle/;
 
-my $Usage = "Usage: perl GBS-SNP-CROP-4.pl -d <data type, PE = Paired-End or SR = Single-End> -b <barcode-ID file> -rl <Raw GBS read lengths> -pl <minimum length required after merging to retain read>\n"
+my $Usage = "Usage: perl GBS-SNP-CROP-4.pl -d <data type, PE = Paired-End or SE = Single-End> -b <barcode-ID file> -rl <Raw GBS read lengths> -pl <minimum length required after merging to retain read>\n"
 ."-p <p-value for PEAR (Zhang et al., 2014)> -id <nucleotide identity value required for USEARCH (Edgar, 2010) read clustering>\n"
 ." -t <number of threads dedicated to USEARCH clustering> -MR <Mock reference name>.\n";
 my $Manual = "Please see the User Manual on the GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
