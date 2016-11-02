@@ -43,8 +43,8 @@ if ($tools =~ "R" or $tools =~ "r"){
 		chomp @snp;
 
 		my $col = join ("\t",$snp[0],$snp[1]);
-		my $primary = $snp[5];
-		my $secondary = $snp[6];
+		my $primary = $snp[4];
+		my $secondary = $snp[5];
 
 		my @out = ();
 		push @out, "$col";
