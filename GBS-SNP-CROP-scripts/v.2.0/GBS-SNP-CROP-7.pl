@@ -211,6 +211,10 @@ while (<$VAR>) {
 			$homo_pri++;
 			$row = "$row\t$pop_one_var/$pop_one_var|$primary_count/1";
 			$depth = $primary_count;
+		} elsif ( $alt_count >= $minHomoDepthOneAlt && $primary_count == 1 ) {
+			$homo_alt++;
+			$row = "$row\t$pop_one_var/$pop_one_var|1/$alt_count";
+			$depth = $primary_count;
 		} elsif ( $alt_count >= $minHomoDepth && $primary_count == 0 ) {
 			$homo_alt++;
 			$row = "$row\t$pop_two_var/$pop_two_var|0/$alt_count";
@@ -225,7 +229,7 @@ while (<$VAR>) {
 			$row = "$row\t-|$primary_count/$alt_count";
 
 		} else {
-			$row = "$row\t-|-";
+			$row = "$row\t-|0/0";
 		}
 			$cumulative_depth = $cumulative_depth + $depth;
 	}
