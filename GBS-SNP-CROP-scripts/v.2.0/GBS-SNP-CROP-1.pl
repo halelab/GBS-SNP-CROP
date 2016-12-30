@@ -165,7 +165,7 @@ if ($dataType eq "PE") {
 				}
 
 				# Extracting barcodes from R1 reads (exact matches or one mismatch)
-				if ( $R1read[1] =~ /^(\w{5,10})$enzyme1(\w+)$/ ) { EXIT_IF: {
+				if ( $R1read[1] =~ /^(\w{3,10})$enzyme1(\w+)$/ ) { EXIT_IF: {
 					my $inline_index = $1;
 					$R1read[1] = $2;
 					my $trim_length = length ($1) + length ($enzyme1);
@@ -229,7 +229,7 @@ if ($dataType eq "PE") {
 				}
 
 				# Trimming R2 reads based on presence of $enzyme1 site residue, barcodes, and Illumina tag
-				if ( $R2read[1] =~ /^(\w+)$RC_enz1(\w{5,10})[AN][GN][AN][TN]/ ) {
+				if ( $R2read[1] =~ /^(\w+)$RC_enz1(\w{3,10})[AN][GN][AN][TN]/ ) {
 					my $R2_read = $1;
 					my $inline_index = scalar reverse $2;
 					$inline_index =~ tr/actgACTG/tgacTGAC/;
@@ -456,7 +456,7 @@ if ($dataType eq "PE") {
 				$i++;
 
 				# Consolidating reads. Checking header and barcode
-				if ( $R1read[0] =~ /^(@.*:N:0:)\w{0,10}$/ ) {
+				if ( $R1read[0] =~ /^(@.*:N:0:)\w{0,50}$/ ) {
 					$R1read[0] = $1;
 				} else {
 					$R1read[0] = $R1read[0];
@@ -464,7 +464,7 @@ if ($dataType eq "PE") {
 				$R1read[2] = $R1read[3];
 
 				# Extracting barcodes from reads (exact matches or one mismatch)
-				if ( $R1read[1] =~ /^(\w{5,10})$enzyme1(\w+)$/ ) { EXIT_IF: {
+				if ( $R1read[1] =~ /^(\w{3,10})$enzyme1(\w+)$/ ) { EXIT_IF: {
 					my $inline_index = $1;
 					$R1read[1] = $2;
 					my $trim_length = length ($1) + length ($enzyme1);
