@@ -23,9 +23,9 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d SE -fq L001 -t 10 -ph 33 -ad Tru
 ## Step 3: Demultiplex (GBS-SNP-CROP-3.pl)
 ```bash
 # Demultiplexing paired-end (PE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d PE -b barcodesID.txt -fq  L001
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d PE -b barcodesID.txt -fq L001
 # Demultiplexing single-end (SE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d SE -b barcodesID.txt -fq  L001
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d SE -b barcodesID.txt -fq L001
 ```
 
 ## Step 4: Cluster reads and assemble the Mock Reference (GBS-SNP-CROP-4.pl)
