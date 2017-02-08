@@ -229,7 +229,7 @@ while (<$VAR>) {
 			$row = "$row\t-|$primary_count/$alt_count";
 
 		} else {
-			$row = "$row\t-|0/0";
+			$row = "$row\t-|-";
 		}
 			$cumulative_depth = $cumulative_depth + $depth;
 	}
