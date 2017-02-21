@@ -4,7 +4,7 @@
 The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of SNP calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence SNPs from both sequencing and PCR errors. The pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream SNP calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources, mainly in the absence of a reference genome. The pipeline, however, can also be used when a reference genome is available, either as a standalone analysis or as a complement to reference-based analyses via alternative pipelines (e.g. TASSEL-GBS) or indeed its own reference-independent analysis.
 
 ### Updates
-**Version 2.0**
+**Version 2.0** (5/11/2016)
 
 This updated version of GBS-SNP-CROP (v.2.0) features the following improvements, by script:
 
@@ -37,7 +37,7 @@ This updated version of GBS-SNP-CROP (v.2.0) features the following improvements
 (i) the maximum distance (bp) between adjacent SNPs in the same cluster.
 See [User Manual][2] for more details.
 
-**Version 1.1**
+**Version 1.1** (3/11/2016)
 
 This updated version of GBS-SNP-CROP (v.1.1) expands the functionality of the original pipeline by accommodating either Paired-End (PE) or Single-End (SE) GBS reads. To access this functionality, a new "data-type" flag (-d) was added so that users can specify their data type ("PE" or "SE") for Steps 1-5. Please refer to the [User Manual][2] for more details.
 
