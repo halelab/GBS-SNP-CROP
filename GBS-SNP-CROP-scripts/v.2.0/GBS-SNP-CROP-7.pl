@@ -214,7 +214,7 @@ while (<$VAR>) {
 		} elsif ( $alt_count >= $minHomoDepthOneAlt && $primary_count == 1 ) {
 			$homo_alt++;
 			$row = "$row\t$pop_two_var/$pop_two_var|1/$alt_count";
-			$depth = $primary_count;
+			$depth = $alt_count;
 		} elsif ( $alt_count >= $minHomoDepth && $primary_count == 0 ) {
 			$homo_alt++;
 			$row = "$row\t$pop_two_var/$pop_two_var|0/$alt_count";
