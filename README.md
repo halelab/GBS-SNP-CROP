@@ -8,12 +8,13 @@ The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a
 
 GBS-SNP-CROP users, please make note of the following important announcements:
 
-1.ERROR FIX: We have discovered a minor genotyping error in Script 7 (Line 216), resulting in the incorrect genotyping of secondary allele homozygotes as primary allele homozygotes, specifically in the case where secondary allele read depth is high and primary allele read depth = 1.  This error affects <1% of genotyping calls in our test data. The error has now been corrected, and all users should replace their Script 7 with the version available as of this date (22/02/17). We sincerely apologize for this!
+ERROR FIX: We have discovered a minor genotyping error in Script 7 (Line 216), resulting in the incorrect genotyping of secondary allele homozygotes as primary allele homozygotes, specifically in the case where secondary allele read depth is high and primary allele read depth = 1.  This error affects <1% of genotyping calls in our test data. The error has now been corrected, and all users should replace their Script 7 with the version available as of this date (22/02/17). We sincerely apologize for this!
 
-2. ADDITIONAL TRIMMOMATIC FLAG RECOMMENDED: It has come to our attention that Trimmomatic, by default, can discard high-quality R2 reads if they contain any adapter sequence (e.g. when a GBS fragment length is less than the Illumina read length).  To avoid this unnecessary creation of singletons, and thus data loss to downstream scripts, we recommend that users activate the "keepBothReads" option within the Trimmomatic ILLUMINACLIP parameter, when using GBS-SNP-CROP to analyze paired-end (PE) data.
+ADDITIONAL TRIMMOMATIC FLAG RECOMMENDED: It has come to our attention that Trimmomatic, by default, can discard high-quality R2 reads if they contain any adapter sequence (e.g. when a GBS fragment length is less than the Illumina read length).  To avoid this unnecessary creation of singletons, and thus data loss to downstream scripts, we recommend that users activate the "keepBothReads" option within the Trimmomatic ILLUMINACLIP parameter, when using GBS-SNP-CROP to analyze paired-end (PE) data.
 For example, the current recommended Trimmomatic ILLUMINACLIP parameters for Script 2 are:
+
 ```bash
-**-ad** TruSeq3-PE.fa:2:30:10:8:true
+-ad TruSeq3-PE.fa:2:30:10:8:true
 ```
 
 Please refer to the [Trimmomatic user manual][15] for more details. 
