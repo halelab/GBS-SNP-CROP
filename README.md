@@ -3,43 +3,32 @@
 ###Introduction
 The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of SNP calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence SNPs from both sequencing and PCR errors. The pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream SNP calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources, mainly in the absence of a reference genome. The pipeline, however, can also be used when a reference genome is available, either as a standalone analysis or as a complement to reference-based analyses via alternative pipelines (e.g. TASSEL-GBS) or indeed its own reference-independent analysis.
 
-### Updates
+### Important Notes
+**Additional Trimmomatic flag recommended and error fix** (24/02/2017)
+
+GBS-SNP-CROP users, please make note of the following important announcements:
+
+1.ERROR FIX: We have discovered a minor genotyping error in Script 7 (Line 216), resulting in the incorrect genotyping of secondary allele homozygotes as primary allele homozygotes, specifically in the case where secondary allele read depth is high and primary allele read depth = 1.  This error affects <1% of genotyping calls in our test data. The error has now been corrected, and all users should replace their Script 7 with the version available as of this date (22/02/17). We sincerely apologize for this!
+
+2. ADDITIONAL TRIMMOMATIC FLAG RECOMMENDED: It has come to our attention that Trimmomatic, by default, can discard high-quality R2 reads if they contain any adapter sequence (e.g. when a GBS fragment length is less than the Illumina read length).  To avoid this unnecessary creation of singletons, and thus data loss to downstream scripts, we recommend that users activate the "keepBothReads" option within the Trimmomatic ILLUMINACLIP parameter, when using GBS-SNP-CROP to analyze paired-end (PE) data.
+For example, the current recommended Trimmomatic ILLUMINACLIP parameters for Script 2 are:
+```bash
+**-ad** TruSeq3-PE.fa:2:30:10:8:true
+```
+
+Please refer to the [Trimmomatic user manual][15] for more details. 
+
 **Version 2.0** (5/11/2016)
 
-This updated version of GBS-SNP-CROP (v.2.0) features the following improvements, by script:
-
-*GBS-SNP-CROP-1.pl:*  
-* Rather than loading entire FASTQ files into memory for parsing, the raw FASTQ files are now processed read-by-read. This drastically reduces memory requirements and allows the script to parse arbitrarily large datasets on even small computers.  
-* Users are now presented a progress bar to let them know the status of this relatively time-intensive parsing step.  
-
-*GBS-SNP-CROP-2.pl:*  
-* A new flag **```-ad```** was added, giving users the option to trim Illumina adapters using Trimmomatic's ILLUMINACLIP option.  
-
-*GBS-SNP-CROP-4.pl:*  
-* To maximize both data usage and genotype representation in building the mock reference, the script now randomly samples FASTA reads from all designated genotypes for input into USEARCH, up to that program's maximum data limit of 4 Gb (Edgar, 2010). If the total data available for read clustering is less than 4 Gb, the entire dataset is used (i.e. no sampling).   
-* When assembling the mock reference, adjacent centroids are now separated by a string of 20 high quality A’s, an adenine-based boundary found to enhance downstream alignment (BWA) performance.  
-* A new file called “PosToMask.txt” is created that contains the coordinates of all adenine-based centroid boundaries.  Using this file, all erroneous SNPs called within those boundaries are identified and culled.  
-
-*GBS-SNP-CROP-6.pl:*  
-* SNP depth is now more rigorously based on the number of independently sequenced GBS fragments rather than on the number of reads.  For example, an overlapping R1 and R2 read pair from the same GBS fragment increases the depth tally by 1 (i.e. one GBS fragment) rather than 2 (i.e. 1 R1 read + 1 R2 read).  This improvement only affects PE analysis.  
-* Monomorphic sites are identified and filtered more efficiently, and users are now presented a progress bar to let them know the status of this relatively time-intensive mpileup parsing step.  
-
-*GBS-SNP-CROP-9.pl - New Script (Downstream Tools):*    
-* To better support user decision-making in applying subsequent filters based on the distributions of SNPs within centroids/clusters, this new script was developed that extracts and presents the following information for each identified SNP:
-(a) the ID of the centroid/cluster containing the SNP; 
-(b) the start position (coordinate) of the cluster within the mock reference;
-(c) the end position (coordinate) of the cluster within the mock reference;
-(d) the length of the cluster;
-(e) the SNP position (coordinate) within the cluster; 
-(f) the total number of SNPs called within the cluster; 
-(g) the distances (bp) between all adjacent SNPs within that same cluster;
-(h) the minimum distance (bp) between adjacent SNPs in the same cluster; and
-(i) the maximum distance (bp) between adjacent SNPs in the same cluster.
-See [User Manual][2] for more details.
+The GBS-SNP-CROP v.1.1 was realized. Please access the [realized version][14] for more information.
 
 **Version 1.1** (3/11/2016)
 
-This updated version of GBS-SNP-CROP (v.1.1) expands the functionality of the original pipeline by accommodating either Paired-End (PE) or Single-End (SE) GBS reads. To access this functionality, a new "data-type" flag (-d) was added so that users can specify their data type ("PE" or "SE") for Steps 1-5. Please refer to the [User Manual][2] for more details.
+The GBS-SNP-CROP v.1.1 was realized. Please access the [realized version][13] for more information.
+
+**Version 1.0** (1/12/2016)
+
+This is the [original version][12] of the GBS-SNP-CROP pipeline.
 
 ### Pipeline workflow
 * **Stage 1. Process the raw GBS data**
@@ -89,3 +78,7 @@ Follow this link to access the [GBS-SNP-CROP Google Group][5].
 [9]: http://www.drive5.com/usearch/
 [10]:http://bio-bwa.sourceforge.net
 [11]:http://samtools.sourceforge.net
+[12]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.1.0
+[13]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.1.1
+[14]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.2.0
+[15]:http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
