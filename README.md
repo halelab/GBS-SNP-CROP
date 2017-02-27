@@ -21,7 +21,7 @@ Please refer to the [Trimmomatic user manual][15] for more details.
 
 **Version 2.0** (5/11/2016)
 
-The GBS-SNP-CROP v.1.1 was realized. Please access the [realized version][14] for more information.
+The GBS-SNP-CROP v.2.0 was realized. Please access the [realized version][14] for more information.
 
 **Version 1.1** (3/11/2016)
 
