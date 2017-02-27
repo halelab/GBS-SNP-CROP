@@ -19,7 +19,7 @@ For example, the current recommended Trimmomatic ILLUMINACLIP parameters for Scr
 
 Please refer to the [Trimmomatic user manual][15] for more details. 
 
-**Version 2.0** (5/11/2016)
+**Version 2.0** (5/11/2016) - Updated on 22/02/2017
 
 The GBS-SNP-CROP v.2.0 was realized. Please access the [realized version][14] for more information.
 
