@@ -249,7 +249,7 @@ while (<$VAR>) {
 		next;
 	}
 
-	$row = join ("\t","$header","$position","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt","$row" );
+	$row = join ("\t","$header","$position","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
 	print $DEST "$row\n";
 	$lc++;
 }
