@@ -1,0 +1,42 @@
+Tutorial Genotyping Matrix for PE analysis
+
+MockRefGenome	179730	G	10.50	G	A	80.00	0	4	0	-|1/0	G/A|5/3	G/A|6/3	G/A|7/3	G/A|8/7
+MockRefGenome	536485	T	10.00	T	G	80.00	0	4	0	-|0/0	T/G|3/5	T/G|7/5	T/G|7/6	T/G|3/4
+MockRefGenome	537830	T	26.00	T	A	80.00	0	4	0	-|0/0	T/A|25/3	T/A|14/6	T/A|20/7	T/A|19/10
+MockRefGenome	537837	G	26.00	A	G	80.00	0	4	0	-|0/0	A/G|18/10	A/G|10/10	A/G|17/10	A/G|18/11
+MockRefGenome	537982	G	9.00	G	C	80.00	0	4	0	-|0/0	G/C|3/3	G/C|7/4	G/C|5/3	G/C|6/5
+MockRefGenome	715627	G	109.60	G	A	100.00	0	5	0	G/A|44/10	G/A|67/47	G/A|100/22	G/A|85/47	G/A|78/48
+MockRefGenome	715639	G	109.80	G	A	100.00	0	5	0	G/A|16/38	G/A|72/43	G/A|96/26	G/A|94/37	G/A|96/31
+MockRefGenome	715653	C	103.75	C	A	80.00	0	4	0	C/A|43/10	C/A|103/11	C/A|102/19	-|0/0	C/A|113/14
+MockRefGenome	897848	G	8.25	G	A	80.00	0	4	0	G/A|3/3	-|0/0	G/A|3/7	G/A|6/4	G/A|4/3
+MockRefGenome	1073269	C	8.50	T	C	80.00	0	4	0	-|0/0	T/C|3/5	T/C|6/5	T/C|3/3	T/C|4/5
+MockRefGenome	1073289	A	8.50	G	A	80.00	0	4	0	-|0/0	G/A|5/3	G/A|5/6	G/A|3/3	G/A|5/4
+MockRefGenome	1073291	A	8.50	G	A	80.00	0	4	0	-|0/0	G/A|5/3	G/A|5/6	G/A|3/3	G/A|5/4
+MockRefGenome	1236541	C	126.60	C	A	100.00	1	4	0	C/C|67/0	C/A|119/14	C/A|89/30	C/A|142/20	C/A|124/28
+MockRefGenome	1236970	T	9.75	T	G	80.00	0	4	0	T/G|8/5	-|0/0	T/G|4/3	T/G|4/5	T/G|7/3
+MockRefGenome	1237622	C	8.50	C	G	80.00	0	4	0	-|0/0	C/G|3/3	C/G|6/4	C/G|5/5	C/G|4/4
+MockRefGenome	1237624	C	8.50	C	G	80.00	0	4	0	-|0/0	C/G|3/3	C/G|6/4	C/G|5/5	C/G|4/4
+MockRefGenome	1237941	A	7.50	G	A	80.00	0	4	0	G/A|3/3	G/A|3/6	-|4/0	G/A|4/3	G/A|4/4
+MockRefGenome	1237942	A	7.50	G	A	80.00	0	4	0	G/A|3/3	G/A|3/6	-|4/0	G/A|4/3	G/A|4/4
+MockRefGenome	1237962	C	7.50	T	C	80.00	0	4	0	T/C|3/3	T/C|3/6	-|4/0	T/C|4/3	T/C|4/4
+MockRefGenome	1237990	C	7.50	C	G	80.00	0	4	0	C/G|3/3	C/G|3/6	-|4/0	C/G|4/3	C/G|4/4
+MockRefGenome	1419116	C	8.00	G	C	80.00	0	4	0	-|0/2	G/C|5/3	G/C|5/3	G/C|5/4	G/C|3/4
+MockRefGenome	1592583	A	14.00	A	G	80.00	0	4	0	A/G|6/4	A/G|13/4	A/G|13/4	-|0/0	A/G|9/3
+MockRefGenome	1592939	G	9.25	G	T	80.00	0	4	0	-|0/0	G/T|3/5	G/T|7/4	G/T|6/4	G/T|3/5
+MockRefGenome	1595550	A	10.25	T	A	80.00	0	4	0	T/A|3/3	T/A|8/4	T/A|9/5	T/A|4/5	-|0/0
+
+
+
+Tutorial Genotyping Matrix for SE analysis
+
+MockRefGenome	13	C	130.00	C	A	100.00	1	4	0	C/C|68/0	C/A|123/14	C/A|94/30	C/A|145/20	C/A|127/29
+MockRefGenome	506858	C	56.40	C	T	100.00	0	5	0	C/T|29/14	C/T|31/20	C/T|32/29	C/T|34/17	C/T|37/39
+MockRefGenome	672873	G	9.75	G	T	80.00	0	4	0	-|-	G/T|3/5	G/T|7/5	G/T|6/4	G/T|4/5
+MockRefGenome	683723	C	8.50	T	C	80.00	0	4	0	-|-	T/C|3/5	T/C|6/5	T/C|3/3	T/C|4/5
+MockRefGenome	683743	A	8.50	G	A	80.00	0	4	0	-|-	G/A|5/3	G/A|5/6	G/A|3/3	G/A|5/4
+MockRefGenome	683745	A	8.50	G	A	80.00	0	4	0	-|-	G/A|5/3	G/A|5/6	G/A|3/3	G/A|5/4
+MockRefGenome	1003851	T	9.50	T	G	80.00	0	4	0	T/G|7/5	-|-	T/G|4/3	T/G|4/5	T/G|7/3
+MockRefGenome	1165038	G	106.60	G	A	100.00	0	5	0	G/A|45/10	G/A|64/42	G/A|102/20	G/A|82/44	G/A|76/48
+MockRefGenome	1165050	G	105.40	G	A	100.00	0	5	0	G/A|16/39	G/A|67/40	G/A|95/27	G/A|85/37	G/A|96/25
+MockRefGenome	1165714	T	9.75	T	A	80.00	0	4	0	T/A|3/3	T/A|8/3	T/A|9/4	T/A|4/5	-|5/0
+
