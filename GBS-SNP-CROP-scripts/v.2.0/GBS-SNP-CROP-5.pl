@@ -95,17 +95,17 @@ foreach my $file (@files) {
 	print "\nProcessing $input_sam file...";
 
 	if ($F > 0 && $f > 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q$phred_Q -f$f -F$F $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -f$f -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q$phred_Q -F$F $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q$phred_Q -f$f $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -f$f $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F > 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q$phred_Q -f$f -F$F $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -f$f -F$F $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q$phred_Q -F$F $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -F$F $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q$phred_Q -f$f $input_sam > $view_out" );
+		system ( "samtools view -b -q$map_q -f$f $input_sam > $view_out" );
 	} else {
 		print "Unable to proceeed; please re-check the syntax of all declared SAMtools flags and options...";
 	}
