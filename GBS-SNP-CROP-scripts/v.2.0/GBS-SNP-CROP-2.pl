@@ -58,7 +58,7 @@ if ($dataType eq "PE") {
 	my $trimoSER2OUT = join("","$fastq_seed","_SE_R2parsed",".fastq");
 	
 	if ($adaptor ne '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	} elsif ($adaptor eq '0') {
 		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	}
@@ -82,7 +82,7 @@ if ($dataType eq "PE") {
 	my $trimoSER1OUT = join("","$fastq_seed","_SE_R1parsed",".fastq");
 
 	if ($adaptor ne '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar SE -phred$phred -threads $threads $outR1 $trimoSER1OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar SE -phred$phred -threads $threads $outR1 $trimoSER1OUT ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	} elsif ($adaptor eq '0') {
 		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar SE -phred$phred -threads $threads $outR1 $trimoSER1OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	}
