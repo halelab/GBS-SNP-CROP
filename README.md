@@ -4,21 +4,13 @@
 The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of SNP calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence SNPs from both sequencing and PCR errors. The pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream SNP calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources, mainly in the absence of a reference genome. The pipeline, however, can also be used when a reference genome is available, either as a standalone analysis or as a complement to reference-based analyses via alternative pipelines (e.g. TASSEL-GBS) or indeed its own reference-independent analysis.
 
 ### Realized versions
-[**Version 3.0**][14] : Realized on 2/8/2018
+[Version 3.0][14] : Realized on 2/8/2018
 
-The GBS-SNP-CROP v.3.0 was realized. Please access the [realized version][14] for more information.
+[Version 2.0][14]: Realized on 5/11/2016 - Updated on 22/02/2017
 
-**Version 2.0** (5/11/2016) - Updated on 22/02/2017
+[Version 1.1][13]: Realized on 3/11/2016
 
-The GBS-SNP-CROP v.2.0 was realized. Please access the [realized version][14] for more information.
-
-**Version 1.1** (3/11/2016)
-
-The GBS-SNP-CROP v.1.1 was realized. Please access the [realized version][13] for more information.
-
-**Version 1.0** (1/12/2016)
-
-This is the [original version][12] of the GBS-SNP-CROP pipeline.
+[Version 1.0][12]: Realized on 1/12/2016
 
 ### Pipeline workflow
 * **Stage 1. Process the raw GBS data**
