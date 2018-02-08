@@ -1,6 +1,6 @@
 # GBS-SNP-CROP v.3.0 Tutorial 
-Arthur T. O. Melo, Radhika Bartaula and Iago Hale   
-Department of Agriculture, Nutrition and Food Systems, University of New Hampshire, Durham, NH, USA
+> Arthur T. O. Melo, Radhika Bartaula and Iago Hale   
+> Department of Agriculture, Nutrition and Food Systems, University of New Hampshire, Durham, NH, USA
 
 ### Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
 ```bash
