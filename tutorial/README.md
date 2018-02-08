@@ -1,4 +1,4 @@
-## GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v2.0) Tutorial
+## GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v3.0) Tutorial
 
 Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
 
