@@ -3,21 +3,6 @@
 ### Introduction
 The GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of SNP calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence SNPs from both sequencing and PCR errors. The pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream SNP calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources, mainly in the absence of a reference genome. The pipeline, however, can also be used when a reference genome is available, either as a standalone analysis or as a complement to reference-based analyses via alternative pipelines (e.g. TASSEL-GBS) or indeed its own reference-independent analysis.
 
-### Important Notes
-**Additional Trimmomatic flag recommended and error fix** (24/02/2017)
-
-GBS-SNP-CROP users, please make note of the following important announcements:
-
-ERROR FIX: We have discovered a minor genotyping error in Script 7 (Line 216), resulting in the incorrect genotyping of secondary allele homozygotes as primary allele homozygotes, specifically in the case where secondary allele read depth is high and primary allele read depth = 1.  This error affects <1% of genotyping calls in our test data. The error has now been corrected, and all users should replace their Script 7 with the version available as of this date (22/02/17). We sincerely apologize for this!
-
-ADDITIONAL TRIMMOMATIC FLAG RECOMMENDED: It has come to our attention that Trimmomatic, by default, can discard high-quality R2 reads if they contain any adapter sequence (e.g. when a GBS fragment length is less than the Illumina read length).  To avoid this unnecessary creation of singletons, and thus data loss to downstream scripts, we recommend that users activate the "keepBothReads" option within the Trimmomatic ILLUMINACLIP parameter, when using GBS-SNP-CROP to analyze paired-end (PE) data.
-For example, the current recommended Trimmomatic ILLUMINACLIP parameters for Script 2 are:
-
-```bash
--ad TruSeq3-PE.fa:2:30:10:8:true
-```
-
-Please refer to the [Trimmomatic user manual][15] for more details. 
 
 **Version 2.0** (5/11/2016) - Updated on 22/02/2017
 
@@ -61,7 +46,7 @@ Follow this link to access the [GBS-SNP-CROP Google Group][5].
 * [Java 7 or higher][6] - We used Java 8
 * [Trimmomatic][7] v.0.33 (Bolger et al., 2014)
 * [PEAR][8] v.0.96 (Zhang et al., 2014)
-* [Usearch][9] v.8.0.1623 (Edgar, 2010)
+* [Vsearch][9] v2.6.2 (Rognes et al., 2016)
 * [BWA aligner][10] v.0.7.12 (Li & Durbin, 2009)
 * [SAMTools][11] v.1.2 (Li et al., 2009)
 
@@ -76,7 +61,7 @@ Follow this link to access the [GBS-SNP-CROP Google Group][5].
 [6]:https://www.java.com/en/
 [7]:http://www.usadellab.org/cms/?page=trimmomatic
 [8]:http://sco.h-its.org/exelixis/web/software/pear/
-[9]: http://www.drive5.com/usearch/
+[9]: https://github.com/torognes/vsearch
 [10]:http://bio-bwa.sourceforge.net
 [11]:http://samtools.sourceforge.net
 [12]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.1.0
