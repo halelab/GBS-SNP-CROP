@@ -32,11 +32,8 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 
 *Step 7: Filter SNPs and call genotypes*
 
-### User Manual
-For more details, please see the [GBS-SNP-CROP User Manual][2].
-
-### Discussion Forum
-Follow this link to access the [GBS-SNP-CROP Google Group][5].
+### Gettin Help
+Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing a issue, please, submit it on our discussion [Google groups page][5].
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
@@ -50,7 +47,7 @@ Follow this link to access the [GBS-SNP-CROP Google Group][5].
 [Melo et al. GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. 2016. 17:29. DOI 10.1186/s12859-016-0879-y.][1]
 
 [1]:https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-0879-y
-[2]:https://github.com/halelab/GBS-SNP-CROP/wiki
+[2]:https://github.com/halelab/GBS-SNP-CROP/wiki/GBS-SNP-CROP-User-Manual-(v.3.0)-February-2018
 [3]:http://www.halelab.org
 [4]:https://github.com/halelab/GBS-SNP-CROP/tree/master/GBS-SNP-CROP-scripts
 [5]:https://groups.google.com/forum/#!forum/gbs-snp-crop
@@ -65,3 +62,4 @@ Follow this link to access the [GBS-SNP-CROP Google Group][5].
 [14]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.2.0
 [15]:http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
 [16]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.3.0
+[17]:https://github.com/halelab/GBS-SNP-CROP/wiki/Frequently-Asked-Questions-(FAQs)
