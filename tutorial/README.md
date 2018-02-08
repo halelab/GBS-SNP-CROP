@@ -1,15 +1,14 @@
 ## GBS SNP Calling Reference Optional Pipeline (GBS-SNP-CROP v3.0) Tutorial
 
 Arthur T. O. Melo, Radhika Bartaula, and Iago Hale
-
-Department of Biological Sciences, College of Life Science and Agriculture, University of New Hampshire, Durham, NH, USA.
+Department of Agriculture, Nutrition and Food Systems, University of New Hampshire, Durham, NH, USA
 
 ## Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
 ```bash
 # Parsing paired-end (PE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d PE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG 
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d PE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10 
 # Parsing single-end (SE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG 
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10
 ```
 
 ## Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
@@ -44,19 +43,25 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d PE-b barcodeID.txt -ref MockRefN
 perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d SE-b barcodeID.txt -ref MockRefName.MockRef_Genome.fasta -Q 30 -q 0 -f 0 -F 2308 -t 10 -Opt 0 
 ```
 
-## Step 6: Parse mpileup output and produce the SNP discovery master matrix (GBS-SNP-CROP-6.pl)
+## Step 6: Parse mpileup output and produce the variants discovery master matrix (GBS-SNP-CROP-6.pl)
 ```bash
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out SNPs_master_matrix.txt
+# Discovery SNPs and indels:
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out SNPs_master_matrix.txt -indels -t 10
+# Discovery only SNPs:
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out SNPs_master_matrix.txt -t 10
 ```
 
-## Step 7: Filter SNPs and call genotypes (GBS-SNP-CROP-7.pl)
+## Step 7: Filter the variants and call genotypes (GBS-SNP-CROP-7.pl)
 ```bash
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in SNPs_master_matrix.txt -out SNPs_genotyping_matrix.txt -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 4 -mxAvgDepth 200  
+# Call both SNPs and indels:
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in SNPs_master_matrix.txt -out SNPs_genotyping_matrix.txt -indels -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 4 -mxAvgDepth 200
+# Call only SNPs:
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in SNPs_master_matrix.txt -out SNPs_genotyping_matrix.txt -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 4 -mxAvgDepth 200 
 ```
 
-## Downstream Tool 1: Creating input files to software packages R, TASSEL GUI and/or PLINK (GBS-SNP-CROP-8.pl)
+## Downstream Tool 1: Creating input files to software packages R, TASSEL GUI and/or PLINK and create VCF output (GBS-SNP-CROP-8.pl)
 ```bash
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in SNPs_genotyping_matrix.txt -b barcodeID.txt -formats R,Tassel,Plink 
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in SNPs_genotyping_matrix.txt -b barcodeID.txt -formats R,Tassel,Plink,vcf 
 ```
 
 ## Downstream Tool 2: Provide the cluster/centroid ID and other descriptors for all called SNPs (GBS-SNP-CROP-9.pl)
