@@ -38,25 +38,23 @@ while(<$IN>) {
 	push @files, $TaxaNames;
 }
 close $IN;
-#chomp (@files);
 
-open my $CountList, ">", "CountFileList1.txt" or die "Unable to load CountFileList.tx file\n";
+open my $CountList, ">", "CountFileList.txt" or die "Unable to load CountFileList.tx file\n";
 
 ###################################
 # Identifying both SNPs and indels 
 ###################################
-
 if ($indels) {
 	print "The GBS-SNP-CROP will identify and call both SNPs and indels from the alignment dataset.\n\n";
 	print "Counting nucleotides and filtering monomorphic sites for all genotypes. Even using multi-threads this process can take a while ... be patient!\n";
 
 	foreach my $file (@files) {
-		my $pid = $pm->start and next;	
-	    my $mpileup_input = join (".", "$file","mpileup");
+	    	my $mpileup_input = join (".", "$file","mpileup");
 		my $count_out = join (".", "$file","count","txt");
 		my $ref_file = join (".", "$file","ref","txt");
-	
 		print $CountList "$count_out\n";
+
+		my $pid = $pm->start and next;
 			
 		open my $PILEUP, "<", "$mpileup_input" or die "Can't load $mpileup_input file";
 		open my $OUT1, ">", "$count_out" or die "Can't initialized $count_out ouput file";
@@ -194,12 +192,9 @@ if ($indels) {
 
 	# Creating a master list of all putative variant positions in the population
 	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
-	system ( "sort CountFileList1.txt > CountFileList.txt" );
-	system ( "rm CountFileList1.txt" );
 
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
-
 	open my $POS, "<", "$posFile" || die "Can't load file $!";
 	open my $LIST, "<","$countList" || die "Can't load file $!";
 	open my $DEST, ">", "$output_file" || die "Can't load file $!";
@@ -263,12 +258,12 @@ if ($indels) {
 
 
 	foreach my $file (@files) {
-		my $pid = $pm->start and next;	
-    	my $mpileup_input = join (".", "$file","mpileup");
+    		my $mpileup_input = join (".", "$file","mpileup");
 		my $count_out = join (".", "$file","count","txt");
 		my $ref_file = join (".", "$file","ref","txt");
-	
 		print $CountList "$count_out\n";
+
+		my $pid = $pm->start and next;
 	
 		open my $PILEUP, "<", "$mpileup_input" or die "Can't load $mpileup_input file";
 		open my $OUT1, ">", "$count_out" or die "Can't initialized $count_out ouput file";
@@ -382,12 +377,9 @@ if ($indels) {
 	print "DONE.\n";
 	# Creating a master list of all putative variant positions in the population
 	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
-	system ( "sort CountFileList1.txt > CountFileList.txt" );
-	system ( "rm CountFileList1.txt" );
 	
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
-
 	open my $POS, "<", "$posFile" || die "Can't load file $!";
 	open my $LIST, "<","$countList" || die "Can't load file $!";
 	open my $DEST, ">", "$output_file" || die "Can't load file $!";
