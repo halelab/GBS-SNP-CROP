@@ -592,12 +592,12 @@ if ($indels) {
 }
 
 sub main {
-	my $dir = "VariantsCalled"; 
+	my $dir = "variants"; 
 	unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
 }
 main();
 
-system ( "mv $SummaryFile $output ./VariantsCalled" );
+system ( "mv $SummaryFile $output ./variants" );
 print "\nElapsed time: ", sprintf("%.2f",((time - $sttime)/60)), " min", "\n";
 print "Please cite: Melo et al. (2016) GBS-SNP-CROP: A reference-optional pipeline for\n"
 ."SNP discovery and plant germplasm characterization using variable length, paired-end\n"
