@@ -317,7 +317,7 @@ if ($indels) {
 	close $VAR;
 	close $DEST;
 
-	print "\nYour $output genotyping matrix was successfully created into VariantsCalled directory. \n";
+	print "\nYour $output genotyping matrix was successfully created into variants directory. \n";
 
 	print "GBS-SNP-CROP called $lc SNPs + indels in your population using the following parameters:\n"
 	."Minimum read depth required to call homozygotes when the secondary allele depth = 0: $minHomoDepth\n"
@@ -578,7 +578,7 @@ if ($indels) {
 	close $VAR;
 	close $DEST;
 
-	print "\nYour $output genotyping matrix was successfully created into VariantsCalled directory. \n";
+	print "\nYour $output genotyping matrix was successfully created into variants directory. \n";
 
 	print "GBS-SNP-CROP called $lc SNPs in your population using the following parameters:\n"
 	."Minimum read depth required to call homozygotes when the secondary allele depth = 0: $minHomoDepth\n"
