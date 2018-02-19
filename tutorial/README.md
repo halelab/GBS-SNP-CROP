@@ -29,9 +29,9 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d SE -b barcodesID.txt -fq L001
 ### Step 4: Cluster reads and assemble the Mock Reference (GBS-SNP-CROP-4.pl)
 ```bash
 # Parsing paired-end (PE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d PE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MockRefName
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d PE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MRef
 # Parsing single-end (SE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d SE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MockRefName
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d SE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MRef
 ```
 
 ### Step 5: Align with BWA-mem and process with SAMTools (GBS-SNP-CROP-5.pl)
