@@ -6,7 +6,7 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 ### Realized versions
 [v.3.0][16]: Realized on 2/8/2018
 
-[v.2.0][14]: Updated on 22/02/2017
+[v.2.0][14]: Updated on 2/22/2017
 
 [v.1.1][13]: Realized on 3/11/2016
 
