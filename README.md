@@ -53,7 +53,7 @@ Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a
 [5]:https://groups.google.com/forum/#!forum/gbs-snp-crop
 [6]:https://www.java.com/en/
 [7]:http://www.usadellab.org/cms/?page=trimmomatic
-[8]:http://sco.h-its.org/exelixis/web/software/pear/
+[8]:https://www.h-its.org/en/research/sco/software/#NextGenerationSequencingSequenceAnalysis
 [9]: https://github.com/torognes/vsearch
 [10]:http://bio-bwa.sourceforge.net
 [11]:http://samtools.sourceforge.net
