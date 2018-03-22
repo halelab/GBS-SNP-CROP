@@ -61,5 +61,5 @@ Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a
 [13]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.1.1
 [14]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.2.0
 [15]:http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
-[16]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.3.0
+[16]:
 [17]:https://github.com/halelab/GBS-SNP-CROP/wiki/Frequently-Asked-Questions-(FAQs)
