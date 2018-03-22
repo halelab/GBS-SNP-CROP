@@ -22,6 +22,7 @@ GetOptions(
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
 
 print "\n#################################\n# GBS-SNP-CROP, Step 8, v.3.0\n#################################\n";
+local $" = "\t";
 my $sttime = time;
 
 # Defining outputs
