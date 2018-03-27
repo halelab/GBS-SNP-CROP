@@ -141,6 +141,11 @@ if ($indels) {
 		my $pop_one_count = $Var_depth{$pop_one_var};
 		my $pop_two_count = $Var_depth{$pop_two_var};
 		
+		# Delete variants which the reference doesn't match to either primary or secondary
+		if (($pop_one_var ne $ref) and ($pop_two_var ne $ref)) {
+			next;
+		}
+		
 		# Initial filters based on population allele frequency.  
 		my $alt_allele_ratio = ( $pop_two_count / ($pop_one_count + $pop_two_count) );
 		if ( $alt_allele_ratio < 0.05) {
@@ -310,7 +315,15 @@ if ($indels) {
 			$VarType = "SNP";
 		}
 		
-		$row = join ("\t","$header","$position","$VarType","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
+		# Alternative allele
+		my $Alt_allele;
+		if ($ref eq $pop_one_var) {
+			$Alt_allele = $pop_two_var;
+		} elsif ($ref eq $pop_two_var) {
+			$Alt_allele = $pop_one_var;
+		}
+		
+		$row = join ("\t","$header","$position","$VarType","$ref","$Alt_allele","$avgDepth","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
 		print $DEST "$row\n";
 		$lc++;
 	}
@@ -406,6 +419,11 @@ if ($indels) {
 		my $pop_two_var = $rank[1];
 		my $pop_one_count = $Var_depth{$pop_one_var};
 		my $pop_two_count = $Var_depth{$pop_two_var};
+		
+		# Delete variants which the reference doesn't match to either primary or secondary
+		if (($pop_one_var ne $ref) and ($pop_two_var ne $ref)) {
+			next;
+		}
 
 		# Initial filters based on population-level allele frequencies
 		my $alt_allele_ratio = ( $pop_two_count / ($pop_one_count + $pop_two_count) );
@@ -429,7 +447,7 @@ if ($indels) {
 		} elsif( (scalar(@input) - 3) < 20 and ($N2 < 2) ) {
 			next;
 		}
-	
+		
 		# Secondary filters based on genotype-level allele frequencies
 		my $row = "";
 		my $homo_pri = 0;
@@ -570,8 +588,16 @@ if ($indels) {
 		} else {
 			$VarType = "SNP";
 		}
+		
+		# Alternative allele
+		my $Alt_allele;
+		if ($ref eq $pop_one_var) {
+			$Alt_allele = $pop_two_var;
+		} elsif ($ref eq $pop_two_var) {
+			$Alt_allele = $pop_one_var;
+		}
 
-		$row = join ("\t","$header","$position","$VarType","$ref","$avgDepth","$pop_one_var","$pop_two_var","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
+		$row = join ("\t","$header","$position","$VarType","$ref","$Alt_allele","$avgDepth","$percentage_scored_genotypes","$homo_pri","$hets","$homo_alt$row" );
 		print $DEST "$row\n";
 		$lc++;
 	}
