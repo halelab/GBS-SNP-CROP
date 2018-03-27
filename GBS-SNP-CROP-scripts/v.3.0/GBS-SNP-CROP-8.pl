@@ -22,7 +22,7 @@ GetOptions(
 ) or die "Error in command line arguments.\n$Usage\n$Manual\n";
 
 print "\n#################################\n# GBS-SNP-CROP, Step 8, v.3.0\n#################################\n";
-local $" = "\t";
+#local $" = "\t";
 my $sttime = time;
 
 # Defining outputs
@@ -46,15 +46,15 @@ if ($tools =~ "R" or $tools =~ "r"){
 		chomp @snp;
 
 		my $col = join ("\t",$snp[0],$snp[1]);
-		my $primary = $snp[5];
-		my $secondary = $snp[6];
+		my $primary = $snp[3];
+		my $secondary = $snp[4];
 
 		my @out = ();
 		push @out, "$col";
 	
 		my $length = scalar(@snp) - 1;
 	
-		for ( my $i=11; $i<=$length; $i++ ) {
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -114,15 +114,17 @@ if ($tools =~ "T" or $tools =~ "t"){
 	while(<$IN2>) {
 		my @snp = split "\t", $_;
 		chomp @snp;
-
+		if ($snp[2] eq "Indel") {
+			next;
+		}
 		my $col1 = join ("_",$snp[0],$snp[1]);
-		my $alleles = join ("/",$snp[5],$snp[6]);
+		my $alleles = join ("/",$snp[3],$snp[4]);
 
 		my @out;
 
 		my $length = scalar(@snp) - 1;
 
-		for ( my $i=11; $i<=$length; $i++ ) {
+		for ( my $i=10; $i<=$length; $i++ ) {
 			my @geno1 = split /\|/, $snp[$i];
 			my $geno2 = $geno1[0];
 
@@ -190,7 +192,9 @@ if ($tools =~ "P" or $tools =~ "p"){
 	while (<$IN3>) {
 		chomp;
 		my @input = split ("\t", $_);
-
+		if ($input[2] eq "Indel") {
+			next;
+		}
 		my $header = $input[0];
 		my $position = $input[1];
 		my $snp_identifier = join ("_",$header,$position);
@@ -198,7 +202,7 @@ if ($tools =~ "P" or $tools =~ "p"){
 		$header =~ s/chr//;
 		my $Tpedfile = join("\t",$header,$snp_identifier,"0",$position);
 
-		my @geno = splice @input, 11; 
+		my @geno = splice @input, 10; 
 		foreach (@geno) {
 			my @geno1 = split /\|/, $_;
 			s/-/0 0/ for @geno1;
@@ -238,16 +242,17 @@ if ($tools =~ "V" or $tools =~ "v"){
 	# Printing output VCF header
 	my $datestring = localtime();
 	
-	print $OUT_V "##fileformat=VCFv4.0\n"
+	print $OUT_V "##fileformat=VCFv4.1\n"
 	."##fileDate=$datestring\n"
 	."##source=GBS-SNP-CROP\n"
 	."##phasing=partial\n"
-	."##INFO=<ID=AC,Number=1,Type=Integer,Description=Allele Count>\n"
-	."##INFO=<ID=AF,Number=1,Type=Integer,Description=Allele Frequency>\n"
-	."##INFO=<ID=DP,Number=1,Type=Integer,Description=Average Depth>\n"
-	."##INFO=<ID=NS,Number=1,Type=Integer,Description=Number of Samples With Data>\n"
-	."##FORMAT=<ID=GT,Number=1,Type=String,Description=Genotype>\n"
-	."##FORMAT=<ID=AD,Number=1,Type=Integer,Description=Allele Depth>\n"
+	."##INFO=<ID=AC,Number=A,Type=Integer,Description=\"Allele Count\">\n"
+	."##INFO=<ID=AF,Number=A,Type=Integer,Description=\"Allele Frequency\">\n"
+	."##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Total Depth\">\n"
+	."##INFO=<ID=AV,Number=1,Type=Integer,Description=\"Average Depth\">\n"
+	."##INFO=<ID=NS,Number=1,Type=Integer,Description=\"Number of Samples With Data\">\n"
+	."##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n"
+	."##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Allele Depth\">\n"
 	."#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t@TaxaNames\n";
 	
 	while (<$IN4>) {
@@ -256,37 +261,52 @@ if ($tools =~ "V" or $tools =~ "v"){
 		my $identifier = $input[0];
 		my $pos = $input[1];
 		my $ref = $input[3];
-		my $pri = $input[5];
-		my $sec = $input[6];
-		my $homo1 = $input[8];
-		my $hetero = $input[9];
-		my $homo2 = $input[10];
+		my $alt = $input[4];
+		my $homo1 = $input[7];
+		my $hetero = $input[8];
+		my $homo2 = $input[9];
 		
-		# DP
-		my $DP = sprintf("%.2f",$input[4]);
-
 		# Alternative allele
-		my $Alt_allele;
-		if ($ref eq $sec) {
-			$Alt_allele = $pri;
-		} else {
-			$Alt_allele = $sec;
+		my $ref_p;
+		my $alt_p;
+		if ($input[2] eq "Indel") {
+			if ($alt =~ "[+]") {
+				$alt =~ s/([+]\d)//g;
+				$alt_p = "$ref"."$alt";
+				$ref_p = $ref;
+			} elsif ($alt =~ "[-]") {
+				$alt =~ s/([-]\d)//g;
+				$ref_p = "$ref"."$alt";
+				$alt_p = $ref;
+			}
+		} elsif ($input[2] eq "SNP") {
+			$ref_p = $ref;
+			$alt_p = $alt;
 		}
+		$alt_p =~ s/([+-]\d)//g;
+		$alt =~ s/([+-]\d)//g;
+		$ref_p =~ s/([+-]\d)//g;
+		$ref =~ s/([+-]\d)//g;
 			
 		# Scored genotypes (NS)
 		my $NS = $homo1 + $hetero + $homo2;
+		# AV
+		my $AV = sprintf("%.2f",$input[5]);
 
-		# Allele Count (AC), Allele Freq (AF) and Combined Depth (DP)
+
+		# Allele Count (AC), Allele Freq (AF) and Depth (DP)
 		my @alleles = ();
 		my @depths = ();
 		my @depths_alt = ();		
 
-		for ( my $i=11; $i<=scalar(@input) - 1; $i++ ) {
+		for ( my $i=10; $i<=scalar(@input) - 1; $i++ ) {
 			my @genos = split /\|/, $input[$i];
 			
 			my $x = $genos[0];
 			$x =~ s/-/N\/N/g;
 			my @x1 = split /\//, $x;
+			$x1[0] =~ s/([+-]\d)//g;
+			$x1[1] =~ s/([+-]\d)//g;
 			push @alleles, $x1[0], $x1[1];
 
 			my $y = $genos[1];
@@ -295,13 +315,16 @@ if ($tools =~ "V" or $tools =~ "v"){
 			push @depths, $y1[0], $y1[1];
 			push @depths_alt, $y1[1];	
 		}
+		my $DP;
+		$DP += $_ for @depths;
 		
 		# AC and AF
 		my $Alt_cnt = 0;
 		my $Ref_cnt = 0;
 		
 		foreach my $allele (@alleles) {
-			if ($allele eq $Alt_allele){
+			#$allele =~ s/([+-]\d)//g;
+			if ($allele eq $alt){
 				$Alt_cnt++;
 			} else {
 				$Ref_cnt++;
@@ -312,7 +335,7 @@ if ($tools =~ "V" or $tools =~ "v"){
 		
 		# Genotypes
 		my @genos = ();
-		for ( my $i=11; $i<=scalar(@input) - 1; $i++ ) {
+		for ( my $i=10; $i<=scalar(@input) - 1; $i++ ) {
 			my @k = split /\|/, $input[$i];
 			my @l = split /\//, $k[1];
 			if ($k[0] eq "-") {
@@ -322,14 +345,14 @@ if ($tools =~ "V" or $tools =~ "v"){
 				next;
 			} else {
 				$k[1] =~ s/\//,/g;
+				$k[0] =~ s/([+-]\d)//g;
+				$k[0] =~ s/$alt/1/g;
 				$k[0] =~ s/$ref/0/g;
-				$k[0] =~ s/$Alt_allele/1/g;
 				push @genos, join (":", $k[0],$k[1]);
 				next;
 			}
 		}
-			
-		my $line = join ("\t","$identifier","$pos",".","$ref","$Alt_allele","40","PASS","AC=$AC;AF=$AF;DP=$DP;NS=$NS","GT:AD","@genos");
+		my $line = join ("\t","$identifier","$pos",".","$ref_p","$alt_p",".","PASS","AC=$AC;AF=$AF;DP=$DP;AV=$AV;NS=$NS","GT:AD","@genos");
 		print $OUT_V "$line\n";
 	}
 
