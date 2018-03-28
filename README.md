@@ -33,7 +33,7 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 *Step 7: Filter SNPs and call genotypes*
 
 ### Getting Help
-Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing a issue, please, submit it on our discussion [Google groups page][5].
+Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing an issue, please, submit it on our discussion [Google groups page][5].
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
