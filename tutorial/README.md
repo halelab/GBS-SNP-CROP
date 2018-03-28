@@ -37,9 +37,9 @@ perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d SE -b barcodeID.txt -rl 150 -pl 
 ### Step 5: Align with BWA-mem and process with SAMTools (GBS-SNP-CROP-5.pl)
 ```bash
 # Mapping paired-end (PE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d PE-b barcodeID.txt -ref MockRefName.MockRef_Genome.fasta -Q 30 -q 0 -f 2 -F 2308 -t 10 -Opt 0 
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d PE-b barcodeID.txt -ref MRef.MockRef_Genome.fasta -Q 30 -q 0 -f 2 -F 2308 -t 10 -Opt 0 
 # Mapping single-end (SE) reads:
-perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d SE-b barcodeID.txt -ref MockRefName.MockRef_Genome.fasta -Q 30 -q 0 -f 0 -F 2308 -t 10 -Opt 0 
+perl /path-to-GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d SE-b barcodeID.txt -ref MRef.MockRef_Genome.fasta -Q 30 -q 0 -f 0 -F 2308 -t 10 -Opt 0 
 ```
 
 ### Step 6: Parse mpileup output and produce the variants discovery master matrix (GBS-SNP-CROP-6.pl)
