@@ -1,9 +1,9 @@
 Tutorial Genotyping Matrix for PE analysis
 
-MockRefGenome	2370084 SNP C A 126.60  100.00	1 4	0	C/C|67/0	C/A|119/14	C/A|89/30	C/A|142/20	C/A|124/28
+MockRefGenome	2370084 SNP     C       A 126.60  100.00	1 4	0	C/C|67/0	C/A|119/14	C/A|89/30	C/A|142/20	C/A|124/28
 MockRefGenome	2549857	SNP	G	C 9.50	80.00	0	4	0	G/C|5/3	G/C|7/3	-|-	G/C|8/4	G/C|5/3
 MockRefGenome	2590697	SNP	A	C 10.20	100.00	0	5	0	C/A|3/3	C/A|8/3	C/A|9/8	C/A|4/5	C/A|5/3
-MockRefGenome	2590710	SNP     C       T   10.20 100.00  0	5	0	C/T|3/3	C/T|8/3	C/T|9/8	C/T|4/5	C/T|5/3
+MockRefGenome	2590710	SNP     C       T  10.20 100.00  0	5	0	C/T|3/3	C/T|8/3	C/T|9/8	C/T|4/5	C/T|5/3
 MockRefGenome	2645827	SNP	C	G 8.50	80.00	0	4	0	-|-	C/G|3/3	C/G|6/4	C/G|5/5	C/G|4/4
 MockRefGenome	2645829	SNP	C	G 8.50	80.00	0	4	0	-|-	C/G|3/3	C/G|6/4	C/G|5/5	C/G|4/4
 MockRefGenome	2764537	SNP	C	T 8.50	80.00	0	4	0	-|-	C/T|5/3	C/T|5/6	C/T|3/3	C/T|5/4
