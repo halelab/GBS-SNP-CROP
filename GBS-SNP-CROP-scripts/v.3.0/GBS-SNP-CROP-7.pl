@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #########################################################################################################################
-# GBS-SNP-CROP, Step 6. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
+# GBS-SNP-CROP, Step 7. For description, please see Melo et al. (2016) BMC Bioinformatics DOI 10.1186/s12859-016-0879-y.
 #########################################################################################################################
 
 use strict;
