@@ -19,7 +19,12 @@ my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.
 
 my ($dataType,$fastq_seed,$threads,$phred,$adaptor,$leading,$sliding,$trailing,$minlen);
 
+#path to Trimmomatic jar. We put a default value for compatibility to 
+#previous versions, so that existing scripts still run
+my $trimmomatic = '/usr/local/bin/trimmomatic-0.33.jar';
+
 GetOptions(
+'tr=s' => \$trimmomatic,  # string, patht to Trimmomatic jar
 'd=s' => \$dataType,      # string - "PE" or "SE"
 'fq=s' => \$fastq_seed,   # string
 't=s' => \$threads,       # numeric
@@ -59,9 +64,9 @@ if ($dataType eq "PE") {
 	my $trimoSER2OUT = join("","$fastq_seed","_SE_R2parsed",".fq.gz");
 	
 	if ($adaptor ne '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar $trimmomatic PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	} elsif ($adaptor eq '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar $trimmomatic PE -phred$phred -threads $threads $outR1 $outR2 $trimoPER1OUT $trimoSER1OUT $trimoPER2OUT $trimoSER2OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	}
 
 	print "\nDONE.\n";
@@ -83,9 +88,9 @@ if ($dataType eq "PE") {
 	my $trimoSER1OUT = join("","$fastq_seed","_SE_R1parsed",".fq.gz");
 	
 	if ($adaptor ne '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar SE -phred$phred -threads $threads $outR1 $trimoSER1OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar $trimmomatic SE -phred$phred -threads $threads $outR1 $trimoSER1OUT MINLEN:$minlen ILLUMINACLIP:$adaptor LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	} elsif ($adaptor eq '0') {
-		system ( "java -jar /usr/local/bin/trimmomatic-0.33.jar SE -phred$phred -threads $threads $outR1 $trimoSER1OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
+		system ( "java -jar $trimmomatic SE -phred$phred -threads $threads $outR1 $trimoSER1OUT LEADING:$leading SLIDINGWINDOW:$sliding TRAILING:$trailing MINLEN:$minlen" );
 	}
 
 	print "\nDONE.\n";
