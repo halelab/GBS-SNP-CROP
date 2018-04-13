@@ -24,7 +24,7 @@ my ($dataType,$fastq_seed,$threads,$phred,$adaptor,$leading,$sliding,$trailing,$
 my $trimmomatic = '/usr/local/bin/trimmomatic-0.33.jar';
 
 GetOptions(
-'tr=s' => \$trimmomatic,  # string, path to Trimmomatic jar
+'tm=s' => \$trimmomatic,  # string, path to Trimmomatic jar
 'd=s' => \$dataType,      # string - "PE" or "SE"
 'fq=s' => \$fastq_seed,   # string
 't=s' => \$threads,       # numeric
