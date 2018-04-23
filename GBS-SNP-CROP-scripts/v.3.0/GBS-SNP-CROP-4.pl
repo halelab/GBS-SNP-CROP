@@ -13,13 +13,17 @@ use strict;
 use warnings;
 use Getopt::Long qw(GetOptions);
 use List::Util qw/shuffle/;
+use List::MoreUtils qw(uniq);
+use List::MoreUtils qw(natatime);
 
 my $Usage = "Usage: perl GBS-SNP-CROP-4.pl -d <data type, PE = Paired-End or SR = Single-End> -b <barcode-ID file> -rl <Raw GBS read lengths> -pl <minimum length required after merging to retain read>\n"
 ."-p <p-value for PEAR (Zhang et al., 2014)> -id <nucleotide identity value required for VSEARCH (Rognes et al., 2016) read clustering>\n"
-." -t <number of threads dedicated to VSEARCH clustering> -MR <Mock reference name>.\n";
+."-t <number of threads dedicated to VSEARCH clustering> -MR <Mock reference name>\n"
+."-db <optional size of dereplication block (expressed in number of files). Use only if you run out of RAM during dereplication\n"
+."-rs <remove singletons, either 'TRUE' or 'FALSE' (false is default)>\n";
 my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. (2016) BMC Bioinformatics. DOI 10.1186/s12859-016-0879-y.\n"; 
 
-my ($dataType,$barcodesID_file,$raw_seq_length,$pear_length,$pvalue,$id,$threads,$MockRefName);
+my ($dataType,$barcodesID_file,$raw_seq_length,$pear_length,$pvalue,$id,$threads,$MockRefName,$derep_blocks,$remove_singletons);
 
 GetOptions(
 'd=s' => \$dataType,          # string - "PE" or "SE"
@@ -30,6 +34,8 @@ GetOptions(
 'id=s' => \$id,               # numeric
 't=s' => \$threads,           # numeric
 'MR=s' => \$MockRefName,      # string
+'db=i' => \$derep_blocks,     # numeric
+'rs=s' => \$remove_singletons,# string - "TRUE" or "FALSE"
 ) or die "$Usage\n$Manual\n";
 
 print "\n#################################\n# GBS-SNP-CROP, Step 4, v.3.0\n#################################\n";
@@ -51,6 +57,29 @@ while ( <$BAR> ) {
 }
 close $BAR;
 chomp (@MR_taxa_files);
+
+#it is possible for single Taxa to appear multiple times in the barcode file
+#(i.e. the same sample can have multiple barcodes). We make sure that each taxa
+#appears only once, so to avoid extra compression/decompression
+@MR_taxa_files = uniq(@MR_taxa_files);
+
+#we now know the default value for dereplication blocks, if not specified
+if (! defined $derep_blocks){
+	$derep_blocks = scalar @MR_taxa_files;
+}
+
+#ensuring the value of $remove_singletons flag
+if (! defined $remove_singletons){
+	$remove_singletons = "FALSE";
+}
+$remove_singletons = uc($remove_singletons);
+if ($remove_singletons eq "TRUE"){
+	$remove_singletons = 1;
+}elsif ($remove_singletons eq "FALSE"){
+	$remove_singletons = 0;
+}else{
+	die ("Parameter rs can only accept values 'TRUE' and 'FALSE'\n");
+}
 
 sub main {
 		my $dir = "fastaForRef"; 
@@ -225,7 +254,7 @@ if ($dataType eq "PE") {
 	print "\n\nSorting the full set of genotype-specific centroids in order of decreasing length...\n";
 	my $out4A = join (".",$MockRefName,"sorted_by_length","fasta");
 	system ( "vsearch -sortbylength $VsearchIN -output $out4A" );
-	
+
 	# Step 4B: Finding population-level initial clusters (centroids)
 	print "\nFinding population-level initial clusters (centroids)...\n";
 	my $out4B = join (".",$MockRefName,"clusters","fasta");
@@ -305,65 +334,108 @@ if ($dataType eq "PE") {
 } elsif ($dataType eq "SE") {
 	print "Parsing Single-End reads...\n";
 
+	#even in single end we apply a filter on minimum length of reads, as
+	#done for paired ends in pear
+	my $min_length = 0;
+	if (defined $pear_length){
+		$min_length = $pear_length;
+	}
+
 # 1. Transforming FASTQ high quality reads into FASTA reads
 	foreach my $file (@MR_taxa_files) {
+		print " - $file\n";
 		my $R1input1 = join (".", "$file","R1","fq","gz");
 		my $out = join (".", "$file","R1","fa");
 		open my $IN, '-|', 'gzip', '-dc', $R1input1 or die "Can't open file $R1input1: $!\n";
 		open my $OUT, ">", "$out" or die "Can't load $out\n";
 
-		my @R1read;
 		my @R1reads;
 
-		my $i = 1;
-		while(<$IN>) {
-			if ($i % 4 != 0) {
-				push @R1read, $_;
-				$i++;
-			} else {
-				push @R1read, $_;
-				chomp (@R1read);
-				push @R1reads, [ @R1read ];
-				@R1read = ();
-				$i++;
+		while(! eof ($IN)) {
+			#here we assume well formatted fastq files, so we can read
+			#four lines at a time. No need for chomping or storing
+			#the whole file in memory. Only first two lines
+			#are useful in each read
+			$R1reads[0] = readline($IN); #fastq @header
+			$R1reads[1] = readline($IN); #bases
+			readline($IN);               #+ (ignored)
+			readline($IN);               #quality (ignored)
+
+			#check on minimum read length (it contains the \n at the
+			#end, thus we use its length minus one
+			if ((length($R1reads[1]) - 1) < $min_length) {
+				next;
 			}
+
+			#fastq -> fasta (no need for newlines, since we did not chomp)
+			$R1reads[0] =~ s/@/>/g;
+			$R1reads[0] =~ s/ /:/g;
+			print $OUT "$R1reads[0]$R1reads[1]";
 		}
 		close $IN;
-
-		my $size = scalar @R1reads - 1;
-		for (my $k = 0; $k <= $size; $k++) {
-
-			$R1reads[$k][0] =~ s/@/>/g;
-			$R1reads[$k][0] =~ s/ /:/g;
-			print $OUT "$R1reads[$k][0]\n$R1reads[$k][1]\n";
-		}
 		close $OUT;
 	}
 
+# 1bis. Use VSEARCH to dereplicate each fasta file separatedly
+	foreach my $file (@MR_taxa_files) {
+		my $fasta_with_reps = join (".", "$file","R1","fa");
+		my $fasta_no_reps = join (".", "$file","R1", "noreps","fa");
+		system ( "vsearch -derep_fulllength $fasta_with_reps -sizeout -minseqlength $min_length -output $fasta_no_reps");
+		
+		#replacing fasta with reps with new dereplicated file
+		system ( "mv $fasta_no_reps $fasta_with_reps");
+	}
+	
 # 2. Use VSEARCH to cluster reads 
 
+	#Step 2init: source fasta files are joined and dereplicated (but taking
+	#notes of numerosity). Dereplication is done (optionally) at blocks
+	#of files to save RAM (see $derep_blocks)
 	my $VsearchIN = join(".","VsearchIN","fa");
-	system ( "cat *.R1.fa > $VsearchIN" );
+	system("touch $VsearchIN");
+	my $tmp = join(".","tmp","fa");
 
+	#catting $derep_blocks files (plus previous results) and dereplicating
+	my $it = natatime($derep_blocks, @MR_taxa_files);
+	while(my @files = $it->()){
+		print "Dereplicating: ".join(' ', @files)."\n";
+		
+		#list of files to be dereplicated in the current batch
+		my $cmd = join('.R1.fa ', @files).".R1.fa";
+		
+		#catting all together
+		system("cat $cmd $VsearchIN > $tmp");
+		
+		#dereplication
+		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $min_length -output $VsearchIN");
+	}
+	
+	#Removing singletons
+	if ($remove_singletons){
+		print "\nRemoving singletons...\n";
+		system("mv $VsearchIN $tmp");
+		system("vsearch -fastx_filter $tmp -minsize 2 -fastaout $VsearchIN");
+	}
+	
 	# Step 2A: Sorting the full set of genotype-specific centroids in order of decreasing length
-	print "\n\nSorting the full set of genotype-specific centroids in order of decreasing length...\n";
+	print "\nSorting the full set of genotype-specific centroids in order of decreasing length...\n";
 	my $out2A = join (".",$MockRefName,"sorted_by_length","fasta");
-	system ( "vsearch -sortbylength $VsearchIN -output $out2A" );
+	system ( "vsearch -sortbylength $VsearchIN -sizein -sizeout -output $out2A" );
 
 	# Step 2B: Finding population-level initial clusters (centroids)
 	print "\nFinding population-level initial clusters (centroids)...\n";
 	my $out2B = join (".",$MockRefName,"clusters","fasta");
-	system ( "vsearch -cluster_fast $out2A -id $id -threads $threads -consout $out2B -sizeout");
+	system ( "vsearch -cluster_fast $out2A -sizein -sizeout -id $id -threads $threads -consout $out2B");
 
 	# Step 2C: Sorting population-level initial clusters (centroids) by depth
 	print "\nSorting population-level initial clusters (centroids) by depth...\n";
 	my $out2C = join (".",$MockRefName,"sorted_by_size","fasta");
-	system ( "vsearch -sortbysize $out2B -output $out2C" );
+	system ( "vsearch -sortbysize $out2B -sizein -sizeout -output $out2C" );
 
 	# Step 2D: Reclustering the population-level centroids
 	print "\nReclustering the population-level centroids...\n";
 	my $VsearchOUT = join (".",$MockRefName,"reclusters","fasta");
-	system ( "vsearch -cluster_fast $out2C -id $id -threads $threads -consout $VsearchOUT" );
+	system ( "vsearch -cluster_fast $out2C -sizein -sizeout -id $id -threads $threads -consout $VsearchOUT" );
 
 	print "\nAll sub-steps for clustering population-level centroids were completed!\n";
 	unlink $VsearchIN;
@@ -418,8 +490,8 @@ if ($dataType eq "PE") {
 		}
 	}
 	close $IN4;
-	system ( "mv *.R1.fa ./fastaForRef" );
-	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $VsearchOUT" );
+	system("mv " . join('.R1.fa ', @MR_taxa_files).".R1.fa ./fastaForRef");
+	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $tmp $VsearchOUT" );
 }
 
 print "Your '$MockRefName' Mock Reference genome was assembled using the following genotypes:\n@MR_taxa_files\n";
