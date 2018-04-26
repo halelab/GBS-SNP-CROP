@@ -245,30 +245,65 @@ if ($dataType eq "PE") {
 	}
 	print "DONE.\n";
 
-# 4. Use VSEARCH to cluster reads
+# 3bis. Use VSEARCH to dereplicate each stitched fasta file separatedly
+	foreach my $file (@MR_taxa_files) {
+		my $fasta_with_reps = join(".","$file","AssembledStitched","fa");
+		my $fasta_no_reps = join(".","$file","AssembledStitched","noreps", "fa");
+		system ( "vsearch -derep_fulllength $fasta_with_reps -sizeout -output $fasta_no_reps");
+		
+		#replacing fasta with reps with new dereplicated file
+		system ( "mv $fasta_no_reps $fasta_with_reps");
+	}
 
+# 4. Use VSEARCH to cluster reads
+	#Step 4init: source fasta files are joined and dereplicated (but taking
+	#notes of numerosity). Dereplication is done (optionally) at blocks
+	#of files to save RAM (see $derep_blocks)
 	my $VsearchIN = join(".","VsearchIN","fa");
-	system ( "cat *AssembledStitched.fa > $VsearchIN" );
+	system("touch $VsearchIN");
+	my $tmp = join(".","tmp","fa");
+
+	#catting $derep_blocks files (plus previous results) and dereplicating
+	my $it = natatime($derep_blocks, @MR_taxa_files);
+	while(my @files = $it->()){
+		print "Dereplicating: ".join(' ', @files)."\n";
+		
+		#list of files to be dereplicated in the current batch
+		my $cmd = join('.AssembledStitched.fa ', @files).'.AssembledStitched.fa ';
+		
+		#catting all together
+		system("cat $cmd $VsearchIN > $tmp");
+		
+		#dereplication
+		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -output $VsearchIN");
+	}
+	
+	#Removing singletons
+	if ($remove_singletons){
+		print "\nRemoving singletons...\n";
+		system("mv $VsearchIN $tmp");
+		system("vsearch -fastx_filter $tmp -minsize 2 -fastaout $VsearchIN");
+	}
 
 	# Step 4A: Sorting the full set of genotype-specific centroids in order of decreasing length
 	print "\n\nSorting the full set of genotype-specific centroids in order of decreasing length...\n";
 	my $out4A = join (".",$MockRefName,"sorted_by_length","fasta");
-	system ( "vsearch -sortbylength $VsearchIN -output $out4A" );
+	system ( "vsearch -sortbylength $VsearchIN -sizein -sizeout -output $out4A" );
 
 	# Step 4B: Finding population-level initial clusters (centroids)
 	print "\nFinding population-level initial clusters (centroids)...\n";
 	my $out4B = join (".",$MockRefName,"clusters","fasta");
-	system ( "vsearch -cluster_fast $out4A -id $id -threads $threads -consout $out4B -sizeout");
+	system ( "vsearch -cluster_fast $out4A -sizein -sizeout -id $id -threads $threads -consout $out4B -sizeout");
 
 	# Step 4C: Sorting population-level initial clusters (centroids) by depth
 	print "\nSorting population-level initial clusters (centroids) by depth...\n";
 	my $out4C = join (".",$MockRefName,"sorted_by_size","fasta");
-	system ( "vsearch -sortbysize $out4B -output $out4C" );
+	system ( "vsearch -sortbysize $out4B -sizein -sizeout -output $out4C" );
 	
 	# Step 4D: Reclustering the population-level centroids
 	print "\nReclustering the population-level centroids...\n";
 	my $VsearchOUT = join (".",$MockRefName,"reclusters","fasta");
-	system ( "vsearch -cluster_fast $out4C -id $id -threads $threads -consout $VsearchOUT" );
+	system ( "vsearch -cluster_fast $out4C -sizein -sizeout -id $id -threads $threads -consout $VsearchOUT" );
 
 	print "\nAll sub-steps for clustering population-level centroids were completed!\n";
 	unlink $VsearchIN;
@@ -325,7 +360,7 @@ if ($dataType eq "PE") {
 	close $IN6;
 
 	system ( "mv *.AssembledStitched.fa ./fastaForRef" );
-	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $VsearchOUT *assembled* *.stitched.fasta" );
+	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $VsearchOUT *assembled* *.stitched.fasta $tmp" );
 
 ############################
 # Parsing Single-End data 
