@@ -101,14 +101,15 @@ if ($dataType eq "PE") {
 	open my $code_OUT, ">", "$script_output" or die "Can't open $script_output\n";
 	print $code_OUT "### PEAR (Zhang et al., 2014) summary results:\n";
 	
-# 1. Use PEAR to merge the parsed R1 and R2 reads to create single reads, if possible
-
 	foreach my $file (@MR_taxa_files) {
+		print "Sample $file\n";
+		
+		# 1. Use PEAR to merge the parsed R1 and R2 reads to create single reads, if possible
 		my $R1input1 = join (".", "$file","R1","fq", "gz");
 		my $R2input2 = join (".", "$file","R2","fq","gz");
 		my $Pear_out = join("","$file");
 	
-		print "Assembling paired $R1input1 and $R2input2 reads using PEAR...\n";
+		print " - assembling paired $R1input1 and $R2input2 reads using PEAR...";
 		print $code_OUT `pear -f $R1input1 -r $R2input2 -o $Pear_out -p $pvalue -n $pear_length -j $threads`;
 		
 		#these .FASTQs are not used, we can safely remove them
@@ -140,15 +141,13 @@ if ($dataType eq "PE") {
 		close $AOUT;
 		close $AIN;
 		unlink $Ain;
-	}
 	
-	print "DONE.\n\n";
+		print "DONE.\n";
 	
-# 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
-	print "Manually stitching together unassembled reads...\n";
-	print $code_OUT "\n\n### Manually stitching together unassembled reads results:\n";
+		# 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
+		print " - manually stitching together unassembled reads...";
+		print $code_OUT "\n\n### Manually stitching together unassembled reads results:\n";
 
-	foreach my $file (@MR_taxa_files) {
 		my $R1file2 = join (".", "$file","unassembled","forward","fastq");
 		my $R2file2 = join (".", "$file","unassembled","reverse","fastq");
 
@@ -230,21 +229,23 @@ if ($dataType eq "PE") {
 		#removing the unassembled files
 		unlink $R1file2;
 		unlink $R2file2;
-	}
-	print "DONE.\n\n";
+		
+		print "DONE.\n";
 
-# 3. Concatenate the merged and stitched reads for each genotype into a single file for use in building the Mock Reference 
-	foreach my $file (@MR_taxa_files) {
+		# 3. Concatenate the merged and stitched reads for each genotype into a single file for use in building the Mock Reference 
 		my $assembled = join (".", "$file","assembled","fasta");
 		my $stitched = join (".", "$file","stitched","fasta");
 		my $out = join(".","$file","AssembledStitched","fa");
 
-		print "Concatenating $assembled and $stitched files...\n";
+		print " - concatenating $assembled and $stitched files...";
 		system ( "cat $assembled $stitched > $out" );
+		print "DONE.\n\n";
+		
+		#removing unused fasta
+		unlink $assembled;
+		unlink $stitched;
 	}
-	print "DONE.\n";
-
-# 3bis. Use VSEARCH to dereplicate each stitched fasta file separatedly
+	
 	foreach my $file (@MR_taxa_files) {
 		my $fasta_with_reps = join(".","$file","AssembledStitched","fa");
 		my $fasta_no_reps = join(".","$file","AssembledStitched","noreps", "fa");
