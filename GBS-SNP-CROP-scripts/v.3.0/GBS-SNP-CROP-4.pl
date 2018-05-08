@@ -238,22 +238,25 @@ if ($dataType eq "PE") {
 
 		print " - concatenating $assembled and $stitched files...";
 		system ( "cat $assembled $stitched > $out" );
-		print "DONE.\n\n";
+		print "DONE.\n";
 		
 		#removing unused fasta
 		unlink $assembled;
 		unlink $stitched;
-	}
-	
-	foreach my $file (@MR_taxa_files) {
+		
+		#-------------------------------------------------------------------
+		# 3.5 Dereplicate AssembledStitched files
+		#-------------------------------------------------------------------
+		print " - dereplicating using vsearch...";
 		my $fasta_with_reps = join(".","$file","AssembledStitched","fa");
 		my $fasta_no_reps = join(".","$file","AssembledStitched","noreps", "fa");
-		system ( "vsearch -derep_fulllength $fasta_with_reps -sizeout -output $fasta_no_reps");
+		print $code_OUT `vsearch -derep_fulllength $fasta_with_reps -sizeout -output $fasta_no_reps 2>&1`;
 		
 		#replacing fasta with reps with new dereplicated file
 		system ( "mv $fasta_no_reps $fasta_with_reps");
+		print "DONE.\n\n";
 	}
-
+	
 # 4. Use VSEARCH to cluster reads
 	#Step 4init: source fasta files are joined and dereplicated (but taking
 	#notes of numerosity). Dereplication is done (optionally) at blocks
