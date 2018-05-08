@@ -104,7 +104,9 @@ if ($dataType eq "PE") {
 	foreach my $file (@MR_taxa_files) {
 		print "Sample $file\n";
 		
+		#-------------------------------------------------------------------
 		# 1. Use PEAR to merge the parsed R1 and R2 reads to create single reads, if possible
+		#-------------------------------------------------------------------
 		my $R1input1 = join (".", "$file","R1","fq", "gz");
 		my $R2input2 = join (".", "$file","R2","fq","gz");
 		my $Pear_out = join("","$file");
@@ -144,7 +146,9 @@ if ($dataType eq "PE") {
 	
 		print "DONE.\n";
 	
+		#-------------------------------------------------------------------
 		# 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
+		#-------------------------------------------------------------------
 		print " - manually stitching together unassembled reads...";
 		print $code_OUT "\n\n### Manually stitching together unassembled reads results:\n";
 
@@ -232,7 +236,9 @@ if ($dataType eq "PE") {
 		
 		print "DONE.\n";
 
+		#-------------------------------------------------------------------
 		# 3. Concatenate the merged and stitched reads for each genotype into a single file for use in building the Mock Reference 
+		#-------------------------------------------------------------------
 		my $assembled = join (".", "$file","assembled","fasta");
 		my $stitched = join (".", "$file","stitched","fasta");
 		my $out = join(".","$file","AssembledStitched","fa");
