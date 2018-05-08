@@ -142,7 +142,6 @@ if ($dataType eq "PE") {
 		unlink $Ain;
 	}
 	
-	#unused 
 	print "DONE.\n\n";
 	
 # 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
@@ -227,9 +226,12 @@ if ($dataType eq "PE") {
 		print $code_OUT "Total number of stitched read pairs = $stitched_tally\n";
 		print $code_OUT "Total number of unstitchable read pairs = $unstitched_tally\n";
 		print $code_OUT "Percent of unassembled read pairs that were unstitchable = $unstitched_percentage\n\n";
+		
+		#removing the unassembled files
+		unlink $R1file2;
+		unlink $R2file2;
 	}
 	print "DONE.\n\n";
-	system ( "rm *.unassembled*" );
 
 # 3. Concatenate the merged and stitched reads for each genotype into a single file for use in building the Mock Reference 
 	foreach my $file (@MR_taxa_files) {
