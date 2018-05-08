@@ -117,37 +117,29 @@ if ($dataType eq "PE") {
 		open my $AIN, "<", "$Ain" or die "Can't open $Ain: $!\n";
 		open my $AOUT, ">", "$Aout" or die "Can't load $Aout: $!\n";
 
-		my @R1read;
-		my @R1reads;
+		while(! eof ($AIN)) {
+			#here we assume well formatted fastq files, so we can read
+			#four lines at a time. No need for chomping or storing
+			#the whole file in memory. Only first two lines
+			#are useful in each read
+			my @R1read;
+			$R1read[0] = readline($AIN); #fastq @header
+			$R1read[1] = readline($AIN); #bases
+			readline($AIN);              #+ (ignored)
+			readline($AIN);              #quality (ignored)
+			
+			$R1read[0] =~ s/@/>/g;
+			$R1read[0] =~ s/ /:/g;
+			print $AOUT "$R1read[0]$R1read[1]";
+		}
 		
-		my $i = 1;
-		while(<$AIN>) {
-			if ($i % 4 != 0) {
-				push @R1read, $_;
-				$i++;
-			} else {
-				push @R1read, $_;
-				chomp (@R1read);
-				push @R1reads, [ @R1read ];
-				@R1read = ();
-				$i++;
-			}
-		}
-		unlink $Ain;
 		close $AIN;
-	
-		my $size = scalar @R1reads - 1;
-		for (my $k = 0; $k <= $size; $k++) {
-	
-			$R1reads[$k][0] =~ s/@/>/g;
-			$R1reads[$k][0] =~ s/ /:/g;
-			print $AOUT "$R1reads[$k][0]\n$R1reads[$k][1]\n";
-		}
+		unlink $Ain;
 		close $AOUT;
 	}
 	system ( "rm *.discarded.fastq" );
 	print "DONE.\n\n";
-
+	
 # 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
 	print "Manually stitching together unassembled reads...\n";
 	print $code_OUT "\n\n### Manually stitching together unassembled reads results:\n";
