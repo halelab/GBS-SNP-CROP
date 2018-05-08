@@ -191,7 +191,8 @@ if ($indels) {
 	print "DONE.\n";
 
 	# Creating a master list of all putative variant positions in the population
-	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
+	#system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
+	system ( "cat *.ref.txt | sort | uniq > VerticalRefPos.txt" ); #missing sort?
 
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
@@ -255,7 +256,6 @@ if ($indels) {
 } else {
 	print "The GBS-SNP-CROP will identify and call only SNPs from the alignment dataset.\n\n";
 	print "Counting nucleotides and filtering monomorphic sites for all genotypes. Even using multi-threads this process can take a while ... \n";
-
 
 	foreach my $file (@files) {
     		my $mpileup_input = join (".", "$file","mpileup");
@@ -376,7 +376,8 @@ if ($indels) {
 
 	print "DONE.\n";
 	# Creating a master list of all putative variant positions in the population
-	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
+	#system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" ); #missing sort?
+	system ( "cat *.ref.txt | sort | uniq > VerticalRefPos.txt" ); #missing sort?
 	
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
