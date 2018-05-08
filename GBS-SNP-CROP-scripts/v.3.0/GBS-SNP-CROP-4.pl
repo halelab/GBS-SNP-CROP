@@ -110,6 +110,9 @@ if ($dataType eq "PE") {
 	
 		print "Assembling paired $R1input1 and $R2input2 reads using PEAR...\n";
 		print $code_OUT `pear -f $R1input1 -r $R2input2 -o $Pear_out -p $pvalue -n $pear_length -j $threads`;
+		
+		#these .FASTQs are not used, we can safely remove them
+		system ( "rm *.discarded.fastq" );
 
 		# Transforming FASTQ PEAR assembly output file into FASTA
 		my $Ain =  join (".", "$file","assembled","fastq");
@@ -117,7 +120,7 @@ if ($dataType eq "PE") {
 		open my $AIN, "<", "$Ain" or die "Can't open $Ain: $!\n";
 		open my $AOUT, ">", "$Aout" or die "Can't load $Aout: $!\n";
 
-		while(! eof ($AIN)) {
+		while(!eof($AIN)) {
 			#here we assume well formatted fastq files, so we can read
 			#four lines at a time. No need for chomping or storing
 			#the whole file in memory. Only first two lines
@@ -133,11 +136,13 @@ if ($dataType eq "PE") {
 			print $AOUT "$R1read[0]$R1read[1]";
 		}
 		
+		#closing file pointers, removing useless fastq
+		close $AOUT;
 		close $AIN;
 		unlink $Ain;
-		close $AOUT;
 	}
-	system ( "rm *.discarded.fastq" );
+	
+	#unused 
 	print "DONE.\n\n";
 	
 # 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
