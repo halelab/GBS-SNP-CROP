@@ -275,7 +275,7 @@ if ($dataType eq "PE") {
 	#catting $derep_blocks files (plus previous results) and dereplicating
 	my $it = natatime($derep_blocks, @MR_taxa_files);
 	while(my @files = $it->()){
-		print "Dereplicating: ".join(' ', @files)."\n";
+		print "Joint dereplication for samples: ".join(' ', @files)."\n";
 		
 		#list of files to be dereplicated in the current batch
 		my $fasta_files = join('.AssembledStitched.fa.gz ', @files).'.AssembledStitched.fa.gz ';
@@ -448,7 +448,7 @@ if ($dataType eq "PE") {
 	#catting $derep_blocks files (plus previous results) and dereplicating
 	my $it = natatime($derep_blocks, @MR_taxa_files);
 	while(my @files = $it->()){
-		print "Dereplicating: ".join(' ', @files)."\n";
+		print "Joint dereplication for samples: ".join(' ', @files)."\n";
 		
 		#list of files to be dereplicated in the current batch
 		my $fasta_files = join('.R1.fa.gz ', @files).".R1.fa.gz";
