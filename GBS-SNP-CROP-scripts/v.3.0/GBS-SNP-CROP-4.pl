@@ -155,52 +155,47 @@ if ($dataType eq "PE") {
 		my $R1file2 = join (".", "$file","unassembled","forward","fastq");
 		my $R2file2 = join (".", "$file","unassembled","reverse","fastq");
 
-		my @R1read;
-		my @R1reads;
-
 		open my $IN1, "<", "$R1file2" or die "Can't open $R1file2: $!\n";
-
-		my $i = 1;
-		while(<$IN1>) {
-			if ($i % 4 != 0) {
-				push @R1read, $_;
-				$i++;
-			} else {
-				push @R1read, $_;
-				chomp (@R1read);
-				push @R1reads, [ @R1read ];
-				@R1read = ();
-				$i++;
-			}
-		}
-		close $IN1;
-
-		my @R2read;
-		my @R2reads;
-
 		open my $IN2, "<", "$R2file2" or die "Can't open $R2file2: $!\n";
+		
+		my @R1reads;
+		my @R2reads;
+		
+		while(!eof($IN1)) {
+			#here we assume well formatted fastq files, so we can read
+			#four lines at a time. Only first two lines
+			#are useful in each read
+			my @R1read;
+			$R1read[0] = readline($IN1); #fastq @header
+			$R1read[1] = readline($IN1); #bases
+			readline($IN1);              #+ (ignored)
+			readline($IN1);              #quality (ignored)
 
-		my $j = 1;
-		while(<$IN2>) {
-			if ($j % 4 != 0) {
-				push @R2read, $_;
-				$j++;
-			} else {
-				push @R2read, $_;
-				chomp (@R2read);
-				push @R2reads, [ @R2read ];
-				@R2read = ();
-				$j++;
-			}
+			chomp(@R1read);
+			push @R1reads, [ @R1read ];
 		}
+
+		while(!eof($IN2)) {
+			#here we assume well formatted fastq files, so we can read
+			#four lines at a time. Only first two lines
+			#are useful in each read
+			my @R2read;
+			$R2read[0] = readline($IN2); #fastq @header
+			$R2read[1] = readline($IN2); #bases
+			readline($IN2);              #+ (ignored)
+			readline($IN2);              #quality (ignored)
+
+			chomp(@R2read);
+			push @R2reads, [ @R2read ];
+		}
+
+		close $IN1;
 		close $IN2;
 
-		my $size = scalar @R1reads - 1;
-
 		my $stitched_file = join (".", "$file","stitched","fasta");
-
 		open my $stitched_OUT, ">", "$stitched_file" or die "Can't open $stitched_file: $!\n";
 
+		my $size = scalar @R1reads - 1;
 		my $stitched_tally = 0;
 		my $unstitched_tally = 0;
 		my $seq_stitch = "A" x 20;
@@ -210,7 +205,6 @@ if ($dataType eq "PE") {
 			my $R2_length = length($R2reads[$k][1]);
 			if ( $R1_length < ($raw_seq_length - 19) || $R2_length < ($raw_seq_length - 5) ) {
 				$unstitched_tally++;
-				next;
 			} else {
 				my $assembled_seq = join ("", "$R1reads[$k][1]", "$seq_stitch", "$R2reads[$k][1]");
 				$R1reads[$k][0] =~ s/@/>/g;
@@ -218,7 +212,6 @@ if ($dataType eq "PE") {
 				print $stitched_OUT "$R1reads[$k][0]\n";
 				print $stitched_OUT "$assembled_seq\n";
 				$stitched_tally++;
-				next;
 			}
 		}
 		close $stitched_OUT;
