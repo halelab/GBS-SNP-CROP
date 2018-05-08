@@ -245,7 +245,7 @@ if ($dataType eq "PE") {
 		unlink $stitched;
 		
 		#-------------------------------------------------------------------
-		# 3.5 Dereplicate AssembledStitched files
+		# 3.1 Dereplicate AssembledStitched files
 		#-------------------------------------------------------------------
 		print " - dereplicating using vsearch...";
 		my $fasta_with_reps = join(".","$file","AssembledStitched","fa");
@@ -254,6 +254,13 @@ if ($dataType eq "PE") {
 		
 		#replacing fasta with reps with new dereplicated file
 		system ( "mv $fasta_no_reps $fasta_with_reps");
+		print "DONE.\n";
+
+		#-------------------------------------------------------------------
+		# 3.2 Compressing result file
+		#-------------------------------------------------------------------
+		print " - compressing .fasta file...";
+		system("gzip $fasta_with_reps");
 		print "DONE.\n\n";
 	}
 	
@@ -271,13 +278,17 @@ if ($dataType eq "PE") {
 		print "Dereplicating: ".join(' ', @files)."\n";
 		
 		#list of files to be dereplicated in the current batch
-		my $cmd = join('.AssembledStitched.fa ', @files).'.AssembledStitched.fa ';
+		my $fasta_files = join('.AssembledStitched.fa.gz ', @files).'.AssembledStitched.fa.gz ';
 		
 		#catting all together
-		system("cat $cmd $VsearchIN > $tmp");
+		system("cp $VsearchIN $tmp");
+		system("zcat $fasta_files >> $tmp");
 		
 		#dereplication
 		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -output $VsearchIN");
+		
+		#files are no longer necessary, we store them away
+		system ("mv $fasta_files ./fastaForRef/");
 	}
 	
 	#Removing singletons
@@ -361,7 +372,6 @@ if ($dataType eq "PE") {
 	}
 	close $IN6;
 
-	system ( "mv *.AssembledStitched.fa ./fastaForRef" );
 	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $VsearchOUT *assembled* *.stitched.fasta $tmp" );
 
 ############################
@@ -413,7 +423,7 @@ if ($dataType eq "PE") {
 		close $OUT;
 	}
 
-# 1bis. Use VSEARCH to dereplicate each fasta file separatedly
+# 1bis. Use VSEARCH to dereplicate each fasta file separatedly, then compressing
 	foreach my $file (@MR_taxa_files) {
 		my $fasta_with_reps = join (".", "$file","R1","fa");
 		my $fasta_no_reps = join (".", "$file","R1", "noreps","fa");
@@ -421,6 +431,9 @@ if ($dataType eq "PE") {
 		
 		#replacing fasta with reps with new dereplicated file
 		system ( "mv $fasta_no_reps $fasta_with_reps");
+		
+		#compressing
+		system ( "gzip $fasta_with_reps");
 	}
 	
 # 2. Use VSEARCH to cluster reads 
@@ -438,13 +451,17 @@ if ($dataType eq "PE") {
 		print "Dereplicating: ".join(' ', @files)."\n";
 		
 		#list of files to be dereplicated in the current batch
-		my $cmd = join('.R1.fa ', @files).".R1.fa";
+		my $fasta_files = join('.R1.fa.gz ', @files).".R1.fa.gz";
 		
 		#catting all together
-		system("cat $cmd $VsearchIN > $tmp");
+		system("cp $VsearchIN > $tmp");
+		system("zcat $fasta_files >> $tmp");
 		
 		#dereplication
 		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $min_length -output $VsearchIN");
+		
+		#files are no longer necessary, we store them away
+		system ("mv $fasta_files ./fastaForRef/");
 	}
 	
 	#Removing singletons
@@ -527,7 +544,6 @@ if ($dataType eq "PE") {
 		}
 	}
 	close $IN4;
-	system("mv " . join('.R1.fa ', @MR_taxa_files).".R1.fa ./fastaForRef");
 	system ( "rm *.sorted_by_length.fasta *.clusters.fasta *.sorted_by_size.fasta $tmp $VsearchOUT" );
 }
 
