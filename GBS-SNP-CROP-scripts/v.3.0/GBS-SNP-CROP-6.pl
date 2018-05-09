@@ -191,8 +191,7 @@ if ($indels) {
 	print "DONE.\n";
 
 	# Creating a master list of all putative variant positions in the population
-	#system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
-	system ( "cat *.ref.txt | sort | uniq > VerticalRefPos.txt" ); #missing sort?
+	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" );
 
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
@@ -376,8 +375,7 @@ if ($indels) {
 
 	print "DONE.\n";
 	# Creating a master list of all putative variant positions in the population
-	#system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" ); #missing sort?
-	system ( "cat *.ref.txt | sort | uniq > VerticalRefPos.txt" ); #missing sort?
+	system ( "cat *.ref.txt | uniq > VerticalRefPos.txt" ); #missing sort?
 	
 	my $posFile = "VerticalRefPos.txt";
 	my $countList = "CountFileList.txt";
