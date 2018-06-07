@@ -307,7 +307,7 @@ if ($dataType eq "PE") {
 # Parsing Single-End data 
 ############################
 } elsif ($dataType eq "SE") {
-	print "Parsing Single-End reads...\n";
+	print "Parsing Single-End reads...\n\n";
 
 	# 1. Transforming FASTQ high quality reads into FASTA reads
 	foreach my $file (@MR_taxa_files) {
