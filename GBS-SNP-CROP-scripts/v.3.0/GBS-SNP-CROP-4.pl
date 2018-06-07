@@ -37,7 +37,7 @@ GetOptions(
 't=s' => \$threads,           # numeric
 'MR=s' => \$MockRefName,      # string
 'db=i' => \$derep,	      # numeric
-'rs=s' => \$no_single,	      # optional flag - it turn on the singletons centroids deletion
+'rs' => \$no_single,	      # optional flag - it turn on the singletons centroids deletion
 ) or die "$Usage\n$Manual\n";
 
 print "\n#################################\n# GBS-SNP-CROP, Step 4, v.3.1\n#################################\n";
@@ -115,11 +115,9 @@ if ($dataType eq "PE") {
 		unlink $Ain;
 		close $AIN;
 		close $AOUT;
-		print "DONE.\n\n";
 		system ( "rm *.discarded.fastq" );
 		
 		# 2. Stitch unassembled R1 and R2 reads together with an intermediate run of 20 high-quality A's
-		print "Manually stitching together unassembled reads...\n";
 		print $code_OUT "\n\n### Manually stitching together unassembled reads results:\n";
 
 		my $R1file2 = join (".", "$file","unassembled","forward","fastq");
@@ -185,17 +183,13 @@ if ($dataType eq "PE") {
 		# Removing the unassembled files
 		unlink $R1file2;
 		unlink $R2file2;
-		print "DONE.\n\n";
 		
 		# 3. For each genotype, concatenate the merged and stitched reads into a single file for use in Vsearch (build the Mock Ref)
 		# Also, remove redundancy among centroids entries (Nelson's dereplication).
 		my $assembled = join (".", "$file","assembled","fasta");
 		my $stitched = join (".", "$file","stitched","fasta");
 		my $out = join(".","$file","AssembledStitched","fa");
-
-		print "Concatenating $assembled and $stitched files and removing centroids redundancy...\n";
 		system ( "cat $assembled $stitched > $out" );
-
 		unlink $assembled;
 		unlink $stitched;
 		
@@ -204,13 +198,12 @@ if ($dataType eq "PE") {
 		print $code_OUT `vsearch -derep_fulllength $out -sizeout -output $fasta_no_reps 2>&1`;
 		# Replacing fasta with reps with new dereplicated file and compressing the result file
 		system ( "mv $fasta_no_reps $out");
-		system( "gzip $fasta_with_reps");
-		print "DONE.\n";
+		system( "gzip $out");
 	}
+	print "DONE.\n";
 
 	# 4. Use VSEARCH to cluster reads
 	# Preparing the files and perform a population level dereplication
-
 	my $VsearchIN = join(".","VsearchIN","fa");
 	system("touch $VsearchIN");
 	my $tmp = join(".","tmp","fa");
@@ -218,8 +211,6 @@ if ($dataType eq "PE") {
 	# catting $derep plus previous results and dereplicating
 	my $it = natatime($derep, @MR_taxa_files);
 	while(my @files = $it->()){
-		print "Joint dereplication for samples: ".join(' ', @files)."\n";
-		
 		# list of files to be dereplicated in the current batch
 		my $fasta_files = join('.AssembledStitched.fa.gz ', @files).'.AssembledStitched.fa.gz ';		
 		# catting all together
@@ -350,7 +341,7 @@ if ($dataType eq "PE") {
 	foreach my $file (@MR_taxa_files) {
 		my $in = join (".", "$file","R1","fa");
 		my $no_reps = join (".", "$file","R1", "noreps","fa");
-		system ( "vsearch -derep_fulllength $in -sizeout -minseqlength $min_length -output $no_reps");
+		system ( "vsearch -derep_fulllength $in -sizeout -minseqlength $pear_length -output $no_reps");
 		system ( "mv $no_reps $in");
 		system ( "gzip $in");
 	}
@@ -367,7 +358,7 @@ if ($dataType eq "PE") {
 		system("cp $VsearchIN > $tmp");
 		system("zcat $fasta_files >> $tmp");
 		# dereplication
-		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $min_length -output $VsearchIN");
+		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $pear_length -output $VsearchIN");
 		system ("mv $fasta_files ./fastaForRef/");
 	}
 	
