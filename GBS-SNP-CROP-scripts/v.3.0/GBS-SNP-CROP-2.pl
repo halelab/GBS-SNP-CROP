@@ -18,7 +18,7 @@ my $Usage = "Usage: perl GBS-SNP-CROP-2.pl -tm <trimmomatic path> -d <data type,
 my $Manual = "Please see UserManual on GBS-SNP-CROP GitHub page (https://github.com/halelab/GBS-SNP-CROP.git) or the original manuscript: Melo et al. BMC Bioinformatics (2016) 17:29 DOI 10.1186/s12859-016-0879-y.\n";
 
 my ($trimmomatic,$dataType,$fastq_seed,$threads,$phred,$adaptor,$leading,$sliding,$trailing,$minlen);
-$trimmomatic = '/usr/local/bin/';
+$trimmomatic = '/usr/local/bin/trimmomatic-0.33.jar';
 
 GetOptions(
 'tm=s' => \$trimmomatic,  # string, path to Trimmomatic jar file
@@ -32,8 +32,6 @@ GetOptions(
 'tr=s' => \$trailing,     # numeric
 'm=s' => \$minlen,        # numeric
 ) or die "$Usage\n$Manual\n";
-
-my $work_trimmomatic = "$trimmomatic" . "trimmomatic-0.33.jar";
 
 print "\n#################################\n# GBS-SNP-CROP, Step 2, v.3.1\n#################################\n";
 my $sttime = time;
