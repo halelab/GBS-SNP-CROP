@@ -65,7 +65,7 @@ chomp (@MR_taxa_files);
 if (! defined $derep){
 	$derep = scalar @MR_taxa_files;
 }
-
+# Creating a directory
 sub main {
 		my $dir = "fastaForRef"; 
 		unless(-e $dir, or mkdir $dir) {die "Directory $dir just exist.\n";}
@@ -78,7 +78,6 @@ my $MR_Genome = " ";
 ############################
 # Parsing Paired-End data 
 ############################
-
 if ($dataType eq "PE") {
 	print "Parsing Paired-End reads...\n\n";
 	
@@ -178,7 +177,6 @@ if ($dataType eq "PE") {
 		close $stitched_OUT;
 
 		my $unstitched_percentage = ( $unstitched_tally / ( $stitched_tally + $unstitched_tally ) ) * 100;
-
 		print $code_OUT "\nFor paired of unassembled files $R1file2 and $R2file2:\n";
 		print $code_OUT "Total number of stitched read pairs = $stitched_tally\n";
 		print $code_OUT "Total number of unstitchable read pairs = $unstitched_tally\n";
@@ -204,7 +202,6 @@ if ($dataType eq "PE") {
 		# Dereplication process
 		my $fasta_no_reps = join(".","$file","AssembledStitched","noreps", "fa");
 		print $code_OUT `vsearch -derep_fulllength $out -sizeout -output $fasta_no_reps 2>&1`;
-		
 		# Replacing fasta with reps with new dereplicated file and compressing the result file
 		system ( "mv $fasta_no_reps $out");
 		system( "gzip $fasta_with_reps");
@@ -318,7 +315,6 @@ if ($dataType eq "PE") {
 ############################
 # Parsing Single-End data 
 ############################
-
 } elsif ($dataType eq "SE") {
 	print "Parsing Single-End reads...\n";
 
@@ -330,7 +326,6 @@ if ($dataType eq "PE") {
 		open my $OUT, ">", "$out" or die "Can't load $out\n";
 
 		my @R1reads;
-		
 		while(! eof ($IN)) {
 			$R1reads[0] = readline($IN); # fastq @header
 			$R1reads[1] = readline($IN); # bases
@@ -375,6 +370,7 @@ if ($dataType eq "PE") {
 		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $min_length -output $VsearchIN");
 		system ("mv $fasta_files ./fastaForRef/");
 	}
+	
 	# removing singletons
 	if ($no_single){
 		system("mv $VsearchIN $tmp");
@@ -412,11 +408,9 @@ if ($dataType eq "PE") {
 	open my $OUT1, ">", "$MR_Cluster" or die "Can't load file";
 	open my $OUT2, ">", "$MR_Genome" or die "Can't load file";
 	open my $OUT3, ">", "$masked_pos" or die "Can't load file";
-
 	print $OUT2 ">MockRefGenome\n";
 
 	my @seqs = ();
-
 	open my $IN4, "<", "$VsearchOUT" or die "Unable to open $VsearchOUT file\n";
 	{
 		local $/ = ">";
