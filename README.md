@@ -4,13 +4,13 @@
 The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of SNP calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence SNPs from both sequencing and PCR errors. The pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream SNP calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources, mainly in the absence of a reference genome. The pipeline, however, can also be used when a reference genome is available, either as a standalone analysis or as a complement to reference-based analyses via alternative pipelines (e.g. TASSEL-GBS) or indeed its own reference-independent analysis.
 
 ### Realized versions
-[v.3.0][16]: Realized on 2/8/2018
+[v.3.0][16]: Released on 2/8/2018
 
-[v.2.0][14]: Updated on 2/22/2017
+[v.2.0][14]: Release on 2/22/2017
 
-[v.1.1][13]: Realized on 3/11/2016
+[v.1.1][13]: Released on 3/11/2016
 
-[v.1.0][12]: Realized on 1/12/2016
+[v.1.0][12]: Released on 1/12/2016
 
 ### Pipeline workflow
 * **Stage 1. Process the raw GBS data**
