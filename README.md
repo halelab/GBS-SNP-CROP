@@ -16,7 +16,7 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 * **Stage 1. Process the raw GBS data**
 
 *Step 1: Parse the raw reads*  
-*Step 2: Trim based on quality*   
+*Step 2: Trim based on quality and adaptors*   
 *Step 3: Demultiplex*
 
 * **Stage 2. Build the Mock Reference** 
@@ -28,9 +28,9 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 *Step 5: Align with BWA-mem and process with SAMtools*  
 *Step 6: Parse mpileup output and produce the SNP discovery master matrix*
 
-* **Stage 4. Call SNPs and Genotypes**
+* **Stage 4. Call Variants (SNP, indels) and Genotypes**
 
-*Step 7: Filter SNPs and call genotypes*
+*Step 7: Filter variants and call genotypes*
 
 ### Getting Help
 Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing an issue, please, submit it on our discussion [Google groups page][5].
