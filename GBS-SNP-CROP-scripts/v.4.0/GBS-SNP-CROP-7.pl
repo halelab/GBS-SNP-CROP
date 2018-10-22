@@ -50,16 +50,16 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 #################################
 # Setting the parameters values
 #################################
-$SummaryFile = 'GSC.Summary.txt';	$output = 'GSC.GenoMatrix.txt';
-$minHomoDepth = 5;					$minHomoDepthOneAlt = 20;
-$minHeteroDepth = 3;				$AltAlleleStrength = 0.8;
-$AlleleFreqProp = 0.25;				$CallRate = 0.75;
-$minAvgDepth = 3;					$maxAvgDepth = 200;
+$SummaryFile = 'GSC.SummaryMatrix.txt';	$output = 'GSC.GenoMatrix.txt';
+$minHomoDepth = 5;			$minHomoDepthOneAlt = 20;
+$minHeteroDepth = 3;			$AltAlleleStrength = 0.8;
+$AlleleFreqProp = 0.25;			$CallRate = 0.75;
+$minAvgDepth = 3;			$maxAvgDepth = 200;
 
 GetOptions(
 'in=s' => \$SummaryFile,                   # file
 'out=s' => \$output,                       # file
-'p=s' => \$type,			    		   # string
+'p=s' => \$type,			   # string
 'mnHoDepth0=s' => \$minHomoDepth,          # numeric
 'mnHoDepth1=s' => \$minHomoDepthOneAlt,    # numeric
 'mnHetDepth=s' => \$minHeteroDepth,        # numeric
