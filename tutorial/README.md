@@ -66,34 +66,55 @@ perl GBS-SNP-CROP-4.pl -d SE -b barcodesID.txt
 
 ### Step 5: Align with BWA-mem and process with SAMTools (GBS-SNP-CROP-5.pl)
 ```bash
-# Mapping paired-end (PE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d PE-b barcodeID.txt -ref MRef.MockRef_Genome.fa -Q 30 -q 0 -f 2 -F 2308 -t 10 -Opt 0 
-# Mapping single-end (SE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-5.pl -d SE-b barcodeID.txt -ref MRef.MockRef_Genome.fa -Q 30 -q 0 -f 0 -F 2308 -t 10 -Opt 0 
+# Paired-end (PE) reads:
+# All parameters:
+perl GBS-SNP-CROP-5.pl -bw /usr/local/bin/bwa -st /usr/local/bin/samtools -d PE -b barcodesID.txt -ref MR.Genome.fa -Q 30 -q 30 -F 2308 -f 2 -t 10 -Opt 0
+# Required parameters:
+perl GBS-SNP-CROP-5.pl -d PE -b barcodesID.txt
+
+# Single-end (SE) reads:
+# All parameters:
+perl GBS-SNP-CROP-5.pl -bw /usr/local/bin/bwa -st /usr/local/bin/samtools -d SE -b barcodesID.txt -ref MR.Genome.fa -Q 30 -q 30 -F 2308 -f 0 -t 10 -Opt 0
+# Required parameters:
+perl GBS-SNP-CROP-5.pl -d SE -b barcodesID.txt -f 0
 ```
 
 ### Step 6: Parse mpileup output and produce the variants discovery master matrix (GBS-SNP-CROP-6.pl)
 ```bash
-# Discovery SNPs and indels:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out MasterMatrix.txt -indels -t 10
 # Discovery only SNPs:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-6.pl -b barcodeID.txt -out Mastermatrix.txt -t 10
+All parameters:
+perl GBS-SNP-CROP-6.pl -b barcodesID.txt -out MasterMatrix.txt -p snp -t 10
+# Required parameters:
+perl GBS-SNP-CROP-6.pl -b barcodesID.txt -p snp
+
+# Discovery SNPs and indels:
+All parameters:
+perl GBS-SNP-CROP-6.pl -b barcodesID.txt -out MasterMatrix.txt -p indel -t 10
+# Required parameters:
+perl GBS-SNP-CROP-6.pl -b barcodesID.txt -p indel
 ```
 
 ### Step 7: Filter the variants and call genotypes (GBS-SNP-CROP-7.pl)
 ```bash
-# Call both SNPs and indels:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in MasterMatrix.txt -out GenotypingMatrix.txt -indels -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 3 -mxAvgDepth 200
 # Call only SNPs:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-7.pl -in MasterMatrix.txt -out GenotypingMatrix.txt -mnHoDepth0 11 -mnHoDepth1 48 -mnHetDepth 3 -altStrength 0.9 -mnAlleleRatio 0.1 -mnCall 0.75 -mnAvgDepth 3 -mxAvgDepth 200 
+# All parameters:
+perl GBS-SNP-CROP-7.pl -in MasterMatrix.txt -out GenoMatrix.txt -p snp -mnHoDepth0 5 -mnHoDepth1 20 -mnHetDepth 3 -altStrength 0.8 -mnAlleleRatio 0.25 -mnCall 0.75 -mnAvgDepth 3 -mxAvgDepth 200
+# Required parameters:
+perl GBS-SNP-CROP-7.pl -p snp 
+
+# Call both SNPs and indels:
+# All parameters:
+perl GBS-SNP-CROP-7.pl -in MasterMatrix.txt -out GenoMatrix.txt -p indel -mnHoDepth0 5 -mnHoDepth1 20 -mnHetDepth 3 -altStrength 0.8 -mnAlleleRatio 0.25 -mnCall 0.75 -mnAvgDepth 3 -mxAvgDepth 200
+# Required parameters:
+perl GBS-SNP-CROP-7.pl -p indel
 ```
 
 ### Downstream Tool 1: Creating input files to software packages R, TASSEL GUI and/or PLINK and create VCF output (GBS-SNP-CROP-8.pl)
 ```bash
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in GenotypingMatrix.txt -out output -b barcodeID.txt -formats R,Tassel,Plink,vcf 
+perl GBS-SNP-CROP-8.pl -in GenoMatrix.txt -out output -b barcodeID.txt -formats R,Tassel,Plink,VCF,HetFreq 
 ```
 
 ### Downstream Tool 2: Provide the cluster/centroid ID and other descriptors for all called SNPs (GBS-SNP-CROP-9.pl)
 ```bash
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-8.pl -in GenotypingMatrix.txt -out output -ref MRef.MockRef_Clusters.fasta 
+perl GBS-SNP-CROP-9.pl -in GenotMatrix.txt -out output -ref MR.Clusters.fa 
 ```
