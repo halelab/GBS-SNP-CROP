@@ -20,7 +20,7 @@ use List::Util qw(sum);
 # The help function
 ######################
 my $help = $ARGV[0];
-my ($SummaryFile,$output,$indels,$minHomoDepth,$minHomoDepthOneAlt,$minHeteroDepth,$AltAlleleStrength,$AlleleFreqProp,$CallRate,$minAvgDepth,$maxAvgDepth);
+my ($SummaryFile,$output,$type,$minHomoDepth,$minHomoDepthOneAlt,$minHeteroDepth,$AltAlleleStrength,$AlleleFreqProp,$CallRate,$minAvgDepth,$maxAvgDepth);
 
 my $H = "\n###########################################################\n"
 	."GBS-SNP-CROP: GBS SNP Calling Reference Optional Pipeline\n"
@@ -32,7 +32,7 @@ my $H = "\n###########################################################\n"
 	."Options:\n"
 	."-in: Discovery master matrix input file. The output from step 6. File. Default: GSC.Summary.txt\n"
 	."-out: Genotyping matrix output file. File. Default: GSC.GenoMatrix.txt\n"
-	."-indel: Turn on indel parsing. String. Default: Turned off. However if used in step 6, it should be turned on.\n"
+	."-p: snp or indel: polymorphism type. SNPs only (snp) or SNPs + indels (indel). String. Required. Should be the same used on step 6.\n"
 	."-mnHoDepth0: Minimum depth required for calling a homozygote when the alternative allele depth = 0. Numeric. Default: 5 (Diploid)\n"
 	."-mnHoDepth1: Minimum depth required for calling a homozygote when the alternative allele depth = 1. Numeric. Default: 20 (Diploid)\n"
 	."-mnHetDepth: Minimum depth required for each allele when calling a heterozygote. Numeric. Default: 3 (Diploid)\n"
@@ -59,7 +59,7 @@ $minAvgDepth = 3;					$maxAvgDepth = 200;
 GetOptions(
 'in=s' => \$SummaryFile,                   # file
 'out=s' => \$output,                       # file
-'indels' => \$indels,		    		   # string
+'p=s' => \$type,			    		   # string
 'mnHoDepth0=s' => \$minHomoDepth,          # numeric
 'mnHoDepth1=s' => \$minHomoDepthOneAlt,    # numeric
 'mnHetDepth=s' => \$minHeteroDepth,        # numeric
@@ -83,7 +83,7 @@ unless(-e $dir, or mkdir $dir) {die "Directory $dir cannot be created.\n";}
 ###################################
 # Genotyping both SNPs and Indels  
 ###################################
-if ($indels) {
+if ($type eq "indel") {
 	print "\nGBS-SNP-CROP is filtering both SNPs and indels and calling genotypes for your population...\n";
 
 	open my $VAR, "<", "$SummaryFile" or die "Can't load file $SummaryFile";
@@ -432,8 +432,7 @@ if ($indels) {
 ########################
 # Genotyping only SNPs  
 ########################
-
-} else {
+} elsif ($type eq "snp") {
 	print "\nGBS-SNP-CROP is filtering only SNPs and calling genotypes for your population...\n";
 	
 	open my $VAR, "<", "$SummaryFile" or die "Can't load file $SummaryFile";
