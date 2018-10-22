@@ -4,6 +4,8 @@
 The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of variant (SNPs and indels) calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence variants from both sequencing and PCR errors, whether or not a reference genome is available. In the latter case, the pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources.
 
 ### Released versions
+[v.4.0][18]: Released on 10/22/2018
+
 [v.3.0][16]: Released on 2/8/2018
 
 [v.2.0][14]: Released on 2/22/2017
@@ -63,3 +65,4 @@ Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a
 [15]:http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
 [16]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.3.0
 [17]:https://github.com/halelab/GBS-SNP-CROP/wiki/Frequently-Asked-Questions-(FAQs)
+[18]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.4.0
