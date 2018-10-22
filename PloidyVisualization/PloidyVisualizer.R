@@ -16,7 +16,7 @@
 setwd("/YOURPATHHERE") # SET THE PATH TO YOUR WORKING DIRECTORY 
 data<-read.table(file="GSC.HetFreq.txt",sep="\t",h=T) # OPEN THE FILE GSC.HetFreq.txt from GBS-SNP-CROP Step 8
 
-pdf("Ploidy.pdf",width=8,height=6) # Output can be found in file Ploidy.pdf
+pdf("PloidyVisualizerOut.pdf",width=8,height=6) # Output can be found in file PloidyVisualizerOut.pdf
 par(mar=c(5,5,3,0),cex.lab=1,cex.main=1,cex.axis=1)
 for (i in 3:ncol(data)) {
   k<-data[,i]
