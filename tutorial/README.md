@@ -25,26 +25,43 @@ perl GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -en
 
 ### Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
 ```bash
-# Trimming paired-end (PE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d PE -fq L001 -t 10 -ph 33 -ad TruSeq3-PE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
-# Trimming single-end (SE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-2.pl -d SE -fq L001 -t 10 -ph 33 -ad TruSeq3-SE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
+# Paired-end (PE) reads:
+# All parameters:
+perl GBS-SNP-CROP-2.pl -tm /usr/local/bin/trimmomatic-0.33.jar -d PE -fq L001 -t 10 -ph 33 -ad TruSeq3-PE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
+# Required parameters:
+perl GBS-SNP-CROP/v.4.0/GBS-SNP-CROP-2.pl -d PE -fq L001
+
+# Single-end (SE) reads:
+# All parameters:
+perl GBS-SNP-CROP-2.pl -tm /usr/local/bin/trimmomatic-0.33.jar -d SE -fq L001 -t 10 -ph 33 -ad TruSeq3-SE.fa:2:30:10 -l 30 -sl 4:30 -tr 30 -m 32
+# Required parameters:
+perl GBS-SNP-CROP-2.pl -d SE -fq L001 -ad TruSeq3-SE.fa:2:30:10
 ```
 
 ### Step 3: Demultiplex (GBS-SNP-CROP-3.pl)
 ```bash
-# Demultiplexing paired-end (PE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d PE -b barcodeID.txt -fq L001
-# Demultiplexing single-end (SE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-3.pl -d SE -b barcodeID.txt -fq L001
+# Paired-end (PE) reads:
+# All and required parameters:
+perl GBS-SNP-CROP-3.pl -d PE -b barcodesID.txt -fq L001
+
+# Single-end (SE) reads:
+# All and required parameters:
+perl GBS-SNP-CROP-3.pl -d SE -b barcodesID.txt -fq L001
 ```
 
 ### Step 4: Cluster reads and assemble the Mock Reference (GBS-SNP-CROP-4.pl)
 ```bash
-# Parsing paired-end (PE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d PE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MRef
-# Parsing single-end (SE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-4.pl -d SE -b barcodeID.txt -rl 150 -pl 32 -p 0.01 -id 0.93 -t 10 -MR MRef
+# Paired-end (PE) reads:
+# All parameters:
+perl GBS-SNP-CROP-4.pl -pr /usr/local/bin/pear -vs /usr/local/bin/vsearch -d PE -b barcodesID.txt -t 10 -cl consout -rl 150 -pl 32 -p 0.01 -id 0.93 -min 32 -MR MR
+# Required parameters:
+perl GBS-SNP-CROP-4.pl -d PE -b barcodesID.txt
+
+# Single-end (SE) reads:
+# All parameters:
+perl GBS-SNP-CROP-4.pl -pr /usr/local/bin/pear -vs /usr/local/bin/vsearch -d SE -b barcodesID.txt -t 10 -cl consout -rl 150 -pl 32 -p 0.01 -id 0.93 -min 32 -MR MR
+# Required parameters:
+perl GBS-SNP-CROP-4.pl -d SE -b barcodesID.txt
 ```
 
 ### Step 5: Align with BWA-mem and process with SAMTools (GBS-SNP-CROP-5.pl)
