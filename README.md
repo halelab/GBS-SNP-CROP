@@ -10,21 +10,18 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 [v.1.1][13]: Released on 3/11/2016  
 [v.1.0][12]: Released on 1/12/2016
 
-### Pipeline workflow
+### Pipeline workflow  
 **Stage 1. Process the raw GBS data**  
-- *Step 1: Parse the raw reads*  
-- *Step 2: Trim based on quality and adaptors*  
-- *Step 3: Demultiplex*
-
+*Step 1: Parse the raw reads*  
+*Step 2: Trim based on quality and adaptors*  
+*Step 3: Demultiplex*  
 **Stage 2. Build the Mock Reference**   
-- *Step 4: Cluster reads and assemble the Mock Reference*
-
+*Step 4: Cluster reads and assemble the Mock Reference*  
 **Stage 3. Map the processed reads and generate standardized alignment files**  
-- *Step 5: Align with BWA-mem and process with SAMtools*  
-- *Step 6: Parse mpileup output and produce the variants discovery master matrix*
-
+*Step 5: Align with BWA-mem and process with SAMtools*  
+*Step 6: Parse mpileup output and produce the variants discovery master matrix*  
 **Stage 4. Call Variants and Genotypes**  
-- *Step 7: Filter variants and call genotypes*
+*Step 7: Filter variants and call genotypes*
 
 ### Getting Help
 Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing an issue, please, submit it on our discussion [Google groups page][5].
