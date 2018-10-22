@@ -14,7 +14,7 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 
 **Stage 3. Map the processed reads and generate standardized alignment files**  
 - *Step 5: Align with BWA-mem and process with SAMtools*  
-- *Step 6: Parse mpileup output and produce the variants discovery matrix*
+- *Step 6: Parse mpileup outputs and produce the variants discovery matrix*
 
 **Stage 4. Call Variants and Genotypes**  
 - *Step 7: Filter variants and call genotypes*
