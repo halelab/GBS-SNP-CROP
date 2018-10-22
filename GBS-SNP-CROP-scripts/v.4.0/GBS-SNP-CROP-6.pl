@@ -8,7 +8,7 @@
 #
 # A detailed description can be found at https://github.com/halelab/GBS-SNP-CROP
 # 
-# For help: perl GBS-SNP-CROP-6.pl help
+# For help: perl GBS-SNP-CROP-6.pl
 ###########################################################################################################
 
 use strict;
