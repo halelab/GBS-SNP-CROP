@@ -10,10 +10,17 @@ Also, download the barcode ID file to the same dataset directory.
 
 ### Step 1: Parsing the raw reads (GBS-SNP-CROP-1.pl)
 ```bash
-# Parsing paired-end (PE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d PE -b barcodeID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10 
-# Parsing single-end (SE) reads:
-perl /path_to_GBS-SNP-CROP/GBS-SNP-CROP-1.pl -d SE -b barcodeID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10
+# Paired-end (PE) reads:
+# All parameters:
+perl GBS-SNP-CROP-1.pl -d PE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10
+# Required parameters:
+perl GBS-SNP-CROP-1.pl -d PE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG
+
+# Single-end (SE) reads:
+# All parameters:
+perl GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG -t 10
+# Required parameters:
+perl GBS-SNP-CROP-1.pl -d SE -b barcodesID.txt -fq L001 -s 1 -e 2 -enz1 TGCA -enz2 CGG
 ```
 
 ### Step 2: Trim based on quality (GBS-SNP-CROP-2.pl)
