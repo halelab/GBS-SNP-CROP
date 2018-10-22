@@ -8,7 +8,7 @@
 #
 # A detailed description can be found at https://github.com/halelab/GBS-SNP-CROP
 # 
-# For help: perl GBS-SNP-CROP-6.pl
+# For help: perl GBS-SNP-CROP-6.pl help
 ###########################################################################################################
 
 use strict;
@@ -21,7 +21,7 @@ use Parallel::ForkManager;
 # The help function
 ######################
 my $help = $ARGV[0];
-my ($barcodesID_file,$output_file,$indels,$threads);
+my ($barcodesID_file,$output_file,$type,$threads);
 
 my $H = "\n###########################################################\n"
 	."GBS-SNP-CROP: GBS SNP Calling Reference Optional Pipeline\n"
@@ -33,7 +33,7 @@ my $H = "\n###########################################################\n"
 	."Options:\n"
 	."-b: BarcodeID file. File. Required.\n"
 	."-out: Name for the discovery master matrix. String. Default: GSC.Summary.txt\n"
-	."-indel: Turn on indel parsing. String. Default: Turned off\n"
+	."-p: snp or indel: polymorphism type. SNPs only (snp) or SNPs + indels (indel). String. Required\n"
 	."-t: Number of independent threads used. Numeric. Default: 10\n\n";
 
 if (! defined $help or $help =~ "h" or $help =~ "H")  {
@@ -49,7 +49,7 @@ $output_file = 'GSC.Summary.txt';
 GetOptions(
 'b=s' => \$barcodesID_file,		# file
 'out=s' => \$output_file,		# file
-'indels' => \$indels,	    	# flag
+'p=s' => \$type,			    	# string
 't=s' => \$threads,				# numeric
 ) or die "$H\n";
 
@@ -82,8 +82,7 @@ open my $CountList, ">", "CountFileList.txt" or die "Unable to load CountFileLis
 ###################################
 # Identifying both SNPs and indels 
 ###################################
-
-if ($indels) {
+if ($type eq "indel") {
 	print "The GBS-SNP-CROP will identify and call both SNPs and indels from the alignment dataset.\n\n";
 	print "Counting nucleotides and filtering monomorphic sites for all genotypes. Even using multi-threads this process can take a while ... be patient!\n";
 
@@ -292,7 +291,7 @@ if ($indels) {
 # Identifying SNPs only
 #########################
 
-} else {
+} elsif ($type eq "snp") {
 	print "The GBS-SNP-CROP will identify and call only SNPs from the alignment dataset.\n\n";
 	print "Counting nucleotides and filtering monomorphic sites for all genotypes. Even using multi-threads this process can take a while ... \n";
 
