@@ -44,7 +44,7 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 #################################
 # Setting the parameters values
 #################################
-$output_file = 'GSC.Summary.txt';
+$output_file = 'GSC.DiscoveryMatrix.txt';
 
 GetOptions(
 'b=s' => \$barcodesID_file,		# file
