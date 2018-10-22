@@ -1,38 +1,30 @@
-# *GBS* *SNP* *C*alling *R*eference *O*ptional *P*ipeline
+# GBS-SNP-CROP
 
 ### Introduction
 The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of variant (SNPs and indels) calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence variants from both sequencing and PCR errors, whether or not a reference genome is available. In the latter case, the pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources.
 
 ### Released versions
-[v.4.0][18]: Released on 10/22/2018
-
-[v.3.0][16]: Released on 2/8/2018
-
-[v.2.0][14]: Released on 2/22/2017
-
-[v.1.1][13]: Released on 3/11/2016
-
+[v.4.0][18]: Released on 10/22/2018  
+[v.3.0][16]: Released on 2/8/2018  
+[v.2.0][14]: Released on 2/22/2017  
+[v.1.1][13]: Released on 3/11/2016  
 [v.1.0][12]: Released on 1/12/2016
 
 ### Pipeline workflow
-* **Stage 1. Process the raw GBS data**
+**Stage 1. Process the raw GBS data**  
+- *Step 1: Parse the raw reads*  
+- *Step 2: Trim based on quality and adaptors*  
+- *Step 3: Demultiplex*
 
-*Step 1: Parse the raw reads*  
-*Step 2: Trim based on quality and adaptors*   
-*Step 3: Demultiplex*
+**Stage 2. Build the Mock Reference**   
+- *Step 4: Cluster reads and assemble the Mock Reference*
 
-* **Stage 2. Build the Mock Reference** 
+**Stage 3. Map the processed reads and generate standardized alignment files**  
+- *Step 5: Align with BWA-mem and process with SAMtools*  
+- *Step 6: Parse mpileup output and produce the variants discovery master matrix*
 
-*Step 4: Cluster reads and assemble the Mock Reference*
-
-* **Stage 3. Map the processed reads and generate standardized alignment files**
-
-*Step 5: Align with BWA-mem and process with SAMtools*  
-*Step 6: Parse mpileup output and produce the SNP discovery master matrix*
-
-* **Stage 4. Call Variants (SNP, indels) and Genotypes**
-
-*Step 7: Filter variants and call genotypes*
+**Stage 4. Call Variants and Genotypes**  
+- *Step 7: Filter variants and call genotypes*
 
 ### Getting Help
 Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before post a question or start a discussion, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file and also see the [FAQ page][17]. If you're still facing an issue, please, submit it on our discussion [Google groups page][5].
