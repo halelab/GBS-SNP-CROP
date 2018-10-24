@@ -401,40 +401,32 @@ if ($tools =~ "H" or $tools =~ "h") {
 		my @snp = split "\t", $_;
 		chomp @snp;
 
-		my @out1 = ();
-		my @out2 = ();
+		my @out = ();
 
 		my $col = join ("\t",$snp[0],$snp[1]);
-		push @out1, "$col";
-		push @out2, "$col";
+		push @out, "$col";
 	
 		for ( my $i=12; $i<=scalar(@snp) - 1; $i++ ) {
 			my @geno = split /\|/, $snp[$i];
 
 			if ( ($geno[0] eq "-") or ($geno[0] eq "A/A") or ($geno[0] eq "C/C") or ($geno[0] eq "G/G") or ($geno[0] eq "T/T") ) {
-				push @out1, "NA";
-				push @out2, "NA";
+				push @out, "NA";
 				next;
 		
 			} else {
 				my @depth = split /\//, $geno[1];
 				if ($depth[0] >= $depth[1]) {
-					my $freq1 = ($depth[1]/($depth[0] + $depth[1])); # lower / sum
-					my $freq2 = ($depth[0]/($depth[0] + $depth[1])); # higher / sum
-					push @out1, $freq1;
-					push @out2, $freq2;
+					my $freq = ($depth[0]/($depth[0] + $depth[1])); # higher / sum
+					push @out, $freq;
 					next;
 				} elsif ($depth[0] < $depth[1])  {
-					my $freq1 = ($depth[0]/($depth[0] + $depth[1])); # lower / sum
-					my $freq2 = ($depth[1]/($depth[0] + $depth[1])); # higher / sum
-					push @out1, $freq1;
-					push @out2, $freq2;
+					my $freq = ($depth[1]/($depth[0] + $depth[1])); # higher / sum
+					push @out, $freq;
 					next;
 				}
 			}
 		}
-		my $line1 = join "\t", @out1;
-		my $line2 = join "\t", @out2;
+		my $line = join "\t", @out;
 		print $OUT_H "$line1\n$line2\n";
 	}
 	close $IN5;
