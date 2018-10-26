@@ -243,7 +243,7 @@ if ($tools =~ "V" or $tools =~ "v"){
 	# Printing output VCF header
 	my $datestring = localtime();
 	
-	print $OUT_V "##fileformat=VCFv4.1\n"
+	print $OUT_V "##fileformat=VCFv4.2\n"
 	."##fileDate=$datestring\n"
 	."##source=GBS-SNP-CROP\n"
 	."##phasing=partial\n"
