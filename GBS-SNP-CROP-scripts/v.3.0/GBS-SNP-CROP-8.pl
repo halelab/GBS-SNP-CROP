@@ -238,6 +238,7 @@ if ($tools =~ "V" or $tools =~ "v"){
 		push @TaxaNames, $barcode[1];
 	}
 	s/_/./g for @TaxaNames;
+	my $Names = join "\t", @TaxaNames;
 	
 	# Printing output VCF header
 	my $datestring = localtime();
@@ -253,7 +254,7 @@ if ($tools =~ "V" or $tools =~ "v"){
 	."##INFO=<ID=NS,Number=1,Type=Integer,Description=\"Number of Samples With Data\">\n"
 	."##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n"
 	."##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Allele Depth\">\n"
-	."#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t@TaxaNames\n";
+	."#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t$Names\n";
 	
 	while (<$IN4>) {
 		chomp;
@@ -352,7 +353,8 @@ if ($tools =~ "V" or $tools =~ "v"){
 				next;
 			}
 		}
-		my $line = join ("\t","$identifier","$pos",".","$ref_p","$alt_p",".","PASS","AC=$AC;AF=$AF;DP=$DP;AV=$AV;NS=$NS","GT:AD","@genos");
+		my $Geno_Names = join "\t", @genos;
+		my $line = join ("\t","$identifier","$pos",".","$ref_p","$alt_p",".","PASS","AC=$AC;AF=$AF;DP=$DP;AV=$AV;NS=$NS","GT:AD","$Geno_Names");
 		print $OUT_V "$line\n";
 	}
 
