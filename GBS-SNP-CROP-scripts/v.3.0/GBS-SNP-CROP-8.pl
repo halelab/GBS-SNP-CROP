@@ -129,7 +129,7 @@ if ($tools =~ "T" or $tools =~ "t"){
 			my $geno2 = $geno1[0];
 
 			if ($geno2 eq "-") {
-				push @out,"N";
+				push @out,"-";
 				next;
 			} elsif ($geno2 eq join("/","A","A")) {
 				push @out,"A";
@@ -162,7 +162,7 @@ if ($tools =~ "T" or $tools =~ "t"){
 				push @out,"K";
 				next;
 			} else {
-				push @out,"N";
+				push @out,"-";
 				next;
 			}
 		}
