@@ -429,7 +429,7 @@ if ($tools =~ "H" or $tools =~ "h") {
 			}
 		}
 		my $line = join "\t", @out;
-		print $OUT_H "$line1\n$line2\n";
+		print $OUT_H "$line\n";
 	}
 	close $IN5;
 	close $OUT_H;
