@@ -56,12 +56,12 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 #################################
 $bwa = '/usr/local/bin/bwa';		$samtools = '/usr/local/bin/samtools';
 $Reference = 'GSC.MR.Genome.fa';	$phred_Q = 30;
-$map_q = 30;						$F = 2308;
-$f = 2;								$threads = 10;	
+$map_q = 30;				$F = 2308;
+$f = 2;					$threads = 10;	
 $sam_add = 0;
 
 GetOptions(
-'bw=s' => \$bwa,	          	# string
+'bw=s' => \$bwa,	        # string
 'st=s' => \$samtools,          	# string
 'd=s' => \$dataType,          	# string
 'b=s' => \$barcodesID_file,     # file
@@ -102,7 +102,7 @@ chomp (@files);
 
 # 1.1 Index
 print "\nIndexing reference FASTA file ...\n";
-system ( "bwa index -a bwtsw $Reference" );
+system ( "$bwa index -a bwtsw $Reference" );
 print "DONE.\n\n";
 	
 ############################
@@ -117,7 +117,7 @@ if ($dataType eq "PE") {
   	    my $input_R2 = join (".", "$file","R2","fq","gz");
         my $BWA_out = join(".","$file","sam");
 		print "Mapping paired $input_R1 $input_R2 files to $Reference ...\n";
-		system ( "bwa mem -t $threads -M $Reference $input_R1 $input_R2 > $BWA_out" );
+		system ( "$bwa mem -t $threads -M $Reference $input_R1 $input_R2 > $BWA_out" );
 	}
 	print "DONE.\n";
 
@@ -132,7 +132,7 @@ if ($dataType eq "PE") {
 		my $input_R1 = join (".", "$file","R1","fq","gz");
   	    my $BWA_out = join(".","$file","sam");
 		print "Mapping single $input_R1 file to $Reference ...\n";
-		system ( "bwa mem -t $threads -M $Reference $input_R1 > $BWA_out" );
+		system ( "$bwa mem -t $threads -M $Reference $input_R1 > $BWA_out" );
 	}
 	print "DONE.\n";
 }
@@ -147,17 +147,17 @@ foreach my $file (@files) {
     my $view_out = join(".","$file","bam");
 
 	if ($F > 0 && $f > 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q $map_q -f $f -F $F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -f $f -F $F $sam_add $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q $map_q -F $F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -F $F $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add ne '0') ) {
-		system ( "samtools view -b -q $map_q -f $f $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -f $f $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F > 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q $map_q -f $f -F $F $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -f $f -F $F $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q $map_q -F $F $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -F $F $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
-		system ( "samtools view -b -q $map_q -f $f $input_sam > $view_out" );
+		system ( "$samtools view -b -q $map_q -f $f $input_sam > $view_out" );
 	} else {
 		print "Unable to proceeed; please re-check the syntax of all declared SAMTools flags and options...";
 	}
@@ -172,7 +172,7 @@ foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input_bam = join (".", "$file","bam");
     my $sort_out = join(".","$file","sorted.bam");
-	system ( "samtools sort $input_bam -o $sort_out" );
+	system ( "$samtools sort $input_bam -o $sort_out" );
 	$pm->finish;
 }
 $pm->wait_all_children;
@@ -183,7 +183,7 @@ print "\nIndexing the sorted BAM files ...";
 foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input_sorted = join (".","$file","sorted","bam");
-	system ( "samtools index $input_sorted" );
+	system ( "$samtools index $input_sorted" );
 	$pm->finish;
 }
 $pm->wait_all_children;
@@ -191,7 +191,7 @@ print "\nDONE.\n";
 
 # Index reference FASTA file
 print "\nIndexing the reference genome FASTA file ...";
-system ( "samtools faidx $Reference" );
+system ( "$samtools faidx $Reference" );
 print "\nDONE.\n\n";
 
 # Mpileup SNPs discovery
@@ -200,7 +200,7 @@ foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input = join (".", "$file","sorted","bam");
 	my $mpileup = join (".", "$file","mpileup");
-	system ("samtools mpileup -Q $phred_Q -q $map_q -B -C 50 -f $Reference $input > $mpileup");
+	system ("$samtools mpileup -Q $phred_Q -q $map_q -B -C 50 -f $Reference $input > $mpileup");
 	$pm->finish;
 }
 $pm->wait_all_children;
