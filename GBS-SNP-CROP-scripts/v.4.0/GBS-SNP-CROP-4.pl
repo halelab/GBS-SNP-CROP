@@ -237,7 +237,7 @@ if ($dataType eq "PE") {
 		# 4. VSEARCH 
 		# Removing read redundancy: genotype level
 		my $no_reps = join(".","$file","AssembledStitched","noreps", "fa");
-		system ( "vsearch -derep_fulllength $out -minseqlength $minCl -sizeout -output $no_reps" );
+		system ( "$vsearch -derep_fulllength $out -minseqlength $minCl -sizeout -output $no_reps" );
 		system ( "mv $no_reps $out");
 		system( "gzip $out");
 	}
@@ -257,7 +257,7 @@ if ($dataType eq "PE") {
 		my $fasta_files = join('.AssembledStitched.fa.gz ', @files).'.AssembledStitched.fa.gz ';		
 		system("cp $VsearchIN $tmp");
 		system("zcat $fasta_files >> $tmp");		
-		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN");
+		system ( "$vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN");
 		system ("mv $fasta_files ./FastaForRef/");
 	}
 
@@ -364,7 +364,7 @@ if ($dataType eq "PE") {
 	foreach my $file (@MR_taxa_files) {
 		my $in = join (".", "$file","R1","fa");
 		my $no_reps = join (".", "$file","R1", "noreps","fa");
-		system ( "vsearch -derep_fulllength $in -sizeout -minseqlength $minCl -output $no_reps");
+		system ( "$vsearch -derep_fulllength $in -sizeout -minseqlength $minCl -output $no_reps");
 		system ( "mv $no_reps $in");
 		system ( "gzip $in");
 	}
@@ -382,7 +382,7 @@ if ($dataType eq "PE") {
 		system("cp $VsearchIN > $tmp");
 		system("zcat $fasta_files >> $tmp");
 		# dereplication
-		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN");
+		system ( "$vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN");
 		system ("mv $fasta_files ./FastaForRef/");
 	}	
 	
