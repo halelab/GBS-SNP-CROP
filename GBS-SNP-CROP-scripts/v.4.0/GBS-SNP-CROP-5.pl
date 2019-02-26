@@ -147,17 +147,17 @@ foreach my $file (@files) {
     my $view_out = join(".","$file","bam");
 
 	if ($F > 0 && $f > 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q $map_q -f $f -F $F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -f$f -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q $map_q -F $F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q $map_q -f $f $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -f$f $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F > 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q $map_q -f $f -F $F $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -f$f -F$F $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q $map_q -F $F $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -F$F $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q $map_q -f $f $input_sam > $view_out" );
+		system ( "$samtools view -b -q$map_q -f$f $input_sam > $view_out" );
 	} else {
 		print "Unable to proceeed; please re-check the syntax of all declared SAMTools flags and options...";
 	}
@@ -200,7 +200,7 @@ foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input = join (".", "$file","sorted","bam");
 	my $mpileup = join (".", "$file","mpileup");
-	system ("$samtools mpileup -Q $phred_Q -q $map_q -B -C 50 -f $Reference $input > $mpileup");
+	system ("$samtools mpileup -Q$phred_Q -q$map_q -B -C 50 -f $Reference $input > $mpileup");
 	$pm->finish;
 }
 $pm->wait_all_children;
