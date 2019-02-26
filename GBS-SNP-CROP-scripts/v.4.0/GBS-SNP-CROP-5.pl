@@ -39,12 +39,12 @@ my $H = "\n###########################################################\n"
 	."-d: Data type. Either PE (Paired-End) or SE (Single-End). String. Required.\n"
 	."-b: BarcodeID file. File. Required.\n"
 	."-ref: Reference FASTA file, either Mock Reference or true reference. File. Default: GSC.MR.Genome.fa\n"
-	."-Q: Phred score base call quality. Numeric. Default: 30\n"
-	."-q: Alignment quality. Numeric. Default: 30\n"
-	."-F: SAMtools flags controlled by CAPS F. Numeric. Default: 2308\n"
-	."-f: SAMtools flags controlled by small f. Numeric. Default: 0\n"
+	."-Q: Phred score base call quality. Numeric. Required.\n"
+	."-q: Alignment quality. Numeric. Required.\n"
+	."-F: SAMtools flags controlled by CAPS F. Numeric. Required.\n"
+	."-f: SAMtools flags controlled by small f. Numeric. Required\n"
 	."-t: Number of independent threads used. Numeric. Default: 10\n"
-	."-opt: If desired, any additional options for SAMtools view. String within “quotes”. Default: 0 (nothing)\n\n";
+	."-Opt: If desired, any additional options for SAMtools view. String within “quotes”. Default: 0 (nothing)\n\n";
 
 if (! defined $help or $help =~ "h" or $help =~ "H")  {
 	print "$H";
@@ -55,10 +55,8 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 # Setting the parameters values
 #################################
 $bwa = '/usr/local/bin/bwa';		$samtools = '/usr/local/bin/samtools';
-$Reference = 'GSC.MR.Genome.fa';	$phred_Q = 30;
-$map_q = 30;				$F = 2308;
-$f = 2;					$threads = 10;	
-$sam_add = 0;
+$Reference = 'GSC.MR.Genome.fa';	$threads = 10;
+$Opt = 0;
 
 GetOptions(
 'bw=s' => \$bwa,	        # string
@@ -71,7 +69,7 @@ GetOptions(
 'F=s' => \$F,                	# numeric
 'f=s' => \$f,               	# numeric 
 't=s' => \$threads,             # numeric
-'opt=s' => \$sam_add,           # string
+'Opt=s' => \$sam_add,           # string
 ) or die "$H\n";
 
 #########################
@@ -147,17 +145,17 @@ foreach my $file (@files) {
     my $view_out = join(".","$file","bam");
 
 	if ($F > 0 && $f > 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$map_q -f$f -F$F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -f$f -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$map_q -F$F $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -F$F $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$map_q -f$f $sam_add $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -f$f $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F > 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$map_q -f$f -F$F $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -f$f -F$F $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$map_q -F$F $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -F$F $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$map_q -f$f $input_sam > $view_out" );
+		system ( "$samtools view -b -q$phred_Q -f$f $input_sam > $view_out" );
 	} else {
 		print "Unable to proceeed; please re-check the syntax of all declared SAMTools flags and options...";
 	}
