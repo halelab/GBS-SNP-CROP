@@ -44,7 +44,7 @@ my $H = "\n###########################################################\n"
 	."-F: SAMtools flags controlled by CAPS F. Numeric. Required.\n"
 	."-f: SAMtools flags controlled by small f. Numeric. Required\n"
 	."-t: Number of independent threads used. Numeric. Default: 10\n"
-	."-Opt: If desired, any additional options for SAMtools view. String within “quotes”. Default: 0 (nothing)\n\n";
+	."-Opt: If desired, any additional options for SAMtools view. String within “quotes”. Required\n\n";
 
 if (! defined $help or $help =~ "h" or $help =~ "H")  {
 	print "$H";
@@ -56,7 +56,6 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 #################################
 $bwa = '/usr/local/bin/bwa';		$samtools = '/usr/local/bin/samtools';
 $Reference = 'GSC.MR.Genome.fa';	$threads = 10;
-$Opt = 0;
 
 GetOptions(
 'bw=s' => \$bwa,	        # string
