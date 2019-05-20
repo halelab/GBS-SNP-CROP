@@ -56,8 +56,8 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 #################################
 $bwa = '/usr/local/bin/bwa';		$samtools = '/usr/local/bin/samtools';
 $Reference = 'GSC.MR.Genome.fa';	$phred_Q = 30;
-$map_q = 30;						$F = 2308;
-$f = 2;								$threads = 10;	
+$map_q = 30;				$F = 2308;
+$f = 2;					$threads = 10;	
 $sam_add = 0;
 
 GetOptions(
