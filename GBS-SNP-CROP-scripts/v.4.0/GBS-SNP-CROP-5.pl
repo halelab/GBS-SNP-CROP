@@ -156,7 +156,7 @@ foreach my $file (@files) {
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
 		system ( "$samtools view -b -q$phred_Q -f$f $input_sam > $view_out" );
 	} else {
-		print "Unable to proceeed; please re-check the syntax of all declared SAMTools flags and options...";
+		print "Unable to proceed; please re-check the syntax of all declared SAMTools flags and options...";
 	}
 	$pm->finish;
 }
