@@ -8,7 +8,7 @@
 #
 # A detailed description can be found at https://github.com/halelab/GBS-SNP-CROP
 # 
-# For help: perl GBS-SNP-CROP-5.pl
+# For help: perl GBS-SNP-CROP-5.pl help
 ###########################################################################################################
 ##########################################################################################
 # Requirement 1: BWA aligner (Li & Durbin, 2009)
@@ -39,12 +39,12 @@ my $H = "\n###########################################################\n"
 	."-d: Data type. Either PE (Paired-End) or SE (Single-End). String. Required.\n"
 	."-b: BarcodeID file. File. Required.\n"
 	."-ref: Reference FASTA file, either Mock Reference or true reference. File. Default: GSC.MR.Genome.fa\n"
-	."-Q: Phred score base call quality. Numeric. Required.\n"
-	."-q: Alignment quality. Numeric. Required.\n"
-	."-F: SAMtools flags controlled by CAPS F. Numeric. Required.\n"
-	."-f: SAMtools flags controlled by small f. Numeric. Required\n"
+	."-Q: Phred score base call quality. Numeric. Default: 30\n"
+	."-q: Alignment quality. Numeric. Default: 30\n"
+	."-F: SAMtools flags controlled by CAPS F. Numeric. Default: 2308\n"
+	."-f: SAMtools flags controlled by small f. Numeric. Default: 0\n"
 	."-t: Number of independent threads used. Numeric. Default: 10\n"
-	."-Opt: If desired, any additional options for SAMtools view. String within “quotes”. Required\n\n";
+	."-Opt: If desired, any additional options for SAMtools view. String within “quotes”. Default: 0 (nothing)\n\n";
 
 if (! defined $help or $help =~ "h" or $help =~ "H")  {
 	print "$H";
@@ -55,10 +55,13 @@ if (! defined $help or $help =~ "h" or $help =~ "H")  {
 # Setting the parameters values
 #################################
 $bwa = '/usr/local/bin/bwa';		$samtools = '/usr/local/bin/samtools';
-$Reference = 'GSC.MR.Genome.fa';	$threads = 10;
+$Reference = 'GSC.MR.Genome.fa';	$phred_Q = 30;
+$map_q = 30;						$F = 2308;
+$f = 2;								$threads = 10;	
+$sam_add = 0;
 
 GetOptions(
-'bw=s' => \$bwa,	        # string
+'bw=s' => \$bwa,	          	# string
 'st=s' => \$samtools,          	# string
 'd=s' => \$dataType,          	# string
 'b=s' => \$barcodesID_file,     # file
@@ -99,7 +102,7 @@ chomp (@files);
 
 # 1.1 Index
 print "\nIndexing reference FASTA file ...\n";
-system ( "$bwa index -a bwtsw $Reference" );
+system ( "bwa index -a bwtsw $Reference" );
 print "DONE.\n\n";
 	
 ############################
@@ -114,7 +117,7 @@ if ($dataType eq "PE") {
   	    my $input_R2 = join (".", "$file","R2","fq","gz");
         my $BWA_out = join(".","$file","sam");
 		print "Mapping paired $input_R1 $input_R2 files to $Reference ...\n";
-		system ( "$bwa mem -t $threads -M $Reference $input_R1 $input_R2 > $BWA_out" );
+		system ( "bwa mem -t $threads -M $Reference $input_R1 $input_R2 > $BWA_out" );
 	}
 	print "DONE.\n";
 
@@ -129,7 +132,7 @@ if ($dataType eq "PE") {
 		my $input_R1 = join (".", "$file","R1","fq","gz");
   	    my $BWA_out = join(".","$file","sam");
 		print "Mapping single $input_R1 file to $Reference ...\n";
-		system ( "$bwa mem -t $threads -M $Reference $input_R1 > $BWA_out" );
+		system ( "bwa mem -t $threads -M $Reference $input_R1 > $BWA_out" );
 	}
 	print "DONE.\n";
 }
@@ -144,19 +147,19 @@ foreach my $file (@files) {
     my $view_out = join(".","$file","bam");
 
 	if ($F > 0 && $f > 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$phred_Q -f$f -F$F $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -f $f -F $F $sam_add $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$phred_Q -F$F $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -F $F $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add ne '0') ) {
-		system ( "$samtools view -b -q$phred_Q -f$f $sam_add $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -f $f $sam_add $input_sam > $view_out" );
 	} elsif ($f > 0 && $F > 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$phred_Q -f$f -F$F $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -f $f -F $F $input_sam > $view_out" );
 	} elsif ($F > 0 && $f == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$phred_Q -F$F $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -F $F $input_sam > $view_out" );
 	} elsif ($f > 0 && $F == 0 && ($sam_add eq '0') ) {
-		system ( "$samtools view -b -q$phred_Q -f$f $input_sam > $view_out" );
+		system ( "samtools view -b -q $map_q -f $f $input_sam > $view_out" );
 	} else {
-		print "Unable to proceed; please re-check the syntax of all declared SAMTools flags and options...";
+		print "Unable to proceeed; please re-check the syntax of all declared SAMTools flags and options...";
 	}
 	$pm->finish;
 }
@@ -169,7 +172,7 @@ foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input_bam = join (".", "$file","bam");
     my $sort_out = join(".","$file","sorted.bam");
-	system ( "$samtools sort $input_bam -o $sort_out" );
+	system ( "samtools sort $input_bam -o $sort_out" );
 	$pm->finish;
 }
 $pm->wait_all_children;
@@ -180,7 +183,7 @@ print "\nIndexing the sorted BAM files ...";
 foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input_sorted = join (".","$file","sorted","bam");
-	system ( "$samtools index $input_sorted" );
+	system ( "samtools index $input_sorted" );
 	$pm->finish;
 }
 $pm->wait_all_children;
@@ -188,7 +191,7 @@ print "\nDONE.\n";
 
 # Index reference FASTA file
 print "\nIndexing the reference genome FASTA file ...";
-system ( "$samtools faidx $Reference" );
+system ( "samtools faidx $Reference" );
 print "\nDONE.\n\n";
 
 # Mpileup SNPs discovery
@@ -197,7 +200,7 @@ foreach my $file (@files) {
 	my $pid = $pm->start and next;
 	my $input = join (".", "$file","sorted","bam");
 	my $mpileup = join (".", "$file","mpileup");
-	system ("$samtools mpileup -Q$phred_Q -q$map_q -B -C 50 -f $Reference $input > $mpileup");
+	system ("samtools mpileup -Q $phred_Q -q $map_q -B -C 50 -f $Reference $input > $mpileup");
 	$pm->finish;
 }
 $pm->wait_all_children;
