@@ -379,7 +379,7 @@ if ($dataType eq "PE") {
 	my $it = natatime($derep, @MR_taxa_files);
 	while(my @files = $it->()){	
 		my $fasta_files = join('.R1.fa.gz ', @files).".R1.fa.gz";
-		system("cp $VsearchIN > $tmp");
+		system("cp $VsearchIN $tmp");
 		system("zcat $fasta_files >> $tmp");
 		# dereplication
 		system ( "$vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN");
