@@ -372,13 +372,13 @@ if ($dataType eq "PE") {
 	# Source fasta files are joined and dereplicated (but taking notes of numerosity). 
 	# Dereplication is done (optionally) at blocks of files to save RAM (see $derep_blocks).
 	my $VsearchIN = join(".","VsearchIN","fa");
-	system ( "touch $VsearchIN" );
+	system ("touch $VsearchIN");
 	my $tmp = join(".","tmp","fa");
 	
 	# catting $derep files (plus previous results) and dereplicating
 	my $it = natatime($derep, @MR_taxa_files);
 	while(my @files = $it->()){	
-		my $fasta_files = join('.R1.fa.gz ', @files).".R1.fa.gz";
+		my $fasta_files = join('.R1.fa.gz ', @files).'.R1.fa.gz ';
 		system("cp $VsearchIN $tmp");
 		system("zcat $fasta_files >> $tmp");
 		# dereplication
