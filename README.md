@@ -35,7 +35,7 @@ Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before postin
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
 * [Trimmomatic][7] v.0.33 (Bolger et al., 2014)
-* [PEAR][8] v.0.96 (Zhang et al., 2014)
+* [PEAR][8] v.0.9.6 (Zhang et al., 2014)
 * [Vsearch][9] v2.6.2 (Rognes et al., 2016)
 * [BWA aligner][10] v.0.7.12 (Li & Durbin, 2009)
 * [SAMTools][11] v.1.7 (Li et al., 2009)
