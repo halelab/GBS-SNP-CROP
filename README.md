@@ -30,7 +30,7 @@ Below is a schematic of the workflow, with inputs and outputs (boxes) indicated 
 [v.1.0][12]: Released on 1/12/2016
 
 ### Getting Help
-Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before posting a question or starting a discussion, please see the [FAQ page][17]. Also, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file. If you're still facing an issue or have suggestions for improving this tool, please submit your question or comment to the discussion group [Google groups page][5].
+Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before posting a question or starting a discussion, please see the [FAQ page][17]. Also, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file. If you're still facing an issue or have suggestions for improving this tool, please submit your question or comment to our [Google groups page][5].
 
 ### Requirements
 * [Java 7 or higher][6] - We used Java 8
