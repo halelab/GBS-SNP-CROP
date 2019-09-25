@@ -1,5 +1,7 @@
 # GBS-SNP-CROP
 
+### *Latest release v.4.1 (September ##, 2019)*
+
 ### Introduction
 The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP-CROP) is executed via a sequence of [seven Perl scripts][4] that integrate custom parsing and filtering procedures with well-known, vetted bioinformatic tools, giving the user full access to all intermediate files. By employing a novel strategy of variant (SNPs and indels) calling based on the correspondence of within-individual to across-population patterns of polymorphism, the pipeline is able to identify and distinguish high-confidence variants from both sequencing and PCR errors, whether or not a reference genome is available. In the latter case, the pipeline adopts a clustering strategy to build a population-tailored "Mock Reference" using the same GBS data for downstream calling and genotyping. Designed for libraries of either paired-end (PE) or single-end (SE) reads of arbitrary lengths, GBS-SNP-CROP maximizes data usage by eliminating unnecessary data culling due to imposed length uniformity requirements. GBS-SNP-CROP is a complete bioinformatics pipeline developed primarily to support curation, research, and breeding programs wishing to utilize GBS for the cost-effective genome-wide characterization of plant genetic resources.
 
@@ -23,6 +25,7 @@ Below is a schematic of the workflow, with inputs and outputs (boxes) indicated 
 ![](https://github.com/halelab/GBS-SNP-CROP/blob/master/images/workflow.jpg)
 
 ### Released versions
+[v.4.1][19]: Released on 9/##/2019  
 [v.4.0][18]: Released on 10/22/2018  
 [v.3.0][16]: Released on 2/8/2018  
 [v.2.0][14]: Released on 2/22/2017  
@@ -30,15 +33,16 @@ Below is a schematic of the workflow, with inputs and outputs (boxes) indicated 
 [v.1.0][12]: Released on 1/12/2016
 
 ### Getting Help
-Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before posting a question or starting a discussion, please see the [FAQ page][17]. Also, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file. If you're still facing an issue or have suggestions for improving this tool, please submit your question or comment to our [Google groups page][5].
+Begin by carefully going through the [GBS-SNP-CROP User manual][2]. Before posting a question or starting a discussion, please first refer to the [FAQ page][17]. Also, please check your barcode ID file for empty characters or blank spaces and verify that it was saved as a tab-delimited file. If you're still facing an issue or have suggestions for improving this tool, kindly submit your question or comment to our [Google groups page][5].
 
 ### Requirements
-* [Java 7 or higher][6] - We used Java 8
-* [Trimmomatic][7] v.0.33 (Bolger et al., 2014)
-* [PEAR][8] v.0.9.6 (Zhang et al., 2014)
-* [Vsearch][9] v2.6.2 (Rognes et al., 2016)
-* [BWA aligner][10] v.0.7.12 (Li & Durbin, 2009)
-* [SAMTools][11] v.1.7 (Li et al., 2009)
+* [Java 7 or higher][6] - The latest version of GBS-SNP-CROP (v.4.1) was tested using Java 8 (update 221)
+* [Trimmomatic][7] Latest version tested using v.0.39 (Bolger et al., 2014)
+* [PEAR][8] Latest version tested with v.0.9.11 (Zhang et al., 2014)
+* [VSEARCH][9] Latest version tested with v2.13.7 (Rognes et al., 2016)
+* [BWA aligner][10] Latest version tested with v.0.7.12 (Li & Durbin, 2009)
+* [SAMTools][11] Latest version tested with v.1.7 (Li et al., 2009)
+* The following five [CPAN modules][20] also need to be installed: GetOpt::Long, IO::ZLib, List::Util, List::MoreUtils, Parallel::ForkManager
 
 ### Citing GBS-SNP-CROP
 [Melo et al. GBS-SNP-CROP: A reference-optional pipeline for SNP discovery and plant germplasm characterization using genotyping-by-sequencing data. BMC Bioinformatics. 2016. 17:29. DOI 10.1186/s12859-016-0879-y.][1]
@@ -61,3 +65,5 @@ Initially, go carefully through the [GBS-SNP-CROP User manual][2]. Before postin
 [16]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.3.0
 [17]:https://github.com/halelab/GBS-SNP-CROP/wiki/Frequently-Asked-Questions-(FAQs)
 [18]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.4.0
+[19]:https://github.com/halelab/GBS-SNP-CROP/releases/tag/v.4.1
+[20]:http://www.cpan.org/modules/index.html
