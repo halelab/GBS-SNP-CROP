@@ -2,11 +2,11 @@
 > Arthur T. O. Melo, Radhika Bartaula and Iago Hale   
 > Department of Agriculture, Nutrition and Food Systems, University of New Hampshire, Durham, NH, USA
 
-Please download the tutorial dataset using the link below:
+You can access the tutorial dataset using the following link:
 
 https://www.dropbox.com/sh/oh8fvm3ekpuktkc/AAAKQ3ZEQFA4DcetKtZnkYqya?dl=0
 
-Also download the provided barcode ID file (barcodesID.txt) to the same directory.
+Download the provided barcode ID file (barcodesID.txt) to the same directory and proceed with the following commands.
 
 ### Step 1: Parse the raw reads (GBS-SNP-CROP-1.pl)
 ```bash
