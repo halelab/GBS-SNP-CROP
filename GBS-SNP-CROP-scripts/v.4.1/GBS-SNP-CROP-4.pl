@@ -270,7 +270,7 @@ if ($dataType eq "PE") {
 		my $fasta_files = join(".AssembledStitched.fa.gz ",@files).".AssembledStitched.fa.gz";
 		system( "cp $VsearchIN $tmp" );
 		system( "zcat $fasta_files >> $tmp" );
-		system ( "vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN" );
+		system ( "$vsearch -derep_fulllength $tmp -sizein -sizeout -minseqlength $minCl -output $VsearchIN" );
 		system ( "mv $fasta_files ./FastaForRef/" );
 	}
 
