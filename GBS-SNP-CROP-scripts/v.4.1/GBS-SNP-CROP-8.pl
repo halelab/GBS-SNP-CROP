@@ -281,7 +281,7 @@ if ($tools =~ "V" or $tools =~ "v") {
 	."##INFO=<ID=AV,Number=1,Type=Integer,Description=\"Average Depth\">\n"
 	."##INFO=<ID=NS,Number=1,Type=Integer,Description=\"Number of Samples With Data\">\n"
 	."##FORMAT=<ID=GT,Number=1,Type=String,Description=\"Genotype\">\n"
-	."##FORMAT=<ID=AD,Number=1,Type=Integer,Description=\"Allele Depth\">\n"
+	."##FORMAT=<ID=AD,Number=R,Type=Integer,Description=\"Allele Depth\">\n"
 	."#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t@TaxaNames\n";
 	
 	while (<$IN4>) {
