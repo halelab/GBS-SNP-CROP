@@ -21,7 +21,9 @@ The **GBS** **SNP** **C**alling **R**eference **O**ptional **P**ipeline (GBS-SNP
 **Stage 4. Call Variants and Genotypes**  
 - *Step 7: Filter variants and call genotypes*
 
-Below is a schematic of the workflow, with inputs and outputs (boxes) indicated for each step (arrows). 
+**PLEASE NOTE: GBS-SNP-CROP is an intentionally modular and flexible pipeline. If your data are already demultiplexed and filtered, simply skip Stage 1 and enter the pipeline at Stage 2. If you have a reference genome and no need for a Mock Reference, simply skip Stage 2 and go directly to Stage 3. Refer to the [User Manual][2] for input file naming conventions for each Step.**
+
+Below is a schematic of the workflow, with inputs and outputs (boxes) indicated for each Step (arrows). 
 ![](https://github.com/halelab/GBS-SNP-CROP/blob/master/images/workflow.jpg)
 
 ### Released versions
